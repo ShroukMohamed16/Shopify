@@ -9,5 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.i("TAG", "onCreate: fffffffffffffff")
+        Log.i("TAG", "onCreate: noha")
+
     }
 }
