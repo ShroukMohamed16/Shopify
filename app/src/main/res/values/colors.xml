@@ -10,4 +10,6 @@
     <color name="primary">#EB3C3C</color>
     <color name="stroke_color">#6D000000</color>
     <color name="heart_back">#85FFFFFF</color>
+    <color name="gray">#979797</color>
+    <color name="background_color">#FAFAFA</color>
 </resources>
