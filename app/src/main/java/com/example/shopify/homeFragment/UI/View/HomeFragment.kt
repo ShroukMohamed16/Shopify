@@ -9,8 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.R
 import com.example.shopify.base.State
@@ -22,7 +26,7 @@ import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
 import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment() , OnBrandClick{
+class HomeFragment : Fragment(), OnBrandClick {
     lateinit var viewModel: HomeViewModel
     lateinit var factory: HomeViewModelFactory
     lateinit var brandAdapter: BrandAdapter
@@ -37,10 +41,11 @@ class HomeFragment : Fragment() , OnBrandClick{
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
         return homeBinding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         factory = HomeViewModelFactory(BrandsRepository.getInstance(BrandsClient()))
-        viewModel = ViewModelProvider(this , factory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
 
         viewModel.getAllBrands()
@@ -52,6 +57,7 @@ class HomeFragment : Fragment() , OnBrandClick{
                     is State.Loading -> {
                         homeBinding.progressBar.visibility = View.VISIBLE
                         homeBinding.brandsRV.visibility = View.GONE
+                        homeBinding.brandTextView.visibility = View.GONE
                         Log.i("TAG", "onViewCreated: loaaaaaaaading")
 
 
@@ -60,6 +66,7 @@ class HomeFragment : Fragment() , OnBrandClick{
                         Log.i("TAG", "onViewCreated: successsssssss")
                         homeBinding.progressBar.visibility = View.GONE
                         homeBinding.brandsRV.visibility = View.VISIBLE
+                        homeBinding.brandTextView.visibility = View.VISIBLE
                         brandList = result.data.smart_collections
                         gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                             GridLayoutManager.VERTICAL, false)
@@ -102,7 +109,8 @@ class HomeFragment : Fragment() , OnBrandClick{
 
 
     override fun onBrandClick(brandName: String) {
-        //
+        val action = HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName)
+        homeBinding.root.findNavController().navigate(action)
     }
 
     private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
@@ -112,11 +120,11 @@ class HomeFragment : Fragment() , OnBrandClick{
 
     private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<SmartCollection>?) {
         if (filteredList.isNullOrEmpty()) {
-            // homeBinding.txtNoResults.visibility = View.VISIBLE
+            homeBinding.txtNoResults.visibility = View.VISIBLE
             homeBinding.brandsRV.visibility = View.GONE
         } else {
 
-            //homeBinding.txtNoResults.visibility = View.GONE
+            homeBinding.txtNoResults.visibility = View.GONE
             homeBinding.brandsRV.visibility = View.VISIBLE
         }
     }
