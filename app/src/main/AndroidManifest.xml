@@ -24,7 +24,11 @@
         android:theme="@style/Theme.Shopify"
         tools:targetApi="31">
         <activity
+
             android:name=".authentication.AuthenticationActivity"
+
+            android:name=".OnBoarding.OnBoardingActivity"
+
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

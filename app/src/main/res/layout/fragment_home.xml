@@ -93,6 +93,21 @@
         app:layout_constraintStart_toEndOf="@+id/leftGL"
         app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
 
+    <TextView
+        android:id="@+id/txt_noResults"
+        android:layout_width="312dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/no_match_results"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/brand_textView"
+        app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brands_RV"
         android:layout_width="0dp"
