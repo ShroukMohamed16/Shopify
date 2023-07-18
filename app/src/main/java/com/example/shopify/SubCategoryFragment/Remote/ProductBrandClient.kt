@@ -13,7 +13,7 @@ class ProductBrandClient : ProductBrandRemoteSource {
         return brandService.getProductsOfBrand(vendor)
     }
 
-    override suspend fun getProductOfCategory( collectioId: Long) : AllProduct{
-        return brandService.getProductsOfCategory(collectioId)
+    override suspend fun getProductOfCategory( productType: String,collectioId: Long) : AllProduct{
+        return brandService.getProductsOfCategory(productType,collectioId)
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.shopify.OnBoarding.OnBoardingActivity
 import com.example.shopify.R
 import com.example.shopify.homeActivity.HomeActivity
 import kotlinx.coroutines.Dispatchers
@@ -33,4 +34,3 @@ class SplashScreen : AppCompatActivity() {
         }
         
     }
-}

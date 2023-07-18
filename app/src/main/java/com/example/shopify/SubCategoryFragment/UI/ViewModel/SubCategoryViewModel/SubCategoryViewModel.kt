@@ -31,9 +31,9 @@ class SubCategoryViewModel(private val repo : SubCategoryRepositoryInterface) :V
         }
     }
 
-    fun getProductOfCategory(collectioId:Long){
+    fun getProductOfCategory(productType: String,collectioId:Long){
         viewModelScope.launch(Dispatchers.IO){
-            repo.getProductOfCategory(collectioId)
+            repo.getProductOfCategory(productType,collectioId)
                 ?.catch { e->
                     Log.e("TAG", "category product : $e", )
                     Log.i("TAG", "getProductOfCategory: faaaaaail")

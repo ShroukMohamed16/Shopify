@@ -66,10 +66,10 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         val categoryID = args.categoryID?.toLong()
         Log.i("TAG", "onViewCreated: $brand")
         Log.i("TAG", "onViewCreated: $categoryID")
-
+        productAdapter = ProductAdapter(productsList, requireContext(), this)
         if (destination == "brand") {
             viewModel.getProductOfBrands(brand)
-            productAdapter = ProductAdapter(productsList, requireContext(), this)
+
             lifecycleScope.launch {
                 viewModel.productBrand.collect { result ->
                     when (result) {
@@ -114,29 +114,31 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
             Log.i("TAG", "onViewCreated: enter the category scoop")
 
             if (categoryID != null){
-                viewModel.getProductOfCategory( categoryID)
+                viewModel.getProductOfCategory( productType,categoryID)
                 Log.i("TAG", "onViewCreated: the id is not nuull")
-//                subCatBinding.shoesTextView.setOnClickListener {
-//                    Log.i("TAG", "onViewCreated: choose shoes ")
-//                    productType = "SHOES"
-//                    resetButtonBackgrounds()
-//                    subCatBinding.shoesTextView.setBackgroundColor(R.color.gray)
-//                    viewModel.getProductOfCategory( categoryID)
-//                }
-//                subCatBinding.tshirtTextView.setOnClickListener {
-//                    Log.i("TAG", "onViewCreated: choose teshirt ")
-//                    productType = "T-SHIRTS"
-//                    resetButtonBackgrounds()
-//                    subCatBinding.tshirtTextView.setBackgroundColor(R.color.gray)
-//                    viewModel.getProductOfCategory( categoryID)
-//                }
-//                subCatBinding.accessoriesTextView.setOnClickListener {
-//                    Log.i("TAG", "onViewCreated: choose accessories ")
-//                    productType = "ACCESSORIES"
-//                    resetButtonBackgrounds()
-//                    subCatBinding.accessoriesTextView.setBackgroundColor(R.color.gray)
-//                    viewModel.getProductOfCategory( categoryID)
-//                }
+                subCatBinding.shoesTextView.setOnClickListener {
+                    Log.i("TAG", "onViewCreated: choose shoes ")
+                    productType = "SHOES"
+                    resetButtonBackgrounds()
+                    subCatBinding.shoesTextView.setBackgroundColor(R.color.gray)
+                    viewModel.getProductOfCategory(productType, categoryID)
+                }
+                subCatBinding.tshirtTextView.setOnClickListener {
+                    Log.i("TAG", "onViewCreated: choose teshirt ")
+                    productType = "T-SHIRTS"
+                    resetButtonBackgrounds()
+                    subCatBinding.tshirtTextView.setBackgroundColor(R.color.gray)
+                    viewModel.getProductOfCategory(productType, categoryID)
+                }
+                subCatBinding.accessoriesTextView.setOnClickListener {
+                    Log.i("TAG", "onViewCreated: choose accessories ")
+                    productType = "ACCESSORIES"
+                    resetButtonBackgrounds()
+                    subCatBinding.accessoriesTextView.setBackgroundColor(R.color.gray)
+                    viewModel.getProductOfCategory( productType,categoryID)
+                }
+
+
 
                 lifecycleScope.launch{
                     viewModel.productCategory.collect{ result ->
