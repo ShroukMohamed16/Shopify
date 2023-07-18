@@ -20,10 +20,17 @@ class SplashScreen : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.Main) {
             delay(4000)
+
                 val intent = Intent(this@SplashScreen, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
         }
 
+
+                val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+        }
+        
     }
 }
