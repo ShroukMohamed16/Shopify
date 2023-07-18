@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.example.shopify.favouriteFragment.UI.View.FavouriteFragment"
+        android:name="com.example.shopify.favourite.ui.view.FavouriteFragment"
         android:label="fragment_favourite"
         tools:layout="@layout/fragment_favourite" >
         <action

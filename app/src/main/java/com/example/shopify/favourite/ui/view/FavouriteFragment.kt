@@ -1,4 +1,4 @@
-package com.example.shopify.favouriteFragment.UI.View
+package com.example.shopify.favourite.ui.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
