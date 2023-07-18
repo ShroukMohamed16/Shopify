@@ -20,18 +20,11 @@ class SplashScreen : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(2500)
+            delay(4000)
                 val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
         }
-
-        Handler().postDelayed({
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-
-        }, 2000)
-
+        
     }
 }
