@@ -98,6 +98,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                 subCatBinding.productsRecyclerview.adapter = productAdapter
                             }
 
+
                         }
                         else -> {
                             Log.i("TAG", "onViewCreated: failur")
@@ -120,21 +121,21 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                     Log.i("TAG", "onViewCreated: choose shoes ")
                     productType = "SHOES"
                     resetButtonBackgrounds()
-                    subCatBinding.shoesTextView.setBackgroundColor(R.color.gray)
+                    subCatBinding.shoesTextView.setBackgroundResource(R.drawable.text_background)
                     viewModel.getProductOfCategory(productType, categoryID)
                 }
                 subCatBinding.tshirtTextView.setOnClickListener {
                     Log.i("TAG", "onViewCreated: choose teshirt ")
                     productType = "T-SHIRTS"
                     resetButtonBackgrounds()
-                    subCatBinding.tshirtTextView.setBackgroundColor(R.color.gray)
+                    subCatBinding.tshirtTextView.setBackgroundResource(R.drawable.text_background)
                     viewModel.getProductOfCategory(productType, categoryID)
                 }
                 subCatBinding.accessoriesTextView.setOnClickListener {
                     Log.i("TAG", "onViewCreated: choose accessories ")
                     productType = "ACCESSORIES"
                     resetButtonBackgrounds()
-                    subCatBinding.accessoriesTextView.setBackgroundColor(R.color.gray)
+                    subCatBinding.accessoriesTextView.setBackgroundResource(R.drawable.text_background)
                     viewModel.getProductOfCategory( productType,categoryID)
                 }
 
@@ -191,6 +192,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
 
     }
+
     private fun resetButtonBackgrounds() {
         subCatBinding.shoesTextView.setBackgroundResource(0)
         subCatBinding.tshirtTextView.setBackgroundResource(0)
