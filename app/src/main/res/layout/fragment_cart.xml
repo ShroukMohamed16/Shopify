@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".CartFragment">
+
+
+    <TextView
+        android:id="@+id/favouriteFAB"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="24dp"
+        android:text="Total Price:  50 EGP"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/favouriteRecycler"
+        app:layout_constraintTop_toBottomOf="@+id/favouriteRecycler" />
+
+    <Button
+        android:id="@+id/checkoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/primary"
+        android:text="Proceed To CheckOut"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/favouriteFAB"
+        app:layout_constraintStart_toStartOf="@+id/favouriteFAB"
+        app:layout_constraintTop_toBottomOf="@+id/favouriteFAB"
+        app:rippleColor="@color/black" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favouriteRecycler"
+        android:layout_width="346dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/cart_item"
+        tools:visibility="visible">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+<ImageView
+    android:id="@+id/FavouriteIcon"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_marginTop="250dp"
+    android:src="@drawable/ic_launcher_background"
+    android:visibility="visible"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.496"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/noAlertTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Items Yet"
+        android:textColor="#D3132F5B"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/FavouriteIcon"
+        app:layout_constraintStart_toStartOf="@+id/FavouriteIcon"
+        app:layout_constraintTop_toBottomOf="@+id/FavouriteIcon"
+        tools:visibility="invisible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
