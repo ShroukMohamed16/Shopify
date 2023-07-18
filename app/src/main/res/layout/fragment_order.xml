@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderFragment.UI.View.OrderFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/orderTopGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/orderLeftGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/orderRightGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="10dp" />
+
+    <TextView
+        android:id="@+id/orderDetailsTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/orderDetails"
+        android:fontFamily="@font/fontfile"
+        android:textColor="@color/primary"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintTop_toBottomOf="@id/orderTopGL"
+
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/orderCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:elevation="20dp"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintTop_toBottomOf="@id/orderDetailsTxt">
+
+        <TextView
+            android:id="@+id/nameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/name"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/nameValue"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addressTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/address"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/addressValue"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="50dp"
+            android:text=""
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/phoneTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="90dp"
+            android:text="@string/phone"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/phoneValue"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="90dp"
+            android:text=""
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/priceTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="130dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/price"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/priceValue"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="130dp"
+            android:text=""
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/itemTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/orderCard"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        android:text="@string/orderItem"
+        android:fontFamily="@font/fontfile"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/itemsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        app:layout_constraintTop_toBottomOf="@+id/itemTxt"
+        tools:listitem="@layout/order_item_raw"
+        app:layout_constraintVertical_bias="0.0" />
+    <Button
+        android:id="@+id/okBtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        android:backgroundTint="@color/primary"
+        android:text="Ok"
+        android:fontFamily="@font/fontfile"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
