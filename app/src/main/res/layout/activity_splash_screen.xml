@@ -18,33 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/splashAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:text="Fashion Frenzy"
-            android:textStyle="bold"/>
 
     </androidx.cardview.widget.CardView>
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splashTopBar"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="shopify_splash.json"
-        app:lottie_loop="false"
-        app:lottie_speed="1.5" />
 
     <TextView
         android:id="@+id/splashSloganTV"
@@ -53,17 +28,49 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="190dp"
         android:layout_marginTop="20dp"
-        android:text="Shop with joy, not stress"
+        android:text="Shop with joy , not stress"
         android:textColor="@color/primary"
-        android:textSize="25sp"
+        android:fontFamily="@font/fontfile"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView"
       />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontfile"
+        android:gravity="center"
+        android:text="@string/frenzy"
+        android:textColor="@color/primary"
+        android:shadowColor="#F4C140"
+        android:shadowDx ="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:textSize="60sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="200dp"
+        app:layout_constraintStart_toStartOf="parent" />
 
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        android:backgroundTint="@color/black"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/shopify_splash" />
+=======
 
 
 

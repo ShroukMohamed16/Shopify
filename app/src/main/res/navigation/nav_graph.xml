@@ -119,6 +119,10 @@
         <argument
             android:name="brandName"
             app:argType="string" />
+        <argument
+            android:name="categoryID"
+            app:argType="string"
+            app:nullable="true"/>
 
     </fragment>
 </navigation>

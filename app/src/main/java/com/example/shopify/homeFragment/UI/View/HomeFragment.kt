@@ -1,5 +1,7 @@
 package com.example.shopify.homeFragment.UI.View
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,7 +27,7 @@ import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
 import kotlinx.coroutines.launch
-
+const val FileName = "prefFile"
 class HomeFragment : Fragment(), OnBrandClick {
     lateinit var viewModel: HomeViewModel
     lateinit var factory: HomeViewModelFactory
@@ -33,6 +35,8 @@ class HomeFragment : Fragment(), OnBrandClick {
     lateinit var gridLayoutmanager: GridLayoutManager
     lateinit var homeBinding: FragmentHomeBinding
     private var brandList: List<SmartCollection> = listOf()
+    lateinit var pref :SharedPreferences
+    lateinit var editor :SharedPreferences.Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +48,8 @@ class HomeFragment : Fragment(), OnBrandClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pref = requireActivity().getSharedPreferences(FileName,Context.MODE_PRIVATE)
+        editor = pref.edit()
         factory = HomeViewModelFactory(BrandsRepository.getInstance(BrandsClient()))
         viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
@@ -109,7 +115,9 @@ class HomeFragment : Fragment(), OnBrandClick {
 
 
     override fun onBrandClick(brandName: String) {
-        val action = HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName)
+        pref.edit().putString("destination" , "brand").apply()
+
+        val action = HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName,"1")
         homeBinding.root.findNavController().navigate(action)
     }
 

@@ -15,10 +15,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"
+            android:fontFamily="@font/fontfile"
             android:textColor="@color/primary"
             android:textSize="60sp"
-            app:layout_constraintStart_toStartOf="@+id/login_left_guideline"
-            app:layout_constraintTop_toTopOf="@+id/login_top_guideline" />
+            app:layout_constraintStart_toEndOf="@+id/login_left_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/login_top_guideline" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/login_top_guideline"
