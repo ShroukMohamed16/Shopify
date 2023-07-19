@@ -124,7 +124,7 @@ class HomeFragment : Fragment(), OnBrandClick {
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    // This method is called after the text has been changed.
+                   // homeBinding.searchEditText.text?.clear()
                 }
             }
 

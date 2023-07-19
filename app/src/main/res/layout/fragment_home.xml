@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtSearch" />
 
     <TextView
-        android:id="@+id/brand_textView"
+        android:id="@+id/brandTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -108,8 +108,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="@+id/brand_textView"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+        app:layout_constraintStart_toEndOf="@id/leftGL"
+        app:layout_constraintTop_toBottomOf="@+id/brandTextView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brands_RV"
@@ -120,7 +120,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightGL"
         app:layout_constraintStart_toEndOf="@id/leftGL"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView"
+        app:layout_constraintTop_toBottomOf="@+id/brandTextView"
         app:layout_constraintVertical_bias="0.0" />
     <TextView
         android:id="@+id/no_internet_text"
