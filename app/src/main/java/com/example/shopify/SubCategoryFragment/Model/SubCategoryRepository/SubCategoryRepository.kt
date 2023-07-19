@@ -33,5 +33,9 @@ class SubCategoryRepository(var productRemote : ProductBrandRemoteSource) : SubC
         return flowOf ( productRemote.getProductOfCategory( productType,collectioId) )
     }
 
+    override suspend fun getAllProductOfCategory(collectioId: Long): Flow<AllProduct> {
+        return flowOf(productRemote.getAllProductOfCategory(collectioId))
+    }
+
 
 }

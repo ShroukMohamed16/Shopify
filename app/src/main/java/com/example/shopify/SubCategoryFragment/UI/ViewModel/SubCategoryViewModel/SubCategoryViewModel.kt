@@ -45,5 +45,19 @@ class SubCategoryViewModel(private val repo : SubCategoryRepositoryInterface) :V
         }
     }
 
+    fun getAllProductOfCategory(collectioId:Long){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.getAllProductOfCategory(collectioId)
+                ?.catch { e->
+                    Log.e("TAG", "category product : $e", )
+                    Log.i("TAG", "getProductOfCategory: faaaaaail")
+                    productCategoryState.value=State.Failure(e) }
+                ?.collect{ data->
+                    Log.i("TAG", "category product : $data")
+                    productCategoryState.value=State.Success(data)
+                }
+        }
+    }
+
 
 }

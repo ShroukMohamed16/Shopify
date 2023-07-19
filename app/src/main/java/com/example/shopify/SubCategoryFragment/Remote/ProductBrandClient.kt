@@ -16,4 +16,8 @@ class ProductBrandClient : ProductBrandRemoteSource {
     override suspend fun getProductOfCategory( productType: String,collectioId: Long) : AllProduct{
         return brandService.getProductsOfCategory(productType,collectioId)
     }
+
+    override suspend fun getAllProductOfCategory(collectioId: Long): AllProduct {
+        return brandService.getAllProductsOfCategory(collectioId)
+    }
 }

@@ -13,7 +13,6 @@
     <string name="shoes">Shoes</string>
     <string name="tshirt">t_shirts</string>
     <string name="accessory">accessories</string>
-
     <string name="login">Login</string>
     <string name="welcome_back">Welcome back</string>
     <string name="password">Password</string>
@@ -28,7 +27,7 @@
     <string name="sign_in">Sign In</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="delete">Delete</string>
-
+    <string name="no_network_connection">no network available</string>
     <string name="no_match_results">no result matches</string>
 
 
