@@ -70,7 +70,7 @@
         android:backgroundTint="@color/black"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/shopify_splash" />
-=======
+
 
 
 

@@ -27,7 +27,7 @@ class AllCategoriesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val currentCategory = categoryList[position]
+       val currentCategory = categoryList[position+1]
         holder.binding.categoryTitle.text=currentCategory.title
         holder.binding.categoryImage.clipToOutline = true
         Glide.with(context)
@@ -39,7 +39,7 @@ class AllCategoriesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return categoryList.size
+        return categoryList.size-1
     }
     fun setCategoryList(values: List<CustomCollections?>?) {
         this.categoryList = values as List<CustomCollections>
