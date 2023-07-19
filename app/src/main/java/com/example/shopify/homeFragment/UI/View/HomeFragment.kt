@@ -1,5 +1,6 @@
 package com.example.shopify.homeFragment.UI.View
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -58,6 +59,7 @@ class HomeFragment : Fragment(), OnBrandClick {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         pref = requireActivity().getSharedPreferences(FileName, Context.MODE_PRIVATE)
@@ -167,7 +169,22 @@ class HomeFragment : Fragment(), OnBrandClick {
                 val networkInfo = connectivityManager.activeNetworkInfo
 
                 if (networkInfo == null || !networkInfo.isConnected) {
+                    homeBinding.couponsViewPager.visibility = View.GONE
+                    homeBinding.searchEditText.visibility = View.GONE
+                    homeBinding.txtSearch.visibility = View.GONE
+                    homeBinding.brandTextView.visibility = View.GONE
+                    homeBinding.brandsRV.visibility = View.GONE
+                    homeBinding.noInternetText.visibility =View.VISIBLE
+                    homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
                     Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG).show()
+                }else{
+                    homeBinding.couponsViewPager.visibility = View.VISIBLE
+                    homeBinding.searchEditText.visibility = View.VISIBLE
+                    homeBinding.txtSearch.visibility = View.VISIBLE
+                    homeBinding.brandTextView.visibility = View.VISIBLE
+                    homeBinding.brandsRV.visibility = View.VISIBLE
+                    homeBinding.noInternetText.visibility =View.GONE
+                    homeBinding.noInternetConnectionAni.visibility = View.GONE
                 }
             }
         }
