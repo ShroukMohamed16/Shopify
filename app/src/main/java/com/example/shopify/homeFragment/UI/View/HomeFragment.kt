@@ -30,6 +30,7 @@ import com.example.shopify.homeFragment.Model.Repository.BrandsRepository
 import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 const val FileName = "prefFile"
 class HomeFragment : Fragment(), OnBrandClick {
@@ -45,6 +46,7 @@ class HomeFragment : Fragment(), OnBrandClick {
     lateinit var adsViewPager : ViewPager2
     private lateinit var handler: Handler
     private var currentItem = 0
+    private var connectivityReceiver: BroadcastReceiver?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,12 +67,12 @@ class HomeFragment : Fragment(), OnBrandClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pref = requireActivity().getSharedPreferences(FileName,Context.MODE_PRIVATE)
+        pref = requireActivity().getSharedPreferences(FileName, Context.MODE_PRIVATE)
         editor = pref.edit()
         factory = HomeViewModelFactory(BrandsRepository.getInstance(BrandsClient()))
         viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
-        adsViewPager= homeBinding.adsViewPager
+        adsViewPager = homeBinding.adsViewPager
 
         viewModel.getAllBrands()
         brandAdapter = BrandAdapter(brandList, requireContext(), this)
@@ -145,102 +147,102 @@ class HomeFragment : Fragment(), OnBrandClick {
                 showNoMatchingResultIfFilteredListIsEmpty(filteredList)
                 if (filteredList != null) {
                     brandAdapter.setBrandList(filteredList)
+                }
+                }
 
                 override fun afterTextChanged(s: Editable?) {
-                   // homeBinding.searchEditText.text?.clear()
-
+                    // This method is called after the text has been changed.
                 }
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                // This method is called after the text has been changed.
+            homeBinding.searchEditText.addTextChangedListener(textWatcher)
+
+            adsAdapter = AdsAdapter(listOf(R.drawable.ads_one, R.drawable.ads_three, R.drawable.ads_two, R.drawable.ads_four, R.drawable.ads_five))
+            adsViewPager.adapter = adsAdapter
+            handler = Handler(Looper.getMainLooper())
+            handler.postDelayed(
+            object : Runnable {
+                override fun run() {
+                    currentItem = (currentItem + 1) % adsAdapter.itemCount
+                    adsViewPager.setCurrentItem(currentItem, true)
+                    handler.postDelayed(this, 3000) // Change the delay time as needed
+                }
+            }, 4000) // Change the delay time as needed
+
+            adsViewPager.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    currentItem = position
+                }
+            })
+
+        }
+
+
+
+
+
+        override fun onBrandClick(brandName: String) {
+            pref.edit().putString("destination", "brand").apply()
+
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName, "1")
+            homeBinding.root.findNavController().navigate(action)
+        }
+
+        private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
+
+            return brandList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
+        }
+
+        private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<SmartCollection>?) {
+            if (filteredList.isNullOrEmpty()) {
+                homeBinding.txtNoResults.visibility = View.VISIBLE
+                homeBinding.brandsRV.visibility = View.GONE
+            } else {
+
+                homeBinding.txtNoResults.visibility = View.GONE
+                homeBinding.brandsRV.visibility = View.VISIBLE
             }
         }
 
-        homeBinding.searchEditText.addTextChangedListener(textWatcher)
-        adsAdapter = AdsAdapter(listOf(R.drawable.ads_one, R.drawable.ads_three, R.drawable.ads_two, R.drawable.ads_four, R.drawable.ads_five))
-        adsViewPager.adapter = adsAdapter
-        handler = Handler(Looper.getMainLooper())
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                currentItem = (currentItem + 1) % adsAdapter.itemCount
-                adsViewPager.setCurrentItem(currentItem, true)
-                handler.postDelayed(this, 3000) // Change the delay time as needed
-            }
-        }, 4000) // Change the delay time as needed
+        private fun checkNetworkAtRuntime() {
+            val connectivityManager =
+                activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
-        adsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                currentItem = position
-            }
-        })
+            connectivityReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    val networkInfo = connectivityManager.activeNetworkInfo
 
-    }
-
-
-
-
-
-
-
-
-    override fun onBrandClick(brandName: String) {
-        pref.edit().putString("destination" , "brand").apply()
-
-        val action = HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName,"1")
-        homeBinding.root.findNavController().navigate(action)
-    }
-
-    private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
-
-        return brandList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
-    }
-
-    private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<SmartCollection>?) {
-        if (filteredList.isNullOrEmpty()) {
-            homeBinding.txtNoResults.visibility = View.VISIBLE
-            homeBinding.brandsRV.visibility = View.GONE
-        } else {
-
-            homeBinding.txtNoResults.visibility = View.GONE
-            homeBinding.brandsRV.visibility = View.VISIBLE
-        }
-    }
-
-    private fun checkNetworkAtRuntime()
-    {
-        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-
-        connectivityReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                val networkInfo = connectivityManager.activeNetworkInfo
-
-                if (networkInfo == null || !networkInfo.isConnected) {
-                    homeBinding.couponsViewPager.visibility = View.GONE
-                    homeBinding.searchEditText.visibility = View.GONE
-                    homeBinding.txtSearch.visibility = View.GONE
-                    homeBinding.brandTextView.visibility = View.GONE
-                    homeBinding.brandsRV.visibility = View.GONE
-                    homeBinding.noInternetText.visibility =View.VISIBLE
-                    homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
-                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG).show()
-                }else{
-                    homeBinding.couponsViewPager.visibility = View.VISIBLE
-                    homeBinding.searchEditText.visibility = View.VISIBLE
-                    homeBinding.txtSearch.visibility = View.VISIBLE
-                    homeBinding.brandTextView.visibility = View.VISIBLE
-                    homeBinding.brandsRV.visibility = View.VISIBLE
-                    homeBinding.noInternetText.visibility =View.GONE
-                    homeBinding.noInternetConnectionAni.visibility = View.GONE
+                    if (networkInfo == null || !networkInfo.isConnected) {
+                        homeBinding.adsViewPager.visibility = View.GONE
+                        homeBinding.searchEditText.visibility = View.GONE
+                        homeBinding.txtSearch.visibility = View.GONE
+                        homeBinding.brandTextView.visibility = View.GONE
+                        homeBinding.brandsRV.visibility = View.GONE
+                        homeBinding.noInternetText.visibility = View.VISIBLE
+                        homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
+                        Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                            .show()
+                    } else {
+                        homeBinding.adsViewPager.visibility = View.VISIBLE
+                        homeBinding.searchEditText.visibility = View.VISIBLE
+                        homeBinding.txtSearch.visibility = View.VISIBLE
+                        homeBinding.brandTextView.visibility = View.VISIBLE
+                        homeBinding.brandsRV.visibility = View.VISIBLE
+                        homeBinding.noInternetText.visibility = View.GONE
+                        homeBinding.noInternetConnectionAni.visibility = View.GONE
+                    }
                 }
             }
+
+            activity?.registerReceiver(connectivityReceiver, intentFilter)
         }
 
-        activity?.registerReceiver(connectivityReceiver, intentFilter)
-        }
+
+    }
 
 
-}
 
