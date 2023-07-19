@@ -120,4 +120,33 @@
         app:layout_constraintStart_toEndOf="@id/leftGL"
         app:layout_constraintTop_toBottomOf="@+id/brand_textView"
         app:layout_constraintVertical_bias="0.0" />
+    <TextView
+        android:id="@+id/no_internet_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/no_internet_connection_ani"
+        android:text="@string/no_internet_connection"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/fontfile"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_internet_connection_ani"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/no_internet"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
