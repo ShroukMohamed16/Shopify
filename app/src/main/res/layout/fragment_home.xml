@@ -90,7 +90,9 @@
         android:text="Brands"
         android:textColor="@color/primary"
         android:fontFamily="@font/fontfile"
-        android:textSize="30sp"
+        android:textSize="35sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/rightGL"
         app:layout_constraintStart_toEndOf="@+id/leftGL"
         app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
 
