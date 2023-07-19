@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filter_list">
+        <item>All Prices</item>
+        <item>Lower that 100</item>
+        <item>More than 100</item>
+        <!-- Add more categories as needed -->
+    </string-array>
+
+</resources>
