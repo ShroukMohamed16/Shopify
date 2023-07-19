@@ -72,4 +72,5 @@
         app:lottie_rawRes="@raw/shopify_splash" />
 
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>

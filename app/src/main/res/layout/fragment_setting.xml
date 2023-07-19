@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAE8E8"
-    tools:context=".SettingFragment">
+    tools:context=".setting.ui.view.SettingFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/CurrencyCard"
@@ -26,9 +26,9 @@
             <!-- Icon on the left -->
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_launcher_background"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/currency_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,9 +101,9 @@
             <!-- Icon on the left -->
             <ImageView
                 android:id="@+id/LanguageIcon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_launcher_background"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/language_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
