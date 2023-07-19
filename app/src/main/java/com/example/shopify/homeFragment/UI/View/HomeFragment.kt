@@ -1,7 +1,12 @@
 package com.example.shopify.homeFragment.UI.View
 
+
 import android.content.Context
-import android.content.SharedPreferences
+
+import android.annotation.SuppressLint
+import android.content.*
+import android.net.ConnectivityManager
+
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -48,6 +53,15 @@ class HomeFragment : Fragment(), OnBrandClick {
         homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
         return homeBinding.root
     }
+
+
+    override fun onStart() {
+        super.onStart()
+        checkNetworkAtRuntime()
+
+    }
+
+    @SuppressLint("SuspiciousIndentation")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -118,6 +132,7 @@ class HomeFragment : Fragment(), OnBrandClick {
                     }
                 }
 
+
             }
         }
         val textWatcher = object : TextWatcher {
@@ -130,6 +145,10 @@ class HomeFragment : Fragment(), OnBrandClick {
                 showNoMatchingResultIfFilteredListIsEmpty(filteredList)
                 if (filteredList != null) {
                     brandAdapter.setBrandList(filteredList)
+
+                override fun afterTextChanged(s: Editable?) {
+                   // homeBinding.searchEditText.text?.clear()
+
                 }
             }
 
@@ -188,6 +207,40 @@ class HomeFragment : Fragment(), OnBrandClick {
             homeBinding.brandsRV.visibility = View.VISIBLE
         }
     }
+
+    private fun checkNetworkAtRuntime()
+    {
+        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+
+        connectivityReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val networkInfo = connectivityManager.activeNetworkInfo
+
+                if (networkInfo == null || !networkInfo.isConnected) {
+                    homeBinding.couponsViewPager.visibility = View.GONE
+                    homeBinding.searchEditText.visibility = View.GONE
+                    homeBinding.txtSearch.visibility = View.GONE
+                    homeBinding.brandTextView.visibility = View.GONE
+                    homeBinding.brandsRV.visibility = View.GONE
+                    homeBinding.noInternetText.visibility =View.VISIBLE
+                    homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
+                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG).show()
+                }else{
+                    homeBinding.couponsViewPager.visibility = View.VISIBLE
+                    homeBinding.searchEditText.visibility = View.VISIBLE
+                    homeBinding.txtSearch.visibility = View.VISIBLE
+                    homeBinding.brandTextView.visibility = View.VISIBLE
+                    homeBinding.brandsRV.visibility = View.VISIBLE
+                    homeBinding.noInternetText.visibility =View.GONE
+                    homeBinding.noInternetConnectionAni.visibility = View.GONE
+                }
+            }
+        }
+
+        activity?.registerReceiver(connectivityReceiver, intentFilter)
+        }
+
 
 }
 

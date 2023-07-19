@@ -1,7 +1,7 @@
 package com.example.shopify.CategoryFragment.UI.View
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.*
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,6 +26,7 @@ import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.View.FileName
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 
@@ -36,14 +37,20 @@ class CategoryFragment : Fragment(), OnClickCategory {
     lateinit var catAdapter: AllCategoriesAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
     private var categoryList: List<CustomCollections> = listOf()
-    lateinit var pref : SharedPreferences
-    lateinit var editor : SharedPreferences.Editor
+    lateinit var pref: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
+    private var connectivityReceiver: BroadcastReceiver? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         catBinding = FragmentCategoryBinding.inflate(inflater, container, false)
         return catBinding.root
+    }
+    override fun onStart() {
+        super.onStart()
+        checkNetworkAtRuntime()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,15 +98,49 @@ class CategoryFragment : Fragment(), OnClickCategory {
 
         }
     }
+    override fun onStop() {
+        super.onStop()
+        activity?.unregisterReceiver(connectivityReceiver)
+    }
 
     override fun onCategoryClick(categoryID: Long) {
-        pref.edit().putString("destination" , "category").apply()
-        val action = CategoryFragmentDirections.actionCategoryFragmentToSubCategoryFragment("",categoryID.toString())
+        pref.edit().putString("destination", "category").apply()
+        val action = CategoryFragmentDirections.actionCategoryFragmentToSubCategoryFragment("",
+            categoryID.toString())
         catBinding.root.findNavController().navigate(action)
     }
 
+    private fun checkNetworkAtRuntime() {
+        val connectivityManager =
+            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
+        connectivityReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val networkInfo = connectivityManager.activeNetworkInfo
+
+                if (networkInfo == null || !networkInfo.isConnected) {
+                    catBinding.categoryProgressBar.visibility = View.GONE
+                    catBinding.categoryRecyclerView.visibility = View.GONE
+                    catBinding.noInternetText.visibility = View.VISIBLE
+                    catBinding.noInternetConnectionAni.visibility = View.VISIBLE
+
+                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                        .show()
+                }else{
+                    catBinding.categoryRecyclerView.visibility = View.VISIBLE
+                    catBinding.noInternetText.visibility = View.GONE
+                    catBinding.noInternetConnectionAni.visibility = View.GONE
+                }
+            }
+        }
+
+        activity?.registerReceiver(connectivityReceiver, intentFilter)
+    }
 }
+
+
+
 
 
 

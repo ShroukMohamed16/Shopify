@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.shopify.R
@@ -25,6 +26,7 @@ import com.example.shopify.SubCategoryFragment.UI.ViewModel.SubCategoryViewModel
 import com.example.shopify.base.State
 import com.example.shopify.databinding.FragmentSubCategoryBinding
 import com.example.shopify.homeFragment.UI.View.FileName
+import com.example.shopify.homeFragment.UI.View.HomeFragmentDirections
 import com.example.shopify.network
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -375,7 +377,8 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
     }
 
     override fun onClickProduct(productID: Long) {
-        //  TODO("Not yet implemented")
+        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductInfoFragment2(productID.toString())
+        subCatBinding.root.findNavController().navigate(action)
     }
 
     private fun onClicked() {
@@ -428,7 +431,22 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                 val networkInfo = connectivityManager.activeNetworkInfo
 
                 if (networkInfo == null || !networkInfo.isConnected) {
+                    subCatBinding.filterList.visibility = View.GONE
+                    subCatBinding.progressBar.visibility =View.GONE
+                    subCatBinding.productsRecyclerview.visibility = View.GONE
+                    subCatBinding.allFAB.visibility = View.GONE
+                    subCatBinding.shoesFAB.visibility = View.GONE
+                    subCatBinding.shirtFAB.visibility = View.GONE
+                    subCatBinding.accessoriesFAB.visibility = View.GONE
+                    subCatBinding.noInternetText.visibility = View.VISIBLE
+                    subCatBinding.noInternetConnectionAni.visibility = View.VISIBLE
                     Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG).show()
+                }else{
+                    subCatBinding.filterList.visibility = View.VISIBLE
+                    subCatBinding.productsRecyclerview.visibility = View.VISIBLE
+                    subCatBinding.allFAB.visibility = View.VISIBLE
+                    subCatBinding.noInternetText.visibility = View.GONE
+                    subCatBinding.noInternetConnectionAni.visibility = View.GONE
                 }
             }
         }
