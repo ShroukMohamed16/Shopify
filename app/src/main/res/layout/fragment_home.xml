@@ -69,7 +69,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/coupons_viewPager"
+        android:id="@+id/ads_viewPager"
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:layout_marginStart="16dp"
@@ -83,16 +83,18 @@
         app:layout_constraintTop_toBottomOf="@+id/txtSearch" />
 
     <TextView
-        android:id="@+id/brand_textView"
+        android:id="@+id/brandTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Brands"
         android:textColor="@color/primary"
         android:fontFamily="@font/fontfile"
-        android:textSize="30sp"
+        android:textSize="35sp"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/rightGL"
         app:layout_constraintStart_toEndOf="@+id/leftGL"
-        app:layout_constraintTop_toBottomOf="@+id/coupons_viewPager" />
+        app:layout_constraintTop_toBottomOf="@+id/ads_viewPager" />
 
     <TextView
         android:id="@+id/txt_noResults"
@@ -106,8 +108,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:gravity="center"
-        app:layout_constraintStart_toStartOf="@+id/brand_textView"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView" />
+        app:layout_constraintStart_toEndOf="@id/leftGL"
+        app:layout_constraintTop_toBottomOf="@+id/brandTextView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brands_RV"
@@ -118,6 +120,35 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightGL"
         app:layout_constraintStart_toEndOf="@id/leftGL"
-        app:layout_constraintTop_toBottomOf="@+id/brand_textView"
+        app:layout_constraintTop_toBottomOf="@+id/brandTextView"
         app:layout_constraintVertical_bias="0.0" />
+    <TextView
+        android:id="@+id/no_internet_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/no_internet_connection_ani"
+        android:text="@string/no_internet_connection"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/fontfile"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_internet_connection_ani"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/no_internet"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

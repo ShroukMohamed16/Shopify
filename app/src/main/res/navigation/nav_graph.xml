@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_homeFragment_to_subCategoryFragment2"
             app:destination="@id/subCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -51,6 +54,12 @@
         <action
             android:id="@+id/action_cartFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
+        <action
+            android:id="@+id/action_cartFragment_to_productInfoFragment22"
+            app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -72,6 +81,9 @@
         <action
             android:id="@+id/action_categoryFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
@@ -93,6 +105,9 @@
         <action
             android:id="@+id/action_favouriteFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_favouriteFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -105,12 +120,19 @@
         <action
             android:id="@+id/action_profileFragment_to_orderFragment"
             app:destination="@id/orderFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
         android:name="com.example.shopify.OrderFragment.UI.View.OrderFragment"
         android:label="fragment_order"
-        tools:layout="@layout/fragment_order" />
+        tools:layout="@layout/fragment_order" >
+        <action
+            android:id="@+id/action_orderFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/subCategoryFragment"
         android:name="com.example.shopify.SubCategoryFragment.UI.View.SubCategoryFragment"
@@ -123,6 +145,25 @@
             android:name="categoryID"
             app:argType="string"
             app:nullable="true"/>
+        <action
+            android:id="@+id/action_subCategoryFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
 
     </fragment>
+    <fragment
+        android:id="@+id/productInfoFragment2"
+        android:name="com.example.shopify.productinfo.ui.view.ProductInfoFragment"
+        android:label="fragment_product_info"
+        tools:layout="@layout/fragment_product_info">
+
+        <argument
+            android:name="productID"
+            app:argType="string"
+            app:nullable="true"/>
+        />
+
+
+    </fragment>
+
+
 </navigation>

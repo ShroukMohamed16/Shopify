@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.base.State
 import com.example.shopify.homeFragment.Model.DataCalss.AllBrandsModel
+import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodeModel
 import com.example.shopify.homeFragment.Model.Repository.BrandsRepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,8 @@ class HomeViewModel(private val repo :BrandsRepositoryInterface) :ViewModel() {
 
     private var brandState: MutableStateFlow<State<AllBrandsModel>> = MutableStateFlow(State.Loading)
     val brand: StateFlow<State<AllBrandsModel>> = brandState
+    private var discountState: MutableStateFlow<State<DiscountCodeModel>> = MutableStateFlow(State.Loading)
+    val discount: StateFlow<State<DiscountCodeModel>> = discountState
 
         fun getAllBrands() {
             Log.i("TAG", "getAllBrands: view model")
@@ -33,4 +36,20 @@ class HomeViewModel(private val repo :BrandsRepositoryInterface) :ViewModel() {
             }
             Log.i("TAG", "getAllBrands: out of scoope")
         }
+
+    fun getAllDiscount() {
+
+        Log.i("TAG", "getAllDiscount: view model")
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getDiscountCodes()
+                ?.catch { e->
+                    Log.e("TAG", "error: $e", )
+                    discountState.value=State.Failure(e) }
+                ?.collect{ data->
+                    Log.i("TAG", "getAllDiscount: $data")
+                    discountState.value=State.Success(data)
+                }
+        }
+        Log.i("TAG", "getAllDiscount: out of scoope")
+    }
 }

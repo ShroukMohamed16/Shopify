@@ -25,7 +25,8 @@ class SplashScreen : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             delay(4000)
 
-                if(auth.currentUser == null){
+
+                /*if(auth.currentUser == null){
                     val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -33,13 +34,12 @@ class SplashScreen : AppCompatActivity() {
                     val intent = Intent(this@SplashScreen, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
-                }
-        }
+                }*/
+            val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
 
-
-                val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
         }
-        
     }
+
+}
