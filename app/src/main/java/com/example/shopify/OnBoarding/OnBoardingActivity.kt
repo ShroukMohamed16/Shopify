@@ -11,7 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.R
-import com.example.shopify.homeActivity.HomeActivity
+import com.example.shopify.authentication.AuthenticationActivity
+import com.example.shopify.utilities.MySharedPreferences
 
 class OnBoardingActivity : AppCompatActivity() {
     lateinit var onBoardingItemsAdapter: OnBoardingItemsAdapter
@@ -19,6 +20,7 @@ class OnBoardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
+        MySharedPreferences.getInstance(this@OnBoardingActivity).saveOnBoardingState(true)
         setOnboardingItems()
         setUpIndicators()
         setCurrentIndicator(0)
@@ -87,7 +89,7 @@ class OnBoardingActivity : AppCompatActivity() {
         }
     }
     private fun navigate(){
-        startActivity(Intent(applicationContext,HomeActivity::class.java))
+        startActivity(Intent(applicationContext,AuthenticationActivity::class.java))
     }
     private fun setUpIndicators(){
         indicatorContainer = findViewById(R.id.indicators_container)
