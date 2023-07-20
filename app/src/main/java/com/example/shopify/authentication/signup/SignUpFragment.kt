@@ -1,60 +1,99 @@
 package com.example.shopify.authentication.signup
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation
 import com.example.shopify.R
+import com.example.shopify.databinding.FragmentSignUpBinding
+import com.google.firebase.auth.FirebaseAuth
+import java.util.regex.Pattern
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentSignUpBinding
+    private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+    ): View{
+        binding =  FragmentSignUpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.signUpBtn.setOnClickListener {
+            singUpWithEmailAndPassword()
+        }
+        binding.txtSignIn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment)
+        }
+    }
+
+    private fun singUpWithEmailAndPassword() {
+        val email = binding.signUpEmailTextField.editText?.text.toString()
+        val username = binding.signUpUsernameTextField.editText?.text.toString()
+        val password = binding.signUpPasswordTextField.editText?.text.toString()
+        val confirmPassword = binding.signUpConfirmPasswordTextField.editText?.text.toString()
+
+        if(email.isEmpty() || username.isEmpty() || password.isEmpty()||confirmPassword.isEmpty()){
+            Toast.makeText(requireContext(),"Please Fill All Data", Toast.LENGTH_LONG).show()
+            return
+        }
+        if(password.length<6 || password.length >20){
+            Toast.makeText(requireContext(),"Password should be at least 6 and less than 20 characters ", Toast.LENGTH_LONG).show()
+            return
+        }
+        if(password != confirmPassword){
+            Toast.makeText(requireContext(),"Password and Confirm Password not match ", Toast.LENGTH_LONG).show()
+            return
+        }
+        if(!isValidEmail(email)){
+            Toast.makeText(requireContext(),"Enter Valid format in email ",Toast.LENGTH_LONG).show()
+            return
+        }
+
+        auth.createUserWithEmailAndPassword(email,password)
+            .addOnCompleteListener{
+                if(it.isSuccessful){
+                    verifyEmailAddress()
+                }
+                else{
+                    Toast.makeText(requireContext(),it.exception?.localizedMessage,Toast.LENGTH_LONG).show()
                 }
             }
     }
+
+    private fun verifyEmailAddress() {
+        auth.currentUser?.sendEmailVerification()!!
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    Navigation.findNavController(binding.root).navigate(R.id.action_signUpFragment_to_signInFragment)
+
+
+                }
+                else{
+                    Toast.makeText(requireContext(),"please verify your email ", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val pattern =  Pattern.compile(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
+        val matcher = pattern.matcher(email)
+        return matcher.matches()
+
+    }
+
 }
