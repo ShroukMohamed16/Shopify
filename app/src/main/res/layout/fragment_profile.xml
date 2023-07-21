@@ -1,14 +1,386 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     tools:context=".ProfileFragment.UI.View.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+ <TextView
+     android:id="@+id/profileOrdersTv3"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="16dp"
+     android:fontFamily="@font/fontfile"
+     android:text="WishList"
+     android:textColor="@color/black"
+     android:textSize="24sp"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profileSecondLine" />
 
-</FrameLayout>
+ <ImageView
+     android:id="@+id/profileNameIcon"
+     android:layout_width="40dp"
+     android:layout_height="40dp"
+     android:layout_marginTop="16dp"
+     android:layout_marginEnd="16dp"
+     android:src="@drawable/setting_icon"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintTop_toTopOf="parent" />
+
+ <TextView
+     android:id="@+id/profileHelloTv"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="16dp"
+     android:fontFamily="@font/fontfile"
+     android:text="Hello "
+     android:textColor="@color/black"
+     android:textSize="24sp"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="@+id/profileNameIcon" />
+
+ <TextView
+     android:id="@+id/profileNameTV"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="name"
+     android:textSize="20sp"
+     app:layout_constraintBottom_toBottomOf="@+id/profileHelloTv"
+     app:layout_constraintEnd_toStartOf="@+id/profileNameIcon"
+     app:layout_constraintHorizontal_bias="0.12"
+     app:layout_constraintStart_toEndOf="@+id/profileHelloTv"
+     app:layout_constraintTop_toTopOf="@+id/profileHelloTv"
+     app:layout_constraintVertical_bias="0.65" />
+
+ <View
+     android:id="@+id/profilefirstLine"
+     android:layout_width="300dp"
+     android:layout_height="2dp"
+     android:layout_marginTop="16dp"
+     android:background="@color/black"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profileNameTV" />
+
+ <TextView
+     android:id="@+id/profileOrdersTv"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="16dp"
+     android:layout_marginTop="6dp"
+     android:fontFamily="@font/fontfile"
+     android:text="Orders"
+     android:textColor="@color/black"
+     android:textSize="24sp"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="@+id/profilefirstLine" />
+
+
+ <TextView
+     android:id="@+id/profileMoreOrdersTv"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginEnd="16dp"
+     android:text="MORE"
+     android:textColor="@color/black"
+     android:textSize="20sp"
+     android:textStyle="bold"
+     app:layout_constraintBottom_toBottomOf="@+id/profileOrdersTv3"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintTop_toTopOf="@+id/profileOrdersTv3" />
+
+ <TextView
+     android:id="@+id/profileMoreOrdersTv2"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="16dp"
+     android:layout_marginTop="16dp"
+     android:text="MORE"
+     android:textColor="@color/black"
+     android:textSize="20sp"
+     android:textStyle="bold"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.948"
+     app:layout_constraintStart_toStartOf="@id/profileOrdersTv"
+     app:layout_constraintTop_toTopOf="@+id/profilefirstLine" />
+
+ <View
+     android:id="@+id/profileSecondLine"
+     android:layout_width="300dp"
+     android:layout_height="2dp"
+     android:layout_marginTop="16dp"
+     android:background="@color/black"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.491"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/firstOrderCardView" />
+
+ <androidx.cardview.widget.CardView
+     android:id="@+id/firstOrderCardView"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="24dp"
+     app:cardCornerRadius="25dp"
+     app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
+     app:layout_constraintStart_toStartOf="@+id/profileOrdersTv"
+     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:padding="16dp">
+
+   <TextView
+       android:id="@+id/ProfileFirstOrderCreatedAt"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Created At:"
+       android:textColor="@android:color/black"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/profileFirstOrderDateTv"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="20/07/2023"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintBottom_toTopOf="@id/text_view_3"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/ProfileFirstOrderCreatedAt" />
+
+   <TextView
+       android:id="@+id/text_view_3"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="Price"
+       android:textColor="@android:color/black"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintBottom_toTopOf="@id/profileFirstOrderPriceTv"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/profileFirstOrderDateTv" />
+
+   <TextView
+       android:id="@+id/profileFirstOrderPriceTv"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="250 EGP"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/text_view_3" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+ </androidx.cardview.widget.CardView>
+
+ <androidx.cardview.widget.CardView
+     android:id="@+id/secondOrderCardView"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="50dp"
+     android:layout_marginTop="16dp"
+     android:layout_marginBottom="16dp"
+     app:cardCornerRadius="25dp"
+     app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
+     app:layout_constraintStart_toEndOf="@+id/firstOrderCardView"
+     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv"
+     app:layout_constraintVertical_bias="0.0">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/profilesecondOrderconstraintLayout"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:padding="16dp">
+
+   <TextView
+       android:id="@+id/text_view_1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Created At:"
+       android:textColor="@android:color/black"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/text_view_2"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="20/07/2023"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintBottom_toTopOf="@id/text_view_33"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/text_view_1" />
+
+   <TextView
+       android:id="@+id/text_view_33"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="Price"
+       android:textColor="@android:color/black"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintBottom_toTopOf="@id/text_view_4"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/text_view_2" />
+
+   <TextView
+       android:id="@+id/text_view_4"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:text="250 EGP"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/text_view_33" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+ </androidx.cardview.widget.CardView>
+
+ <androidx.cardview.widget.CardView
+     android:id="@+id/profileFirstWishListCardView"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginStart="8dp"
+     android:layout_marginTop="8dp"
+     app:cardCornerRadius="25dp"
+     app:cardElevation="4dp"
+     app:cardUseCompatPadding="true"
+     app:layout_constraintStart_toStartOf="@+id/profileOrdersTv3"
+     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv3">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp">
+
+   <ImageView
+       android:id="@+id/profileFirstWishListItemImage"
+       android:layout_width="100dp"
+       android:layout_height="100dp"
+       android:src="@drawable/sneakers"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="1.0"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/profileFirstWishListItemName"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Item Name"
+       android:textColor="@android:color/black"
+       android:textSize="16sp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/profileFirstWishListItemImage" />
+
+   <TextView
+       android:id="@+id/profileFirstWishListItemPrice"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="250 EGP"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/profileFirstWishListItemName" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+ </androidx.cardview.widget.CardView>
+
+ <androidx.cardview.widget.CardView
+     android:id="@+id/profileSecondWishListCardView"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="8dp"
+     app:cardCornerRadius="25dp"
+     app:cardElevation="4dp"
+     app:cardUseCompatPadding="true"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.584"
+     app:layout_constraintStart_toEndOf="@+id/profileFirstWishListCardView"
+     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv3">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp">
+
+   <ImageView
+       android:id="@+id/profileSecondWishListItemImage"
+       android:layout_width="100dp"
+       android:layout_height="100dp"
+       android:src="@drawable/sneakers"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="1.0"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/profileSecondWishListItemName"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Item Name"
+       android:textColor="@android:color/black"
+       android:textSize="16sp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/profileSecondWishListItemImage" />
+
+   <TextView
+       android:id="@+id/profileSecondWishListItemPrice"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="250 EGP"
+       android:textColor="@color/primary"
+       android:textSize="16sp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/profileSecondWishListItemName" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+ </androidx.cardview.widget.CardView>
+
+ <com.google.android.material.button.MaterialButton
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="12dp"
+     android:backgroundTint="@color/primary"
+     android:text="Logout"
+     android:textColor="@color/white"
+     android:textSize="24sp"
+     app:cornerRadius="25dp"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profileSecondWishListCardView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

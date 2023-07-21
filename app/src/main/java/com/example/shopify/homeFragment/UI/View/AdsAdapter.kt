@@ -7,8 +7,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopify.R
 
-
-class AdsAdapter(private val images: List<Int>) : RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
+class AdsAdapter(private val images: List<Int>, var listener: OnAdsClickListener) :
+    RecyclerView.Adapter<AdsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.ads_item, parent, false)
@@ -17,6 +17,9 @@ class AdsAdapter(private val images: List<Int>) : RecyclerView.Adapter<AdsAdapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(images[position])
+        holder.itemView.setOnClickListener {
+            listener.onAdsClick(holder.itemView, position)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -28,4 +31,9 @@ class AdsAdapter(private val images: List<Int>) : RecyclerView.Adapter<AdsAdapte
             itemView.findViewById<ImageView>(R.id.adsImageView).setImageResource(image)
         }
     }
+
+}
+
+interface OnAdsClickListener {
+    fun onAdsClick(view: View, position: Int)
 }

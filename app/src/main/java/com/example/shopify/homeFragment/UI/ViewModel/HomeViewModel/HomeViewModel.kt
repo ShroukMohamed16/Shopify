@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopify.base.State
 import com.example.shopify.homeFragment.Model.DataCalss.AllBrandsModel
-import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodeModel
+import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodes
+import com.example.shopify.homeFragment.Model.DataCalss.PriceRules
 import com.example.shopify.homeFragment.Model.Repository.BrandsRepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,13 +15,12 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repo :BrandsRepositoryInterface) :ViewModel() {
-
     private var brandState: MutableStateFlow<State<AllBrandsModel>> = MutableStateFlow(State.Loading)
     val brand: StateFlow<State<AllBrandsModel>> = brandState
-    private var discountState: MutableStateFlow<State<DiscountCodeModel>> = MutableStateFlow(State.Loading)
-    val discount: StateFlow<State<DiscountCodeModel>> = discountState
+    private var discountState: MutableStateFlow<State<DiscountCodes>> = MutableStateFlow(State.Loading)
+    val discount: StateFlow<State<DiscountCodes>> = discountState
 
-        fun getAllBrands() {
+    fun getAllBrands() {
             Log.i("TAG", "getAllBrands: view model")
             viewModelScope.launch(Dispatchers.IO) {
                 repo.getBrands()
@@ -37,11 +37,10 @@ class HomeViewModel(private val repo :BrandsRepositoryInterface) :ViewModel() {
             Log.i("TAG", "getAllBrands: out of scoope")
         }
 
-    fun getAllDiscount() {
-
+    fun getAllDiscount(id:Long) {
         Log.i("TAG", "getAllDiscount: view model")
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getDiscountCodes()
+            repo.getDiscountCodes(id)
                 ?.catch { e->
                     Log.e("TAG", "error: $e", )
                     discountState.value=State.Failure(e) }
@@ -52,4 +51,5 @@ class HomeViewModel(private val repo :BrandsRepositoryInterface) :ViewModel() {
         }
         Log.i("TAG", "getAllDiscount: out of scoope")
     }
+
 }
