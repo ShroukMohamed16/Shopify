@@ -1,9 +1,8 @@
 package com.example.shopify.authentication.remote
 
-import com.example.shopify.authentication.model.pojo.Customer
+import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.base.Remote.RetrofitHelper
-import com.example.shopify.productinfo.model.pojo.ProductResponse
-import com.example.shopify.productinfo.remote.ProductDetailsService
+import kotlinx.coroutines.flow.Flow
 
 class AuthenticationClient:AuthenticationRemoteSource {
 
@@ -12,7 +11,7 @@ class AuthenticationClient:AuthenticationRemoteSource {
     }
 
 
-    override suspend fun addNewCustomer(customer: Customer) {
-        authenticationService.addNewCustomer(customer)
+    override suspend fun addNewCustomer(customer: CustomerResponse): Flow<CustomerResponse> {
+        return authenticationService.addNewCustomer(customer)
     }
 }
