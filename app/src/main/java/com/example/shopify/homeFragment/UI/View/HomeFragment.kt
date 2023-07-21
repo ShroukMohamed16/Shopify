@@ -219,11 +219,9 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
         val connectivityManager =
             activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-
         connectivityReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val networkInfo = connectivityManager.activeNetworkInfo
-
                 if (networkInfo == null || !networkInfo.isConnected) {
                     homeBinding.adsViewPager.visibility = View.GONE
                     homeBinding.searchEditText.visibility = View.GONE
