@@ -1,4 +1,4 @@
-package com.example.shopify.authentication.signup
+package com.example.shopify.authentication.ui.view.signup
 
 import android.content.Context
 import android.os.Bundle
@@ -32,6 +32,7 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.signUpBtn.setOnClickListener {
             singUpWithEmailAndPassword()
         }

@@ -10,7 +10,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             >
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,19 +91,85 @@
                     app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
                     app:layout_constraintTop_toBottomOf="@id/product_info_item_price" />
 
+                <TextView
+                    android:id="@+id/product_info_reviews_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reviews"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_rating_bar" />
+                />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/first_review"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_reviews_txt">
+                >
+                    <TextView
+                        android:id="@+id/first_reviewer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="reviewer name"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/first_reviewer_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="reviewer comment"
+                        android:textSize="25sp"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/first_reviewer_name"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/second_review"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/first_review">
+                    >
+                    <TextView
+                        android:id="@+id/second_reviewer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="reviewer name"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/second_reviewer_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="reviewer comment"
+                        android:textSize="25sp"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/second_reviewer_name"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/product_info_description_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="Description"
+                    android:text="@string/description"
                     android:textColor="@color/black"
-                    android:textSize="30dp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/second_review"
                     app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
-                    app:layout_constraintTop_toBottomOf="@id/product_info_rating_bar" />
-
+                />
                 <TextView
                     android:id="@+id/product_info_description_content"
                     android:layout_width="0dp"
@@ -111,7 +177,7 @@
                     android:layout_marginStart="10dp"
                     android:text="Description"
                     android:textColor="@color/gray"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toStartOf="@id/product_info_right_guideline"
                     app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
                     app:layout_constraintTop_toBottomOf="@id/product_info_description_txt" />
@@ -136,6 +202,50 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_begin="15dp" />
+                <TextView
+                    android:id="@+id/product_info_available_sizes_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/product_info_left_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_description_content"
+                    android:text="@string/available_sizes"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_info_size_rv"
+                    tools:listitem="@layout/product_info_raw"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_available_sizes_txt"
+                    app:layout_constraintEnd_toStartOf="@id/product_info_right_guideline"
+                    app:layout_constraintStart_toEndOf="@id/product_info_left_guideline" />
+                <TextView
+                    android:id="@+id/product_info_available_colors_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/product_info_left_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_size_rv"
+                    android:text="Available Colors"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/product_info_color_rv"
+                    tools:listitem="@layout/product_info_raw"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/product_info_available_colors_txt"
+                    app:layout_constraintEnd_toStartOf="@id/product_info_right_guideline"
+                    app:layout_constraintStart_toEndOf="@id/product_info_left_guideline" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ProgressBar

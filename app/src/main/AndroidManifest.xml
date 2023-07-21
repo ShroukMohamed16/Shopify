@@ -24,7 +24,7 @@
         android:theme="@style/Theme.Shopify"
         tools:targetApi="31">
         <activity
-            android:name=".authentication.AuthenticationActivity"
+            android:name=".authentication.ui.view.AuthenticationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

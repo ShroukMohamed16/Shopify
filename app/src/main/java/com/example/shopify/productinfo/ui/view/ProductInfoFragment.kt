@@ -19,6 +19,7 @@ import com.example.shopify.homeFragment.Model.Repository.BrandsRepository
 import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
+import com.example.shopify.productinfo.model.pojo.Reviews
 import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
 import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
@@ -32,6 +33,13 @@ class ProductInfoFragment : Fragment() {
     lateinit var productBinding : FragmentProductInfoBinding
     lateinit var productsDetailsViewModel:ProductsDetailsViewModel
     lateinit var productsDetailsViewModelFactory: ProductsDetailsViewModelFactory
+    val reviews = arrayOf(
+        Reviews("Bassant Mohamed","This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
+        Reviews("Radwa Mohamed","The fit of this item is perfect. It's true to size and hugs my body in all the right places."),
+        Reviews("Sarah Mohamed","This item is a great value for the price. It's affordable and offers high-quality materials and construction."),
+        Reviews("Shrouk Mohamed","The quality of this product is impressive. It's well-made and durable, ensuring that it will last for a long time."),
+        Reviews( "Noha Ahmed","This item is incredibly comfortable. The fabric is soft and breathable, and it feels great to wear.")
+    )
 
 
     override fun onCreateView(
@@ -44,6 +52,7 @@ class ProductInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         productsDetailsViewModelFactory = ProductsDetailsViewModelFactory(ProductDetailsRepository.getInstance(ProductDetailsClient()))
         productsDetailsViewModel = ViewModelProvider(this, productsDetailsViewModelFactory)[ProductsDetailsViewModel::class.java]
 

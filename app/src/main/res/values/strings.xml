@@ -32,6 +32,9 @@
     <string name="no_internet_connection">no internet connection \n please check your connection to continue</string>
     <string name="orderNumber">order num : </string>
     <string name="date">Created At : </string>
+    <string name="reviews">Reviews</string>
+    <string name="description">Description</string>
+    <string name="available_sizes">Available Sizes</string>
 
 
 </resources>
