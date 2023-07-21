@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="25dp"
-
+    android:id="@+id/currencyItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+
+    app:cardCornerRadius="25dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/spinner_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

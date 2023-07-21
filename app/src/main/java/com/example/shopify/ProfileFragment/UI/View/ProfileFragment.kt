@@ -11,15 +11,7 @@ import com.example.shopify.databinding.FragmentProfileBinding
 
 
 class ProfileFragment : Fragment() {
-
     lateinit var profileBinding: FragmentProfileBinding
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -27,7 +19,6 @@ class ProfileFragment : Fragment() {
         profileBinding = FragmentProfileBinding.inflate(inflater, container, false)
         return profileBinding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +31,4 @@ class ProfileFragment : Fragment() {
 
         }
     }
-
-
 }

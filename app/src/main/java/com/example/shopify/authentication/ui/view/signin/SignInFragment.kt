@@ -103,7 +103,7 @@ class SignInFragment : Fragment() {
             .addOnCompleteListener{
                 if(it.isSuccessful) {
                     if (auth.currentUser?.isEmailVerified!!) {
-                        authenticationViewModel.addCustomer(CustomerResponse(Customer(auth.currentUser!!.uid ,email,firstName,lastName)))
+                        authenticationViewModel.addCustomer(CustomerResponse( Customer(auth.currentUser!!.uid ,email,firstName,lastName)))
                         startActivity(Intent(requireActivity(), HomeActivity::class.java))
                         requireActivity().finish()
                         Toast.makeText(requireContext(), "Sign in Successfully", Toast.LENGTH_LONG)
