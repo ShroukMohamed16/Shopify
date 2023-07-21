@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.Customer
+import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.authentication.model.repository.AuthenticationRepository
 import com.example.shopify.authentication.remote.AuthenticationClient
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModel
@@ -102,7 +103,7 @@ class SignInFragment : Fragment() {
             .addOnCompleteListener{
                 if(it.isSuccessful) {
                     if (auth.currentUser?.isEmailVerified!!) {
-                        authenticationViewModel.addCustomer(Customer(auth.currentUser!!.uid ,email,firstName,lastName))
+                        authenticationViewModel.addCustomer(CustomerResponse(Customer(auth.currentUser!!.uid ,email,firstName,lastName)))
                         startActivity(Intent(requireActivity(), HomeActivity::class.java))
                         requireActivity().finish()
                         Toast.makeText(requireContext(), "Sign in Successfully", Toast.LENGTH_LONG)

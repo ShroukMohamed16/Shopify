@@ -123,6 +123,9 @@
         <action
             android:id="@+id/action_profileFragment_to_productInfoFragment2"
             app:destination="@id/productInfoFragment2" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -164,6 +167,19 @@
 
 
     </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.shopify.setting.ui.view.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addressFragment"
+        android:name="com.example.shopify.address.ui.view.AddressFragment"
+        android:label="AddressFragment" />
 
 
 </navigation>

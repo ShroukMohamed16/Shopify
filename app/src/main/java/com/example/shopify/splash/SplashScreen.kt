@@ -10,9 +10,6 @@ import com.example.shopify.OnBoarding.OnBoardingActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.ui.view.AuthenticationActivity
 
-import androidx.appcompat.app.AppCompatDelegate
-import com.example.shopify.OnBoarding.OnBoardingActivity
-import com.example.shopify.R
 
 import com.example.shopify.homeActivity.HomeActivity
 
@@ -32,24 +29,16 @@ class SplashScreen : AppCompatActivity() {
 
         if(!MySharedPreferences.getInstance(this@SplashScreen).getOnBoardingState()){
             GlobalScope.launch(Dispatchers.Main) {
-
-
             val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
-            Log.i(TAG, "onCreate: ${auth.currentUser.toString()}")
-
-            delay(4000)
-               val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
             }
 
         }else{
             GlobalScope.launch(Dispatchers.Main) {
                 delay(4000)
-                if(auth.currentUser == null){
+           /*     if(auth.currentUser == null){
                     val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -57,8 +46,8 @@ class SplashScreen : AppCompatActivity() {
                     val intent = Intent(this@SplashScreen, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
-                }
-            val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
+                }*/
+            val intent = Intent(this@SplashScreen, HomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
 
