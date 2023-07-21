@@ -50,4 +50,5 @@ class ProductAdapter  (private var productList: List<Product>, val context: Cont
         val decimalFormat = DecimalFormat("0.00")
         return decimalFormat.format(decimal)
     }
+
 }

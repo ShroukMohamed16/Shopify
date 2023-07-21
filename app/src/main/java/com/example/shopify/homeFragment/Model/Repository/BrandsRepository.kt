@@ -2,7 +2,8 @@ package com.example.shopify.homeFragment.Model.Repository
 
 import android.util.Log
 import com.example.shopify.homeFragment.Model.DataCalss.AllBrandsModel
-import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodeModel
+import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodes
+import com.example.shopify.homeFragment.Model.DataCalss.PriceRules
 import com.example.shopify.homeFragment.Remote.BrandsRemoteSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +26,11 @@ class BrandsRepository(var brandRemote :BrandsRemoteSource) : BrandsRepositoryIn
         return flowOf(brandRemote.getBrands())
     }
 
-    override suspend fun getDiscountCodes(): Flow<DiscountCodeModel> {
-        return flowOf(brandRemote.getDiscountCodes())
+    override suspend fun getDiscountCodes(id:Long): Flow<DiscountCodes> {
+        return flowOf(brandRemote.getDiscountCodes(id))
+    }
+
+    override suspend fun getPriceRules(): Flow<PriceRules> {
+        return flowOf(brandRemote.getPriceRules())
     }
 }

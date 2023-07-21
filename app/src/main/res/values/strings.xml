@@ -20,7 +20,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="continue_as_guest">Continue as Guest</string>
     <string name="continue_with_google">Continue with google</string>
-    <string name="welcome_in_frenzy">Welcome in Frenzy</string>
+    <string name="welcome_in_frenzy">Welcome to Frenzy</string>
     <string name="sign_up_txt">Sign Up</string>
     <string name="username">Username</string>
     <string name="already_have_an_account">Already have an account?</string>
@@ -37,6 +37,11 @@
     <string name="available_sizes">Available Sizes</string>
     <string name="show_more">show more</string>
     <string name="show_less">show less</string>
+    <string name="coupon">Coupon</string>
+    <string name="save_the_code_to_apply_the_discount">Save the code to apply the discount</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
 
 
 </resources>

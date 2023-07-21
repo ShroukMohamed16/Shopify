@@ -26,6 +26,7 @@ import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.View.FileName
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
+import com.example.shopify.network
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -105,9 +106,14 @@ class CategoryFragment : Fragment(), OnClickCategory {
 
     override fun onCategoryClick(categoryID: Long) {
         pref.edit().putString("destination", "category").apply()
+        if(network.isNetworkAvailable(requireContext())){
         val action = CategoryFragmentDirections.actionCategoryFragmentToSubCategoryFragment("",
             categoryID.toString())
         catBinding.root.findNavController().navigate(action)
+        }else{
+            Snackbar.make(catBinding.root, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
 
     private fun checkNetworkAtRuntime() {

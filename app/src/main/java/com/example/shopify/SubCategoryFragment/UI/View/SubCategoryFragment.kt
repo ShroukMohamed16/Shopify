@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,9 +28,11 @@ import com.example.shopify.SubCategoryFragment.UI.ViewModel.SubCategoryViewModel
 import com.example.shopify.SubCategoryFragment.UI.ViewModel.SubCategoryViewModelFactory.SubCategoryViewModelFactory
 import com.example.shopify.base.State
 import com.example.shopify.databinding.FragmentSubCategoryBinding
+import com.example.shopify.homeFragment.Model.DataCalss.SmartCollection
 import com.example.shopify.homeFragment.UI.View.FileName
 import com.example.shopify.homeFragment.UI.View.HomeFragmentDirections
 import com.example.shopify.network
+import com.google.android.material.slider.RangeSlider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -44,7 +49,10 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
     private var selectedFilter = "All Prices"
     private val args: SubCategoryFragmentArgs by navArgs()
 
-    private var connectivityReceiver: BroadcastReceiver?=null
+    private var minPrice = 20.0
+    private var maxPrice = 50.0
+
+    private var connectivityReceiver: BroadcastReceiver? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -58,6 +66,7 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         checkNetworkAtRuntime()
 
     }
+
     @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,8 +76,6 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         Log.i("TAG", "onViewCreated: $destination")
 
         var productType = "SHOES"
-
-
         factory =
             SubCategoryViewModelFactory(SubCategoryRepository.getInstance(ProductBrandClient()))
         viewModel = ViewModelProvider(this, factory).get(SubCategoryViewModel::class.java)
@@ -78,6 +85,38 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         Log.i("TAG", "onViewCreated: $brand")
         Log.i("TAG", "onViewCreated: $categoryID")
         productAdapter = ProductAdapter(productsList, requireContext(), this)
+
+
+        subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+            RangeSlider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: RangeSlider) {
+            }
+
+            override fun onStopTrackingTouch(slider: RangeSlider) {
+                maxPrice = slider.values[0].toDouble()
+                subCatBinding.maxPriceValue.text = "$maxPrice"
+            }
+        })
+
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val filteredList = filteredMyListWithSequence(s.toString())
+                showNoMatchingResultIfFilteredListIsEmpty(filteredList)
+                if (filteredList != null) {
+                    productAdapter.setProductList(filteredList)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        }
+
+        subCatBinding.searchEditText.addTextChangedListener(textWatcher)
+
 
 
         if (destination == "brand") {
@@ -103,30 +142,19 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                 subCatBinding.noItemsfound.visibility = View.GONE
                                 subCatBinding.progressBar.visibility = View.GONE
                                 subCatBinding.productsRecyclerview.visibility = View.VISIBLE
-                                subCatBinding.filterList.onItemSelectedListener = object :
-                                    AdapterView.OnItemSelectedListener {
-                                    override fun onItemSelected(
-                                        parent: AdapterView<*>,
-                                        view: View?,
-                                        position: Int,
-                                        id: Long,
-                                    ) {
-                                        selectedFilter =
-                                            parent.getItemAtPosition(position) as String
-                                        val filtershoesList = when (selectedFilter) {
-                                            "Lower that 100" -> productsList.filter { it.variants[0].price?.toDouble()!! < 100.00 }
-                                            "More than 100" -> productsList.filter { it.variants[0].price?.toDouble()!! >= 100.00 }
-                                            else -> productsList
-                                        }
-                                        productAdapter.setProductList(filtershoesList)
-                                        Log.i("TAG", "onItemSelected: $productsList")
-                                        Log.i("TAG", "onItemSelected: $selectedFilter")
+
+
+                                subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+                                    RangeSlider.OnSliderTouchListener {
+                                    override fun onStartTrackingTouch(slider: RangeSlider) {
                                     }
 
-                                    override fun onNothingSelected(parent: AdapterView<*>) {
+                                    override fun onStopTrackingTouch(slider: RangeSlider) {
+                                        val priceFilterList = filterProductsByPrice(productsList, minPrice, maxPrice)
+                                        productAdapter.setProductList(priceFilterList)
+                                        Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                     }
-                                }
-
+                                })
                                 gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                                     GridLayoutManager.VERTICAL, false)
                                 productAdapter.setProductList(productsList)
@@ -141,29 +169,19 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                 subCatBinding.shoesFAB.setOnClickListener {
                                     var shoesList =
                                         productsList.filter { it.product_type == "SHOES" }
-                                    subCatBinding.filterList.onItemSelectedListener = object :
-                                        AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            parent: AdapterView<*>,
-                                            view: View?,
-                                            position: Int,
-                                            id: Long,
-                                        ) {
-                                            selectedFilter =
-                                                parent.getItemAtPosition(position) as String
-                                            val filtershoesList = when (selectedFilter) {
-                                                "Lower that 100" -> shoesList.filter { it.variants[0].price?.toDouble()!! < 100.00 }
-                                                "More than 100" -> shoesList.filter { it.variants[0].price?.toDouble()!! >= 100.00 }
-                                                else -> shoesList
-                                            }
-                                            productAdapter.setProductList(filtershoesList)
-                                            Log.i("TAG", "onItemSelected: $shoesList")
-                                            Log.i("TAG", "onItemSelected: $selectedFilter")
+
+                                    subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+                                        RangeSlider.OnSliderTouchListener {
+                                        override fun onStartTrackingTouch(slider: RangeSlider) {
                                         }
 
-                                        override fun onNothingSelected(parent: AdapterView<*>) {
+                                        override fun onStopTrackingTouch(slider: RangeSlider) {
+                                            val priceFilterList = filterProductsByPrice(shoesList, minPrice, maxPrice)
+                                            productAdapter.setProductList(priceFilterList)
+                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
-                                    }
+                                    })
+
 
                                     gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                                         GridLayoutManager.VERTICAL, false)
@@ -180,29 +198,18 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
                                     val tShirtList =
                                         productsList.filter { it.product_type == "T-SHIRTS" }
-                                    subCatBinding.filterList.onItemSelectedListener = object :
-                                        AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            parent: AdapterView<*>,
-                                            view: View?,
-                                            position: Int,
-                                            id: Long,
-                                        ) {
-                                            selectedFilter =
-                                                parent.getItemAtPosition(position) as String
-                                            val filtershoesList = when (selectedFilter) {
-                                                "Lower that 100" -> tShirtList.filter { it.variants[0].price?.toDouble()!! < 100.00 }
-                                                "More than 100" -> tShirtList.filter { it.variants[0].price?.toDouble()!! >= 100.00 }
-                                                else -> tShirtList
-                                            }
-                                            productAdapter.setProductList(filtershoesList)
-                                            Log.i("TAG", "onItemSelected: $tShirtList")
-                                            Log.i("TAG", "onItemSelected: $selectedFilter")
+                                    subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+                                        RangeSlider.OnSliderTouchListener {
+                                        override fun onStartTrackingTouch(slider: RangeSlider) {
                                         }
 
-                                        override fun onNothingSelected(parent: AdapterView<*>) {
+                                        override fun onStopTrackingTouch(slider: RangeSlider) {
+                                            val priceFilterList = filterProductsByPrice(tShirtList, minPrice, maxPrice)
+                                            productAdapter.setProductList(priceFilterList)
+                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
-                                    }
+                                    })
+
                                     gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                                         GridLayoutManager.VERTICAL, false)
                                     productAdapter.setProductList(tShirtList)
@@ -214,29 +221,18 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                 subCatBinding.accessoriesFAB.setOnClickListener {
                                     val accessList =
                                         productsList.filter { it.product_type == "ACCESSORIES" }
-                                    subCatBinding.filterList.onItemSelectedListener = object :
-                                        AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            parent: AdapterView<*>,
-                                            view: View?,
-                                            position: Int,
-                                            id: Long,
-                                        ) {
-                                            selectedFilter =
-                                                parent.getItemAtPosition(position) as String
-                                            val filtershoesList = when (selectedFilter) {
-                                                "Lower that 100" -> accessList.filter { it.variants[0].price?.toDouble()!! < 100.00 }
-                                                "More than 100" -> accessList.filter { it.variants[0].price?.toDouble()!! >= 100.00 }
-                                                else -> accessList
-                                            }
-                                            productAdapter.setProductList(filtershoesList)
-                                            Log.i("TAG", "onItemSelected: $accessList")
-                                            Log.i("TAG", "onItemSelected: $selectedFilter")
+                                    subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+                                        RangeSlider.OnSliderTouchListener {
+                                        override fun onStartTrackingTouch(slider: RangeSlider) {
                                         }
 
-                                        override fun onNothingSelected(parent: AdapterView<*>) {
+                                        override fun onStopTrackingTouch(slider: RangeSlider) {
+                                            val priceFilterList = filterProductsByPrice(accessList, minPrice, maxPrice)
+                                            productAdapter.setProductList(priceFilterList)
+                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
-                                    }
+                                    })
+
                                     gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                                         GridLayoutManager.VERTICAL, false)
                                     productAdapter.setProductList(accessList)
@@ -320,29 +316,17 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                     subCatBinding.progressBar.visibility = View.GONE
                                     subCatBinding.productsRecyclerview.visibility = View.VISIBLE
 
-                                    subCatBinding.filterList.onItemSelectedListener = object :
-                                        AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            parent: AdapterView<*>,
-                                            view: View?,
-                                            position: Int,
-                                            id: Long,
-                                        ) {
-                                            selectedFilter =
-                                                parent.getItemAtPosition(position) as String
-                                            val filtershoesList = when (selectedFilter) {
-                                                "Lower that 100" -> productsList.filter { it.variants[0].price?.toDouble()!! < 100.00 }
-                                                "More than 100" -> productsList.filter { it.variants[0].price?.toDouble()!! >= 100.00 }
-                                                else -> productsList
-                                            }
-                                            productAdapter.setProductList(filtershoesList)
-                                            Log.i("TAG", "onItemSelected: $productsList")
-                                            Log.i("TAG", "onItemSelected: $selectedFilter")
+                                    subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
+                                        RangeSlider.OnSliderTouchListener {
+                                        override fun onStartTrackingTouch(slider: RangeSlider) {
                                         }
 
-                                        override fun onNothingSelected(parent: AdapterView<*>) {
+                                        override fun onStopTrackingTouch(slider: RangeSlider) {
+                                            val priceFilterList = filterProductsByPrice(productsList, minPrice, maxPrice)
+                                            productAdapter.setProductList(priceFilterList)
+                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
-                                    }
+                                    })
                                     val gridLayoutmanager = GridLayoutManager(requireContext(), 2,
                                         GridLayoutManager.VERTICAL, false)
                                     productAdapter.setProductList(productsList)
@@ -377,8 +361,16 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
     }
 
     override fun onClickProduct(productID: Long) {
-        val action = SubCategoryFragmentDirections.actionSubCategoryFragmentToProductInfoFragment2(productID.toString())
-        subCatBinding.root.findNavController().navigate(action)
+        if (network.isNetworkAvailable(requireContext())) {
+            val action =
+                SubCategoryFragmentDirections.actionSubCategoryFragmentToProductInfoFragment2(
+                    productID.toString())
+            subCatBinding.root.findNavController().navigate(action)
+        } else {
+            Snackbar.make(subCatBinding.root, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                .show()
+        }
+
     }
 
     private fun onClicked() {
@@ -421,9 +413,9 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         }
     }
 
-    private fun checkNetworkAtRuntime()
-    {
-        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private fun checkNetworkAtRuntime() {
+        val connectivityManager =
+            activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
 
         connectivityReceiver = object : BroadcastReceiver() {
@@ -431,8 +423,8 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                 val networkInfo = connectivityManager.activeNetworkInfo
 
                 if (networkInfo == null || !networkInfo.isConnected) {
-                    subCatBinding.filterList.visibility = View.GONE
-                    subCatBinding.progressBar.visibility =View.GONE
+                    subCatBinding.sliderLayout.visibility = View.GONE
+                    subCatBinding.progressBar.visibility = View.GONE
                     subCatBinding.productsRecyclerview.visibility = View.GONE
                     subCatBinding.allFAB.visibility = View.GONE
                     subCatBinding.shoesFAB.visibility = View.GONE
@@ -440,9 +432,10 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                     subCatBinding.accessoriesFAB.visibility = View.GONE
                     subCatBinding.noInternetText.visibility = View.VISIBLE
                     subCatBinding.noInternetConnectionAni.visibility = View.VISIBLE
-                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG).show()
-                }else{
-                    subCatBinding.filterList.visibility = View.VISIBLE
+                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                        .show()
+                } else {
+                    subCatBinding.sliderLayout.visibility = View.VISIBLE
                     subCatBinding.productsRecyclerview.visibility = View.VISIBLE
                     subCatBinding.allFAB.visibility = View.VISIBLE
                     subCatBinding.noInternetText.visibility = View.GONE
@@ -452,5 +445,27 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         }
 
         activity?.registerReceiver(connectivityReceiver, intentFilter)
+    }
+
+    private fun showNoMatchingResultIfFilteredListIsEmpty(filteredList: List<Product>?) {
+        if (filteredList.isNullOrEmpty()) {
+            subCatBinding.txtNoResults.visibility = View.VISIBLE
+            subCatBinding.productsRecyclerview.visibility = View.GONE
+        } else {
+
+            subCatBinding.txtNoResults.visibility = View.GONE
+            subCatBinding.productsRecyclerview.visibility = View.VISIBLE
         }
+    }
+
+    private fun filteredMyListWithSequence(s: String): List<Product>? {
+
+        return productsList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
+    }
+
+    fun filterProductsByPrice(productsList: List<Product>, minPrice: Double, maxPrice: Double): List<Product> {
+        return productsList.filter { product ->
+            product.variants[0].price?.toDouble()!! >= minPrice && product.variants[0].price?.toDouble()!! <= maxPrice
+        }
+    }
 }

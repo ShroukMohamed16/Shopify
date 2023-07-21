@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
         android:textColor="@color/primary"
+        android:fontFamily="@font/fontfile"
         android:textSize="60sp"
         app:layout_constraintStart_toStartOf="@+id/sign_up_left_guideline"
         app:layout_constraintTop_toTopOf="@+id/sign_up_top_guideline" />
@@ -46,6 +47,7 @@
         android:text="@string/welcome_in_frenzy"
         android:textColor="@color/gray"
         android:textSize="25sp"
+        android:fontFamily="@font/fontfile"
         app:layout_constraintEnd_toEndOf="@+id/sign_up_txt"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/sign_up_txt"
