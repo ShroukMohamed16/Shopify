@@ -35,6 +35,8 @@
     <string name="reviews">Reviews</string>
     <string name="description">Description</string>
     <string name="available_sizes">Available Sizes</string>
+    <string name="show_more">show more</string>
+    <string name="show_less">show less</string>
 
 
 </resources>
