@@ -30,6 +30,7 @@ import com.example.shopify.homeFragment.Model.Repository.BrandsRepository
 import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
+import com.example.shopify.network
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 const val FileName = "prefFile"
@@ -185,10 +186,14 @@ class HomeFragment : Fragment(), OnBrandClick {
 
         override fun onBrandClick(brandName: String) {
             pref.edit().putString("destination", "brand").apply()
-
+            if(network.isNetworkAvailable(requireContext())){
             val action =
                 HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName, "1")
             homeBinding.root.findNavController().navigate(action)
+            }else{
+                Snackbar.make(homeBinding.root, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
 
         private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
