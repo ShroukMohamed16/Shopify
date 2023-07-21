@@ -1,4 +1,4 @@
-package com.example.shopify.authentication
+package com.example.shopify.authentication.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

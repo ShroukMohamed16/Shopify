@@ -1,0 +1,23 @@
+package com.example.shopify.authentication.model.pojo
+
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+
+class SmsMarketingConsent {
+    @SerializedName("state")
+    @Expose
+    var state: String? = null
+
+    @SerializedName("opt_in_level")
+    @Expose
+    var optInLevel: String? = null
+
+    @SerializedName("consent_updated_at")
+    @Expose
+    var consentUpdatedAt: Any? = null
+
+    @SerializedName("consent_collected_from")
+    @Expose
+    var consentCollectedFrom: String? = null
+}
