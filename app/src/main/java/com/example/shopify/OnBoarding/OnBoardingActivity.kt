@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.R
 import com.example.shopify.authentication.AuthenticationActivity
+import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.utilities.MySharedPreferences
 
 class OnBoardingActivity : AppCompatActivity() {
