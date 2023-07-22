@@ -106,6 +106,7 @@ class SignInFragment : Fragment() {
             return
 
         }
+
         lifecycleScope.launch {
             val job = lifecycleScope.launch {
                 authenticationViewModel.getCustomerByEmail(email)
@@ -147,6 +148,18 @@ class SignInFragment : Fragment() {
                     } else {
                         val errorMessage = it.exception?.localizedMessage
                         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+        auth.signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener{
+                if(it.isSuccessful) {
+                    if (auth.currentUser?.isEmailVerified!!) {
+                        authenticationViewModel.addCustomer(CustomerResponse( Customer(auth.currentUser!!.uid ,email,firstName,lastName)))
+                        startActivity(Intent(requireActivity(), HomeActivity::class.java))
+                        requireActivity().finish()
+                        Toast.makeText(requireContext(), "Sign in Successfully", Toast.LENGTH_LONG)
+                            .show()
+                    }else{
+                        Toast.makeText(requireContext(), "Please Verify your email ", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
         }
