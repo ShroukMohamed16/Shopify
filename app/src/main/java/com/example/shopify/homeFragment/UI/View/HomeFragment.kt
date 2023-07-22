@@ -41,21 +41,22 @@ import kotlinx.coroutines.*
 import java.lang.Runnable
 
 const val FileName = "prefFile"
-class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
+
+class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
     lateinit var viewModel: HomeViewModel
     lateinit var factory: HomeViewModelFactory
     lateinit var brandAdapter: BrandAdapter
     lateinit var gridLayoutmanager: GridLayoutManager
     lateinit var homeBinding: FragmentHomeBinding
     private var brandList: List<SmartCollection> = listOf()
-    lateinit var pref :SharedPreferences
-    lateinit var editor :SharedPreferences.Editor
+    lateinit var pref: SharedPreferences
+    lateinit var editor: SharedPreferences.Editor
     lateinit var adsAdapter: AdsAdapter
-    lateinit var adsViewPager : ViewPager2
+    lateinit var adsViewPager: ViewPager2
     private lateinit var handler: Handler
     private var currentItem = 0
-    private var connectivityReceiver: BroadcastReceiver?=null
-    private  var copouns:MutableList<String> = mutableListOf()
+    private var connectivityReceiver: BroadcastReceiver? = null
+    private var copouns: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,7 +123,6 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
         }
 
 
-
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // This method is called before the text is changed.
@@ -143,7 +143,11 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
 
         homeBinding.searchEditText.addTextChangedListener(textWatcher)
 
-        adsAdapter = AdsAdapter(listOf(R.drawable.ads_one, R.drawable.ads_three, R.drawable.ads_two, R.drawable.ads_four, R.drawable.ads_five),this)
+        adsAdapter = AdsAdapter(listOf(R.drawable.ads_one,
+            R.drawable.ads_three,
+            R.drawable.ads_two,
+            R.drawable.ads_four,
+            R.drawable.ads_five), this)
         adsViewPager.adapter = adsAdapter
 
         adsViewPager.registerOnPageChangeCallback(
@@ -165,19 +169,24 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
             }, 6000) // Change the delay time as needed
 
 
+
     }
 
-        override fun onBrandClick(brandName: String) {
-            pref.edit().putString("destination", "brand").apply()
-            if(network.isNetworkAvailable(requireContext())){
+    override fun onBrandClick(brandName: String) {
+        pref.edit().putString("destination", "brand").apply()
+        if (network.isNetworkAvailable(requireContext())) {
             val action =
                 HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName, "1")
             homeBinding.root.findNavController().navigate(action)
-            }else{
-                Snackbar.make(homeBinding.root, R.string.no_network_connection, Snackbar.LENGTH_LONG)
-                    .show()
+        } else {
+            Snackbar.make(homeBinding.root,
+                R.string.no_network_connection,
+                Snackbar.LENGTH_LONG)
+                .show()
+        }
+    }
 
-    fun getCopouns(){
+    fun getCopouns() {
         lifecycleScope.launch {
             Log.i("MYTAG", "onCreate: one")
             viewModel.getAllDiscount(MyPriceRules.rules[0].id)
@@ -200,14 +209,6 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
         }
     }
 
-
-    override fun onBrandClick(brandName: String) {
-        pref.edit().putString("destination", "brand").apply()
-
-        val action =
-            HomeFragmentDirections.actionHomeFragmentToSubCategoryFragment(brandName, "1")
-        homeBinding.root.findNavController().navigate(action)
-    }
 
     private fun filteredMyListWithSequence(s: String): List<SmartCollection>? {
 
@@ -240,7 +241,9 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
                     homeBinding.brandsRV.visibility = View.GONE
                     homeBinding.noInternetText.visibility = View.VISIBLE
                     homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
-                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    Snackbar.make(view!!,
+                        R.string.no_network_connection,
+                        Snackbar.LENGTH_LONG)
                         .show()
                 } else {
                     homeBinding.adsViewPager.visibility = View.VISIBLE
@@ -258,7 +261,7 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
     }
 
 
-    fun displayCouponDialog(code:String){
+    fun displayCouponDialog(code: String) {
         val builder = AlertDialog.Builder(requireContext())
         val couponDialog = CopounDialogBinding.inflate(layoutInflater)
         builder.setView(couponDialog.root)
@@ -267,7 +270,7 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
         couponDialog.CopounCodeTv.text = code
         couponDialog.copounSaveBtn.setOnClickListener {
             MySharedPreferences.getInstance(requireContext()).saveCouponCode(code)
-            Toast.makeText(requireContext(),"coupon saved",Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "coupon saved", Toast.LENGTH_SHORT)
             dialog.dismiss()
         }
         couponDialog.copounCancelBtn.setOnClickListener {
@@ -277,7 +280,7 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
 
     override fun onAdsClick(view: View, position: Int) {
         when (position) {
-             0,2,4 -> {
+            0, 2, 4 -> {
                 displayCouponDialog(MyPriceRules.rules[0].title)
             }
             else -> {
@@ -286,6 +289,3 @@ class HomeFragment : Fragment(), OnBrandClick,OnAdsClickListener {
         }
     }
 }
-
-
-

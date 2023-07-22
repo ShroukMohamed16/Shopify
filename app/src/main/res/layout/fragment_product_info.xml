@@ -23,13 +23,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/product_info_images"
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/product_info_viewPager"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-                    android:background="@color/white"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/sneakers"
+                    android:clipToPadding="true"
+                    android:padding="0dp"
+                    app:chainUseRtl="true"
                     app:layout_constraintEnd_toStartOf="@id/product_info_right_guideline"
                     app:layout_constraintStart_toEndOf="@id/product_info_left_guideline"
                     app:layout_constraintTop_toBottomOf="@id/product_info_top_guideline" />
@@ -41,8 +42,8 @@
                     android:layout_height="30dp"
                     android:layout_margin="20dp"
                     android:src="@drawable/add_to_favorite"
-                    app:layout_constraintEnd_toEndOf="@+id/product_info_images"
-                    app:layout_constraintTop_toTopOf="@+id/product_info_images"
+                    app:layout_constraintEnd_toEndOf="@+id/product_info_viewPager"
+                    app:layout_constraintTop_toTopOf="@+id/product_info_viewPager"
                     app:layout_constraintVertical_bias="0.12" />
 
                 <ImageView
@@ -67,7 +68,7 @@
                     android:textSize="30sp"
                     app:layout_constraintEnd_toStartOf="@id/product_info_right_guideline"
                     app:layout_constraintStart_toEndOf="@id/product_info_left_guideline"
-                    app:layout_constraintTop_toBottomOf="@id/product_info_images" />
+                    app:layout_constraintTop_toBottomOf="@id/product_info_viewPager" />
 
                 <TextView
                     android:id="@+id/product_info_item_price"

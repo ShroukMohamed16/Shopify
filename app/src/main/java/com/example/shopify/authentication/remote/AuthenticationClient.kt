@@ -11,7 +11,11 @@ class AuthenticationClient:AuthenticationRemoteSource {
     }
 
 
-    override suspend fun addNewCustomer(customer: CustomerResponse): Flow<CustomerResponse> {
+    override suspend fun addNewCustomer(customer: CustomerResponse): CustomerResponse {
         return authenticationService.addNewCustomer(customer)
+    }
+
+    override suspend fun deleteCustomer(customerID: Long) {
+      authenticationService.deleteCustomer(customerID)
     }
 }

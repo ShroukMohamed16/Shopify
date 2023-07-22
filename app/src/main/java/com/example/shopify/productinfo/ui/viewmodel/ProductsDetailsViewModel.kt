@@ -24,10 +24,10 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
         viewModelScope.launch(Dispatchers.IO) {
             repositoryInterface.getProductByID(id)
                 ?.catch { e->
-                    Log.e("TAG", "getAllBrands: $e", )
+                    Log.e("TAG", "getProductInfo: $e", )
                     productInfo.value= State.Failure(e) }
                 ?.collect{ data->
-                    Log.i("TAG", "getAllBrands: $data")
+                    Log.i("TAG", "getProductInfo: $data")
                     productInfo.value= State.Success(data)
                 }
 

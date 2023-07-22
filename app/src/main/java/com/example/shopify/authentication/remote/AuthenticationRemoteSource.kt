@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationRemoteSource {
 
-    suspend fun addNewCustomer(customer: CustomerResponse): Flow<CustomerResponse>
+    suspend fun addNewCustomer(customer: CustomerResponse): CustomerResponse
+    suspend fun deleteCustomer(customerID:Long)
 }

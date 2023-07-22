@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
+private const val TAG = "AuthenticationViewModel"
 class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryInterface):ViewModel(){
 
     private var customerInfo: MutableStateFlow<State<CustomerResponse>> = MutableStateFlow(State.Loading)
@@ -23,12 +24,13 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.addNewCustomerToAPI(customer)
                 ?.catch { e->
-                    Log.e("TAG", "getAllBrands: $e", )
+                    Log.e("TAG", "getCutomer: $e", )
                     customerInfo.value= State.Failure(e)
                 }
                 ?.collect{ data->
-                    Log.i("TAG", "getAllBrands: $data")
+                    Log.i("TAG", "getCutomer: $data")
                     customerInfo.value= State.Success(data)
+                    Log.i(TAG, "addCustomer: ${data.customer.toString()}")
                 }
         }
     }

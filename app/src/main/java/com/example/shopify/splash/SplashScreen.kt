@@ -10,9 +10,7 @@ import com.example.shopify.OnBoarding.OnBoardingActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.ui.view.AuthenticationActivity
 
-import androidx.appcompat.app.AppCompatDelegate
-import com.example.shopify.OnBoarding.OnBoardingActivity
-import com.example.shopify.R
+
 
 import com.example.shopify.homeActivity.HomeActivity
 
@@ -25,6 +23,9 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "SplashScreen"
 class SplashScreen : AppCompatActivity() {
+
+    val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -34,9 +35,7 @@ class SplashScreen : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.Main) {
 
 
-            val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+
 
             Log.i(TAG, "onCreate: ${auth.currentUser.toString()}")
 

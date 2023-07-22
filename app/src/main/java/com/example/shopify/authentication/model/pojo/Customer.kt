@@ -3,10 +3,10 @@ package com.example.shopify.authentication.model.pojo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Customer(var customerID:String? , var customerEmail:String?,var customerFirstName:String?,var customerLastName:String?){
+class Customer(var customerEmail:String?,var customerFirstName:String?,var customerLastName:String?){
     @SerializedName("id")
     @Expose
-    var id: String? = customerID
+    var id: Long? = null
 
     @SerializedName("email")
     @Expose

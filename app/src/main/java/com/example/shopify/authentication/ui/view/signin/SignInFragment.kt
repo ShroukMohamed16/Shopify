@@ -2,6 +2,7 @@ package com.example.shopify.authentication.ui.view.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,11 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.example.shopify.Constants
 import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.Customer
+import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.authentication.model.repository.AuthenticationRepository
 import com.example.shopify.authentication.remote.AuthenticationClient
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModel
@@ -21,10 +24,9 @@ import com.example.shopify.databinding.FragmentSignInBinding
 import com.google.firebase.auth.FirebaseAuth
 import java.util.regex.Pattern
 
-
+private const val TAG = "SignInFragment"
 class SignInFragment : Fragment() {
 
-    private val signInArgs: com.example.shopify.authentication.ui.view.signin.SignInFragmentArgs by navArgs()
     private lateinit var binding: FragmentSignInBinding
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     lateinit var authenticationViewModel: AuthenticationViewModel
@@ -50,7 +52,11 @@ class SignInFragment : Fragment() {
         authenticationViewModel = ViewModelProvider(this,authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
-        val username = signInArgs.username
+        /*val username = arguments?.let {
+            SignInFragmentArgs.fromBundle(it).username
+        }*/
+
+        val username = Constants.userName
         val name = username!!.split("\\s+".toRegex())
         val firstname = name[0]
         val lastname = name[1]
@@ -102,7 +108,8 @@ class SignInFragment : Fragment() {
             .addOnCompleteListener{
                 if(it.isSuccessful) {
                     if (auth.currentUser?.isEmailVerified!!) {
-                        authenticationViewModel.addCustomer(Customer(auth.currentUser!!.uid ,email,firstName,lastName))
+                        Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
+                        //authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
                         startActivity(Intent(requireActivity(), HomeActivity::class.java))
                         requireActivity().finish()
                         Toast.makeText(requireContext(), "Sign in Successfully", Toast.LENGTH_LONG)
