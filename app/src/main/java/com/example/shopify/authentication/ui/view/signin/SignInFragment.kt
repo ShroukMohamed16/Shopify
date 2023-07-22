@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.shopify.Constants
@@ -22,16 +23,17 @@ import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModel
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModelFactory
 import com.example.shopify.databinding.FragmentSignInBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 private const val TAG = "SignInFragment"
+
 class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     lateinit var authenticationViewModel: AuthenticationViewModel
     lateinit var authenticationViewModelFactory: AuthenticationViewModelFactory
-
 
 
     override fun onCreateView(
@@ -104,26 +106,50 @@ class SignInFragment : Fragment() {
             return
 
         }
-        auth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener{
-                if(it.isSuccessful) {
-                    if (auth.currentUser?.isEmailVerified!!) {
-                        Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
-                        //authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
-                        startActivity(Intent(requireActivity(), HomeActivity::class.java))
-                        requireActivity().finish()
-                        Toast.makeText(requireContext(), "Sign in Successfully", Toast.LENGTH_LONG)
-                            .show()
-                    }else{
-                        Toast.makeText(requireContext(), "Please Verify your email ", Toast.LENGTH_LONG)
-                            .show()
+        lifecycleScope.launch {
+            val job = lifecycleScope.launch {
+                authenticationViewModel.getCustomerByEmail(email)
+            }
+            job.join()
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        if (auth.currentUser?.isEmailVerified!!) {
+                            Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
+                            if (Constants.CustomerListResponseSize == 0) {
+                                authenticationViewModel.addCustomer(
+                                    CustomerResponse(
+                                        Customer(
+                                            email,
+                                            firstName,
+                                            lastName
+                                        )
+                                    )
+                                )
+                            }
+
+                            startActivity(Intent(requireActivity(), HomeActivity::class.java))
+                            requireActivity().finish()
+                            Toast.makeText(
+                                requireContext(),
+                                "Sign in Successfully",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Please Verify your email ",
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    } else {
+                        val errorMessage = it.exception?.localizedMessage
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
                     }
                 }
-                else{
-                    val errorMessage = it.exception?.localizedMessage
-                    Toast.makeText(requireContext(),errorMessage,Toast.LENGTH_LONG).show()
-                }
-            }
+        }
 
     }
     private fun isValidEmail(email: String): Boolean {

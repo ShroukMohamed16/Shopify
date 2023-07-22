@@ -122,9 +122,9 @@ class ProductInfoFragment : Fragment() {
                                         currentPage++
                                     }
                                     productBinding.productInfoViewPager.setCurrentItem(currentPage, true)
-                                    handler.postDelayed(this, 4000) // Change the delay time as needed
+                                    handler.postDelayed(this, 5000) // Change the delay time as needed
                                 }
-                            }, 4000)
+                            }, 5000)
                     }
                     else -> {
                         Log.i("TAG", "onViewCreated: fail")
