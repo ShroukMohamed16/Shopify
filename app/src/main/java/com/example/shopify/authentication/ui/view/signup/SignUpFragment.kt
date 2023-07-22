@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
+import com.example.shopify.Constants
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -34,14 +36,14 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.signUpBtn.setOnClickListener {
-            singUpWithEmailAndPassword()
+            singUpWithEmailAndPassword(view)
         }
         binding.txtSignIn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment)
         }
     }
 
-    private fun singUpWithEmailAndPassword() {
+    private fun singUpWithEmailAndPassword(view:View) {
         val email = binding.signUpEmailTextField.editText?.text.toString()
         val username = binding.signUpUsernameTextField.editText?.text.toString()
         val password = binding.signUpPasswordTextField.editText?.text.toString()
@@ -73,6 +75,7 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(requireContext(),it.exception?.localizedMessage,Toast.LENGTH_LONG).show()
                 }
             }
+        Constants.userName = username
     }
 
     private fun verifyEmailAddress() {

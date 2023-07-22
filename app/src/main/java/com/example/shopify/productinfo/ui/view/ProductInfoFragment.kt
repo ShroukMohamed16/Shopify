@@ -1,6 +1,8 @@
 package com.example.shopify.productinfo.ui.view
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.shopify.base.State
 import com.example.shopify.databinding.FragmentProductInfoBinding
@@ -29,6 +32,7 @@ class ProductInfoFragment : Fragment() {
     private lateinit var productsDetailsViewModelFactory: ProductsDetailsViewModelFactory
     lateinit var sizeAdapter: SizeAdapter
     lateinit var colorAdapter: ColorAdapter
+    private var currentPage = 0
     private var optionList:List<String> = listOf()
     private val reviews = arrayOf(
         Reviews("Bassant Mohamed","This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
@@ -93,9 +97,34 @@ class ProductInfoFragment : Fragment() {
                         productBinding.productInfoSizeRv.adapter = sizeAdapter
                         productBinding.productInfoColorRv.adapter = colorAdapter
 
-                        Glide.with(requireContext())
-                            .load(result.data.product!!.images!![0].src)
-                            .into(productBinding.productInfoImages)
+                        val images = result.data.product?.images
+                        val countOfImages = result.data.product?.images?.size
+                        val adapter = ImagesAdapter(images!!)
+                        productBinding.productInfoViewPager.adapter = adapter
+
+                        productBinding.productInfoViewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+                        //productBinding.productInfoViewPager.offscreenPageLimit = 3
+                        //imageSlider.setPageMargin(20)
+
+                        productBinding.productInfoViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                            override fun onPageSelected(position: Int) {
+                                //captionView.text = "Image ${position + 1}"
+                            }
+                        })
+                       val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed(
+                            object : Runnable {
+                                override fun run() {
+                                    if (currentPage == countOfImages) {
+                                        currentPage = 0
+                                    } else {
+                                        currentPage++
+                                    }
+                                    productBinding.productInfoViewPager.setCurrentItem(currentPage, true)
+                                    handler.postDelayed(this, 5000) // Change the delay time as needed
+                                }
+                            }, 5000)
                     }
                     else -> {
                         Log.i("TAG", "onViewCreated: fail")

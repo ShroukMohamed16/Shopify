@@ -169,6 +169,7 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
             }, 6000) // Change the delay time as needed
 
 
+
     }
 
     override fun onBrandClick(brandName: String) {
@@ -240,7 +241,9 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
                     homeBinding.brandsRV.visibility = View.GONE
                     homeBinding.noInternetText.visibility = View.VISIBLE
                     homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
-                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    Snackbar.make(view!!,
+                        R.string.no_network_connection,
+                        Snackbar.LENGTH_LONG)
                         .show()
                 } else {
                     homeBinding.adsViewPager.visibility = View.VISIBLE
@@ -286,6 +289,3 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
         }
     }
 }
-
-
-
