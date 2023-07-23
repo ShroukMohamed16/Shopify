@@ -36,7 +36,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
     lateinit var factory: SettingViewModelFactory
     private var currencyList: List<List<String>> = emptyList()
     lateinit var settingBinding: FragmentSettingBinding
-    lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currencyAdapter: CurrencyAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +54,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         currencyAdapter = CurrencyAdapter(currencyList, this)
-        linearLayoutManager = LinearLayoutManager(requireContext())
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         factory = SettingViewModelFactory(SettingRepository.getInstance(CurrencyClient()))
         viewModel = ViewModelProvider(this, factory).get(SettingViewModel::class.java)
         settingBinding.currencyTV.text =
@@ -128,7 +125,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
     private fun displayCurrencyDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val currencyDialog = CurrencyDialogBinding.inflate(layoutInflater)
-        currencyDialog.currencyRV.layoutManager = linearLayoutManager
         currencyAdapter.setCurrencyList(currencyList)
         currencyDialog.currencyRV.adapter = currencyAdapter
         builder.setView(currencyDialog.root)
@@ -140,9 +136,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
                 MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
             dialog.dismiss()
         }
-//       val action = SettingFragmentDirections.actionSettingFragmentToCurrencyFragment()
-//        settingBinding.root.findNavController().navigate(action)
-
     }
 
 
