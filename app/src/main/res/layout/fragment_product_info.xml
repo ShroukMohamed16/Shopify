@@ -88,6 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:rating="4.5"
+                    android:isIndicator="true"
                     app:layout_constraintEnd_toStartOf="@+id/product_info_right_guideline"
                     app:layout_constraintStart_toEndOf="@+id/product_info_left_guideline"
                     app:layout_constraintTop_toBottomOf="@id/product_info_item_price" />

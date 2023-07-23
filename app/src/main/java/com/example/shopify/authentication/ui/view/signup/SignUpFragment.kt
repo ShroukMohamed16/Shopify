@@ -36,7 +36,15 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.signUpBtn.setOnClickListener {
-            singUpWithEmailAndPassword(view)
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("please verify your email address")
+            builder.setPositiveButton("Ok"){ dialog , it->
+                dialog.dismiss()
+                singUpWithEmailAndPassword(view)
+            }
+            val dialog = builder.create()
+            dialog.show()
+
         }
         binding.txtSignIn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_signUpFragment_to_signInFragment)
@@ -85,7 +93,6 @@ class SignUpFragment : Fragment() {
             .addOnCompleteListener {
                 if(it.isSuccessful){
                     Navigation.findNavController(binding.root).navigate(R.id.action_signUpFragment_to_signInFragment)
-
 
                 }
                 else{
