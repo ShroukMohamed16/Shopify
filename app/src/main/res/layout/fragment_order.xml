@@ -32,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/orderDetails"
         android:fontFamily="@font/fontfile"
+        android:text="@string/orderDetails"
         android:textColor="@color/primary"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -63,6 +63,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/name"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/nameValue"
             android:layout_width="230dp"
@@ -73,40 +74,23 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/addressTxt"
+            android:id="@+id/orderNumTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="50dp"
-            android:text="@string/address"
+            android:layout_marginTop="70dp"
+            android:text="@string/OrderNum"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/addressValue"
+            android:id="@+id/orderNumValue"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:text=""
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/phoneTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="90dp"
-            android:text="@string/phone"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/phoneValue"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="90dp"
-            android:text=""
-            android:textSize="20sp" />
         <TextView
             android:id="@+id/priceTxt"
             android:layout_width="wrap_content"
@@ -116,30 +100,66 @@
             android:layout_marginBottom="20dp"
             android:text="@string/price"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/priceValue"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="150dp"
             android:layout_marginTop="130dp"
-            android:text=""
             android:layout_marginBottom="20dp"
+            android:text=""
             android:textSize="20sp" />
 
     </androidx.cardview.widget.CardView>
 
-
-
-    <Button
-        android:id="@+id/okBtn"
-        android:layout_width="200dp"
+    <TextView
+        android:id="@+id/orderItemsTV"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
-        android:backgroundTint="@color/primary"
-        android:text="Ok"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/fontfile"
-        />
+        android:gravity="center"
+        android:text="@string/OrderItems"
+        android:textColor="@color/primary"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@id/orderRightGL"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintTop_toBottomOf="@id/orderCard" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintTop_toBottomOf="@id/orderItemsTV">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/orderItemRV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/order_item_raw" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/backImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/primary"
+        android:fontFamily="@font/fontfile"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        app:layout_constraintEnd_toStartOf="@id/orderDetailsTxt"
+        app:layout_constraintHorizontal_bias="0.321"
+        app:layout_constraintStart_toEndOf="@id/orderLeftGL"
+        app:layout_constraintTop_toTopOf="@id/orderTopGL" />
 </androidx.constraintlayout.widget.ConstraintLayout>
