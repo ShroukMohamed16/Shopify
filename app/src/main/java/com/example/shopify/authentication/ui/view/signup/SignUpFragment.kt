@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
-import com.example.shopify.Constants
+import com.example.shopify.utilities.Constants
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -44,12 +44,13 @@ class SignUpFragment : Fragment() {
     }
 
     private fun singUpWithEmailAndPassword(view:View) {
-        val email = binding.signUpEmailTextField.editText?.text.toString()
-        val username = binding.signUpUsernameTextField.editText?.text.toString()
-        val password = binding.signUpPasswordTextField.editText?.text.toString()
-        val confirmPassword = binding.signUpConfirmPasswordTextField.editText?.text.toString()
+        val email = binding.signUpEmailTextField.editText?.text.toString().trim()
+        val firstname = binding.signUpFirstnameTextField.editText?.text.toString().trim()
+        val lastname = binding.signUpLastnameTextField.editText?.text.toString().trim()
+        val password = binding.signUpPasswordTextField.editText?.text.toString().trim()
+        val confirmPassword = binding.signUpConfirmPasswordTextField.editText?.text.toString().trim()
 
-        if(email.isEmpty() || username.isEmpty() || password.isEmpty()||confirmPassword.isEmpty()){
+        if(email.isEmpty() || firstname.isEmpty()||lastname.isEmpty() || password.isEmpty()||confirmPassword.isEmpty()){
             Toast.makeText(requireContext(),"Please Fill All Data", Toast.LENGTH_LONG).show()
             return
         }
@@ -75,7 +76,8 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(requireContext(),it.exception?.localizedMessage,Toast.LENGTH_LONG).show()
                 }
             }
-        Constants.userName = username
+        Constants.first_name = firstname
+        Constants.last_name = lastname
     }
 
     private fun verifyEmailAddress() {

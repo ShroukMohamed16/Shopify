@@ -11,8 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
-import com.example.shopify.Constants
+import com.example.shopify.utilities.Constants
 import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.Customer
@@ -54,14 +53,9 @@ class SignInFragment : Fragment() {
         authenticationViewModel = ViewModelProvider(this,authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
-        /*val username = arguments?.let {
-            SignInFragmentArgs.fromBundle(it).username
-        }*/
 
-        val username = Constants.userName
-        val name = username!!.split("\\s+".toRegex())
-        val firstname = name[0]
-        val lastname = name[1]
+        val firstname = Constants.first_name
+        val lastname = Constants.last_name
 
         binding.loginBtn.setOnClickListener {
             signInWithEmailAndPassword(firstname,lastname)

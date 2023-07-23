@@ -1,15 +1,13 @@
 package com.example.shopify.authentication.ui.viewmodel
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shopify.Constants
 import com.example.shopify.authentication.model.pojo.CustomerListResponse
 import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.authentication.model.repository.AuthenticationRepositoryInterface
 import com.example.shopify.base.State
-import com.example.shopify.productinfo.model.pojo.ProductResponse
+import com.example.shopify.utilities.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
