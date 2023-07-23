@@ -34,13 +34,9 @@ class SplashScreen : AppCompatActivity() {
         if (!MySharedPreferences.getInstance(this@SplashScreen).getOnBoardingState()) {
             GlobalScope.launch(Dispatchers.Main) {
 
+                Log.i(TAG, "onCreate: ${auth.currentUser.toString()}")
 
-
-
-            Log.i(TAG, "onCreate: ${auth.currentUser.toString()}")
-
-            delay(4000)
-               val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
+                delay(4000)
                 val intent = Intent(this@SplashScreen, OnBoardingActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -50,20 +46,15 @@ class SplashScreen : AppCompatActivity() {
         } else {
             GlobalScope.launch(Dispatchers.Main) {
                 delay(4000)
-                /*     if(auth.currentUser == null){
-                         val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
-                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                         startActivity(intent)
-                     }else {
-                         val intent = Intent(this@SplashScreen, HomeActivity::class.java)
-                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                         startActivity(intent)
-                     }*/
-                val intent = Intent(this@SplashScreen, HomeActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-
-
+                if (auth.currentUser == null) {
+                    val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this@SplashScreen, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                }
             }
 
         }
