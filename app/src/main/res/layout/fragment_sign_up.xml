@@ -77,17 +77,16 @@
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/sign_up_usernameTextField"
-        android:layout_marginTop="20dp"
+        android:id="@+id/sign_up_firstnameTextField"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
         app:layout_constraintHorizontal_bias="0.5"
-        android:hint="@string/username"
+        android:hint="@string/firstname"
         app:boxStrokeColor="#000000"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-
         android:textColorHint="@color/gray"
         app:startIconDrawable="@drawable/username_icon"
         app:layout_constraintStart_toStartOf="@id/sign_up_emailTextField"
@@ -101,8 +100,31 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sign_up_lastnameTextField"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:hint="@string/lastname"
+        app:boxStrokeColor="#000000"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:textColorHint="@color/gray"
+        app:startIconDrawable="@drawable/username_icon"
+        app:layout_constraintStart_toStartOf="@id/sign_up_firstnameTextField"
+        app:layout_constraintEnd_toStartOf="@id/sign_up_firstnameTextField"
+        app:layout_constraintTop_toBottomOf="@id/sign_up_firstnameTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sign_up_passwordTextField"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -114,9 +136,9 @@
 
         android:textColorHint="@color/gray"
         app:startIconDrawable="@drawable/lock_icon"
-        app:layout_constraintStart_toStartOf="@id/sign_up_usernameTextField"
-        app:layout_constraintEnd_toStartOf="@id/sign_up_usernameTextField"
-        app:layout_constraintTop_toBottomOf="@id/sign_up_usernameTextField"
+        app:layout_constraintStart_toStartOf="@id/sign_up_lastnameTextField"
+        app:layout_constraintEnd_toStartOf="@id/sign_up_lastnameTextField"
+        app:layout_constraintTop_toBottomOf="@id/sign_up_lastnameTextField"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -128,7 +150,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/sign_up_confirm_passwordTextField"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/white"
@@ -154,7 +176,7 @@
         android:id="@+id/sign_up_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="90dp"
         android:layout_marginEnd="90dp"
         android:text="@string/sign_up"
@@ -168,7 +190,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/already_have_an_account"
         android:textColor="@color/black"
         android:textSize="15sp"
