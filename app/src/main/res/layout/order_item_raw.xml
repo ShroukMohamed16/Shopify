@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@+id/quantityTxt" />
 
         <TextView
-            android:id="@+id/price_value"
+            android:id="@+id/pricevalue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

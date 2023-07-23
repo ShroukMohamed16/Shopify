@@ -1,60 +1,129 @@
 package com.example.shopify.setting.ui.view
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
+import com.example.shopify.base.State
+import com.example.shopify.databinding.AddressDialogBinding
+import com.example.shopify.databinding.CurrencyDialogBinding
+import com.example.shopify.databinding.FragmentHomeBinding
+import com.example.shopify.databinding.FragmentSettingBinding
+import com.example.shopify.databinding.LanguageDialogBinding
+import com.example.shopify.setting.Model.SettingRepository.SettingRepository
+import com.example.shopify.setting.Remote.CurrencyClient
+import com.example.shopify.setting.ui.viewModel.SettingViewModel
+import com.example.shopify.setting.ui.viewModel.SettingViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+class SettingFragment : Fragment(), OnClickCurrency {
+    lateinit var viewModel: SettingViewModel
+    lateinit var factory: SettingViewModelFactory
+    private var currencyList: List<List<String>> = emptyList()
+    lateinit var settingBinding: FragmentSettingBinding
+    lateinit var linearLayoutManager: LinearLayoutManager
+    lateinit var currencyAdapter: CurrencyAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
+
+        settingBinding = FragmentSettingBinding.inflate(inflater, container, false)
+        return settingBinding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        currencyAdapter = CurrencyAdapter(currencyList, this)
+        linearLayoutManager = LinearLayoutManager(requireContext())
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        factory = SettingViewModelFactory(SettingRepository.getInstance(CurrencyClient()))
+        viewModel = ViewModelProvider(this, factory).get(SettingViewModel::class.java)
+
+        viewModel.getAllCurrencies()
+        lifecycleScope.launch(Dispatchers.IO) {
+            viewModel.currency.collect { result ->
+                when (result) {
+                    is State.Loading -> {
+
+                    }
+                    is State.Success -> {
+
+                        if(result.data.supported_codes.isEmpty()){
+                            Toast.makeText(requireContext(),"loaaading" , Toast.LENGTH_SHORT).show()
+                        }else{
+                            currencyList = result.data.supported_codes
+                        }
+                        Log.i("TAG", "onViewCreated is currency setting : $currencyList")
+
+
+                    }
+                    else -> {
+                        Log.i("TAG", "onViewCreated: failur")
+
+
+                    }
                 }
+
             }
+        }
+
+
+        settingBinding.AddressCard.setOnClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.action_settingFragment_to_addressFragment)
+        }
+        settingBinding.CurrencyCard.setOnClickListener {
+            displayCurrencyDialog()
+        }
+
+        settingBinding.LanguageCard.setOnClickListener {
+            displayLanguageDialog()
+        }
+
     }
+
+    private fun displayCurrencyDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val currencyDialog = CurrencyDialogBinding.inflate(layoutInflater)
+        currencyDialog.currencyRV.layoutManager = linearLayoutManager
+        currencyAdapter.setCurrencyList(currencyList)
+        currencyDialog.currencyRV.adapter = currencyAdapter
+        builder.setView(currencyDialog.root)
+        val dialog = builder.create()
+        dialog.show()
+        currencyDialog.okBTN.setOnClickListener {
+            dialog.dismiss()
+        }
+
+    }
+
+    private fun displayLanguageDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val languageDialog = LanguageDialogBinding.inflate(layoutInflater)
+        builder.setView(languageDialog.root)
+       val dialog = builder.create()
+        dialog.show()
+    }
+
+    override fun changeCurrency(code: String) {
+        viewModel.changeCurrency(code)
+        settingBinding.currencyTV.text = code
+    }
+
 }
