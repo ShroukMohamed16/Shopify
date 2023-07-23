@@ -3,17 +3,14 @@ package com.example.shopify.authentication.ui.view.signin
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
-import com.example.shopify.Constants
-import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.Customer
 import com.example.shopify.authentication.model.pojo.CustomerResponse
@@ -22,7 +19,19 @@ import com.example.shopify.authentication.remote.AuthenticationClient
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModel
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModelFactory
 import com.example.shopify.databinding.FragmentSignInBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.example.shopify.homeActivity.HomeActivity
+import com.example.shopify.utilities.Constants
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+//import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.SignInButton
+
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.*
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
@@ -34,6 +43,9 @@ class SignInFragment : Fragment() {
     private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
     lateinit var authenticationViewModel: AuthenticationViewModel
     lateinit var authenticationViewModelFactory: AuthenticationViewModelFactory
+    var mGoogleSignInClient: GoogleSignInClient? = null
+    private val RC_SIGN_IN = 100
+    private val TAG = "Google_SIGN_IN_TAG"
 
 
     override fun onCreateView(
@@ -47,6 +59,14 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+
         authenticationViewModelFactory = AuthenticationViewModelFactory(
             AuthenticationRepository.getInstance(
                 AuthenticationClient()
@@ -54,14 +74,9 @@ class SignInFragment : Fragment() {
         authenticationViewModel = ViewModelProvider(this,authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
-        /*val username = arguments?.let {
-            SignInFragmentArgs.fromBundle(it).username
-        }*/
 
-        val username = Constants.userName
-        val name = username!!.split("\\s+".toRegex())
-        val firstname = name[0]
-        val lastname = name[1]
+        val firstname = Constants.first_name
+        val lastname = Constants.last_name
 
         binding.loginBtn.setOnClickListener {
             signInWithEmailAndPassword(firstname,lastname)
@@ -69,6 +84,9 @@ class SignInFragment : Fragment() {
         binding.signUpTxt.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_signUpFragment)
 
+        }
+        binding.googleLoginBtn.setOnClickListener {
+            signIn()
         }
 
         binding.guestBtn.setOnClickListener {
@@ -90,6 +108,7 @@ class SignInFragment : Fragment() {
                 }
             }
     }
+
     private fun signInWithEmailAndPassword( firstName:String , lastName:String){
         val email = binding.emailTextField.editText?.text.toString()
         val password = binding.passwordTextField.editText?.text.toString()
@@ -158,6 +177,74 @@ class SignInFragment : Fragment() {
         val matcher = pattern.matcher(email)
         return matcher.matches()
 
+    }
+    private fun signIn() {
+        Log.i(TAG, "signIn: ")
+        val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i(TAG, "onActivityResult: ")
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)
+                Log.d("TAG token", "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account)
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("TAGFailed", "Google sign in failed", e)
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+        Log.i(TAG, "firebaseAuthWithGoogle: ")
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity(),
+                OnCompleteListener<AuthResult> { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAGsigninsuccess", "signInWithCredential:success")
+                        val user: FirebaseUser? = auth.getCurrentUser()
+                        val emailWithGoogle:String = user?.email!!
+                        val names = user.displayName?.split("\\s".toRegex())
+                        val firstNameWithGoogle = names?.get(0)
+                        val lastNameWithGoogle = names?.get(1)
+                        Log.i(TAG, "firebaseAuthWithGoogle: $emailWithGoogle\n $firstNameWithGoogle\n $lastNameWithGoogle\n")
+
+                        lifecycleScope.launch {
+                            val job = lifecycleScope.launch {
+                                authenticationViewModel.getCustomerByEmail(emailWithGoogle)
+                            }
+                            job.join()
+                            if (Constants.CustomerListResponseSize == 0) {
+                                authenticationViewModel.addCustomer(CustomerResponse(Customer(
+                                            emailWithGoogle,
+                                            firstNameWithGoogle,
+                                            lastNameWithGoogle)))
+                            }
+                        }
+
+                        if (task.result.additionalUserInfo!!.isNewUser) {}
+                        Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(requireActivity(), HomeActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                        Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "Fail", Toast.LENGTH_SHORT).show()
+                        // If sign in fails, display a message to the user.
+                        Log.i("TAG sign in fail", "signInWithCredential:failure", task.exception)
+                    }
+                })
     }
 
 
