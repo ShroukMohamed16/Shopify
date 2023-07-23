@@ -46,6 +46,7 @@
     <string name="Orders">Orders</string>
     <string name="OrderNum">OrderNum :</string>
     <string name="OrderItems">Order Items</string>
+    <string name="data">Created At :</string>
 
 
 </resources>

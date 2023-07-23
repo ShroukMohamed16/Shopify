@@ -1,16 +1,19 @@
 package com.example.shopify.setting.ui.view
 
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shopify.R
 import com.example.shopify.base.State
@@ -23,6 +26,8 @@ import com.example.shopify.setting.Model.SettingRepository.SettingRepository
 import com.example.shopify.setting.Remote.CurrencyClient
 import com.example.shopify.setting.ui.viewModel.SettingViewModel
 import com.example.shopify.setting.ui.viewModel.SettingViewModelFactory
+import com.example.shopify.utilities.MySharedPreferences
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -54,7 +59,8 @@ class SettingFragment : Fragment(), OnClickCurrency {
         linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
         factory = SettingViewModelFactory(SettingRepository.getInstance(CurrencyClient()))
         viewModel = ViewModelProvider(this, factory).get(SettingViewModel::class.java)
-
+        settingBinding.currencyTV.text =
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
         viewModel.getAllCurrencies()
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.currency.collect { result ->
@@ -64,9 +70,9 @@ class SettingFragment : Fragment(), OnClickCurrency {
                     }
                     is State.Success -> {
 
-                        if(result.data.supported_codes.isEmpty()){
-                            Toast.makeText(requireContext(),"loaaading" , Toast.LENGTH_SHORT).show()
-                        }else{
+                        if (result.data.supported_codes.isEmpty()) {
+                            Toast.makeText(requireContext(), "loaaading", Toast.LENGTH_SHORT).show()
+                        } else {
                             currencyList = result.data.supported_codes
                         }
                         Log.i("TAG", "onViewCreated is currency setting : $currencyList")
@@ -76,6 +82,27 @@ class SettingFragment : Fragment(), OnClickCurrency {
                     else -> {
                         Log.i("TAG", "onViewCreated: failur")
 
+
+                    }
+                }
+
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.changeCurrency.collect { result ->
+                when (result) {
+                    is State.Loading -> {
+
+                    }
+                    is State.Success -> {
+                        val rate = result.data.conversion_rate
+                        MySharedPreferences.getInstance(requireContext())
+                            .saveExchangeRate(rate.toFloat())
+                        Log.i("TAG", "onViewCreated: ${rate.toFloat()}")
+
+                    }
+                    else -> {
 
                     }
                 }
@@ -105,25 +132,32 @@ class SettingFragment : Fragment(), OnClickCurrency {
         currencyAdapter.setCurrencyList(currencyList)
         currencyDialog.currencyRV.adapter = currencyAdapter
         builder.setView(currencyDialog.root)
+
         val dialog = builder.create()
         dialog.show()
         currencyDialog.okBTN.setOnClickListener {
+            settingBinding.currencyTV.text =
+                MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
             dialog.dismiss()
         }
+//       val action = SettingFragmentDirections.actionSettingFragmentToCurrencyFragment()
+//        settingBinding.root.findNavController().navigate(action)
 
     }
+
 
     private fun displayLanguageDialog() {
         val builder = AlertDialog.Builder(requireContext())
         val languageDialog = LanguageDialogBinding.inflate(layoutInflater)
         builder.setView(languageDialog.root)
-       val dialog = builder.create()
+        val dialog = builder.create()
         dialog.show()
     }
 
     override fun changeCurrency(code: String) {
         viewModel.changeCurrency(code)
-        settingBinding.currencyTV.text = code
+        MySharedPreferences.getInstance(requireContext()).saveCurrencyCode(code)
+
     }
 
 }

@@ -11,6 +11,7 @@ import com.example.shopify.AllOrdersFragment.Model.Order
 import com.example.shopify.R
 import com.example.shopify.databinding.BrandRawBinding
 import com.example.shopify.databinding.OrderRawBinding
+import com.example.shopify.utilities.MySharedPreferences
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,7 +37,8 @@ class AllOrdersAdapter(
         val currentOrder = orderList[position]
         holder.binding.orderNumValue.text = currentOrder.order_number.toString()
         holder.binding.dateValue.text = convertDateTimeFormat(currentOrder.processed_at!!)
-        holder.binding.priceValue.text = currentOrder.total_price
+        holder.binding.priceValue.text = formatDecimal(currentOrder.total_price!!.toDouble()* MySharedPreferences
+            .getInstance(context).getExchangeRate() )+" "+"${MySharedPreferences.getInstance(context).getCurrencyCode()}"
         holder.binding.orderCardView.setOnClickListener {
             listner.onClickOrder(currentOrder)
         }
@@ -57,6 +59,10 @@ class AllOrdersAdapter(
 
         val dateTime = LocalDateTime.parse(dateTimeString, inputFormat)
         return dateTime.format(outputFormat)
+    }
+    fun formatDecimal(decimal: Double): String {
+        val decimalFormat = DecimalFormat("0.00")
+        return decimalFormat.format(decimal)
     }
 
 }
