@@ -41,7 +41,7 @@ class SettingViewModel(private val repo :SettingRepositoryInterface) :ViewModel(
                 ?.catch { e->
                     changeCurrencyState.value=State.Failure(e) }
                 ?.collect{ data->
-                    Log.i("TAG", "category product : $data")
+                    Log.i("TAG", "exchange rateeeeeeeeeeeeeeeeeee : $data")
                     changeCurrencyState.value= State.Success(data!!)
                 }
 

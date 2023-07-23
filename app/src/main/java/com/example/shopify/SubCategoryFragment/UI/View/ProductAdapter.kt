@@ -10,6 +10,7 @@ import com.example.shopify.SubCategoryFragment.Model.Product
 import com.example.shopify.databinding.BrandRawBinding
 import com.example.shopify.databinding.ProductRawBinding
 import com.example.shopify.homeFragment.Model.DataCalss.SmartCollection
+import com.example.shopify.utilities.MySharedPreferences
 import java.text.DecimalFormat
 
 
@@ -29,7 +30,8 @@ class ProductAdapter  (private var productList: List<Product>, val context: Cont
        val currentProduct= productList[position]
         holder.binding.productTitleTextView.text = currentProduct.title
         holder.binding.productPriceTextView.text =
-            formatDecimal(currentProduct.variants[0].price!!.toDouble() )+"EGP"
+            formatDecimal(currentProduct.variants[0].price!!.toDouble()*MySharedPreferences
+                .getInstance(context).getExchangeRate() )+" "+"${MySharedPreferences.getInstance(context).getCurrencyCode()}"
         Glide.with(context)
             .load(currentProduct.image.src)
             .into(holder.binding.productImageView)
