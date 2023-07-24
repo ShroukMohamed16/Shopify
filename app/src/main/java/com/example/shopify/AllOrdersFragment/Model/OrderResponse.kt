@@ -88,3 +88,15 @@ data class Property(
     val name: String = "",
     val value: String? = "",
 ) : Parcelable
+
+//fun LineItem.toLineItemOrder():LineItemsOrder{
+//    val arr = applied_discount.description?.split(")")
+//    var url:String? = ""
+//    if((arr?.size?:0)>1)
+//    {
+//        url = arr?.get(1)
+//    }
+//    return LineItemsOrder(price,quantity, title ="${title})${arr?.get(0)}", listOf(
+//        Property(this.properties[0].name?:"", value = url)
+//    ))
+//}
