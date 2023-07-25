@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -168,6 +169,13 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
                 }
             }, 6000) // Change the delay time as needed
 
+        homeBinding.searchByProduct.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
+
+        }
+        homeBinding.searchIcon.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
+        }
 
 
     }

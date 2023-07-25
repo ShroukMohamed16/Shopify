@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_homeFragment_to_productInfoFragment2"
             app:destination="@id/productInfoFragment2" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
@@ -129,9 +132,6 @@
         <action
             android:id="@+id/action_profileFragment_to_allOrdersFragment"
             app:destination="@id/allOrdersFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_paymentFragment"
-            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -146,9 +146,6 @@
             app:argType="com.example.shopify.AllOrdersFragment.Model.Order" />
         <action
             android:id="@+id/action_orderFragment_to_allOrdersFragment"
-            app:destination="@id/allOrdersFragment" />
-        <action
-            android:id="@+id/action_orderFragment_to_allOrdersFragment2"
             app:destination="@id/allOrdersFragment" />
 
     </fragment>
@@ -179,9 +176,6 @@
             android:name="productID"
             app:argType="string"
             app:nullable="true"/>
-        <action
-            android:id="@+id/action_productInfoFragment2_to_orderFragment"
-            app:destination="@id/orderFragment" />
         />
 
 
@@ -217,9 +211,6 @@
         <action
             android:id="@+id/action_allOrdersFragment_to_orderFragment"
             app:destination="@id/orderFragment" />
-        <action
-            android:id="@+id/action_allOrdersFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -246,14 +237,6 @@
             android:id="@+id/action_currencyFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
     </dialog>
-    <fragment
-        android:id="@+id/paymentFragment"
-        android:name="com.example.shopify.Payment.UI.View.PaymentFragment"
-        android:label="PaymentFragment" >
-        <action
-            android:id="@+id/action_paymentFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
 
 
 </navigation>
