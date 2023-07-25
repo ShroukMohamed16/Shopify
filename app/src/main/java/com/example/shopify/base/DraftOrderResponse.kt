@@ -7,7 +7,7 @@ data class DraftOrder(
     var id: Long? = null,
     var order_id: Long? = null,
     var name: String? = null,
-    var customer: Customer,
+    var customer: Customer? = null,
     var shipping_address: shipping_address? = shipping_address(),
     var billing_address: billing_address? = billing_address(),
     var note: String? = null,

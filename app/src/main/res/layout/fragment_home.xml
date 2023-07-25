@@ -68,7 +68,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/searchshape"
             android:textSize="14sp"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.viewpager2.widget.ViewPager2
@@ -141,6 +141,26 @@
         android:visibility="gone"
         />
 
+    <ImageView
+        android:id="@+id/search_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_baseline_search_24"
+        app:layout_constraintStart_toEndOf="@id/leftGL"
+        app:layout_constraintBottom_toBottomOf="@+id/brandTextView"
+        app:layout_constraintTop_toTopOf="@+id/brandTextView"
+        tools:layout_editor_absoluteX="30dp" />
+
+    <TextView
+        android:id="@+id/search_by_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="find product"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/search_icon"
+        app:layout_constraintStart_toEndOf="@+id/search_icon"
+        app:layout_constraintTop_toTopOf="@+id/search_icon" />
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/no_internet_connection_ani"
         android:layout_width="wrap_content"
@@ -154,4 +174,6 @@
         android:visibility="gone"
         app:lottie_rawRes="@raw/no_internet"
         />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

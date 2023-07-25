@@ -18,7 +18,8 @@ class MySharedPreferences private constructor(context: Context) {
         }
     }
 
-    private val sharedPreferences = context.getSharedPreferences(Constants.PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences =
+        context.getSharedPreferences(Constants.PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
 
     fun saveCouponCode(code: String) {
         sharedPreferences.edit().putString(Constants.PREFERENCE_COUPON_CODE, code).apply()
@@ -27,12 +28,47 @@ class MySharedPreferences private constructor(context: Context) {
     fun getCouponCode(): String? {
         return sharedPreferences.getString(Constants.PREFERENCE_COUPON_CODE, null)
     }
+    fun saveCustomerID(id: Long) {
+        sharedPreferences.edit().putLong(Constants.CUSTOMER_ID, id).apply()
+    }
+    fun getCartID(): Long? {
+        return sharedPreferences.getLong(Constants.CART_DRAFT_ID, 0)
+    }
+    fun saveCartID(id: Long) {
+        sharedPreferences.edit().putLong(Constants.CART_DRAFT_ID, id).apply()
+    }
+    fun getFavID(): Long? {
+        return sharedPreferences.getLong(Constants.FAV_DRAFT_ID, 0)
+    }
+    fun saveFavID(id: Long) {
+        sharedPreferences.edit().putLong(Constants.FAV_DRAFT_ID, id).apply()
+    }
 
-    fun saveOnBoardingState(state:Boolean){
+    fun getCustomerID(): Long? {
+        return sharedPreferences.getLong(Constants.CUSTOMER_ID, 0)
+    }
+
+    fun saveOnBoardingState(state: Boolean) {
         sharedPreferences.edit().putBoolean(Constants.ONBOARDING_FLAG, state).apply()
     }
+
     fun getOnBoardingState(): Boolean {
-        return sharedPreferences.getBoolean(Constants.ONBOARDING_FLAG,false)
+        return sharedPreferences.getBoolean(Constants.ONBOARDING_FLAG, false)
+    }
+
+    fun saveCurrencyCode(code: String) {
+        sharedPreferences.edit().putString(Constants.CURRENCY_CODE, code).apply()
+    }
+
+    fun getCurrencyCode(): String? {
+        return sharedPreferences.getString(Constants.CURRENCY_CODE, null)
+    }
+
+    fun saveExchangeRate(rate :Float){
+        sharedPreferences.edit().putFloat(Constants.EXCHANGE_RATE , rate).apply()
+    }
+    fun getExchangeRate() : Float{
+        return sharedPreferences.getFloat(Constants.EXCHANGE_RATE , 0.0F)
     }
     fun saveCountryName(name:String){
         sharedPreferences.edit().putString(Constants.COUNTRY_NAME, name).apply()

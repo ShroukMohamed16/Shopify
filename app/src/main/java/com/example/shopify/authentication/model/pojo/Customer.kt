@@ -50,7 +50,7 @@ class Customer(var customerEmail:String?,var customerFirstName:String?,var custo
 
     @SerializedName("note")
     @Expose
-    var note: Any? = null
+    var note: Long? = null
 
     @SerializedName("verified_email")
     @Expose
@@ -58,7 +58,7 @@ class Customer(var customerEmail:String?,var customerFirstName:String?,var custo
 
     @SerializedName("multipass_identifier")
     @Expose
-    var multipassIdentifier: Any? = null
+    var multipassIdentifier: Long? = null
 
     @SerializedName("tax_exempt")
     @Expose

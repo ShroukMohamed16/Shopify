@@ -32,6 +32,7 @@ import com.example.shopify.homeFragment.Model.DataCalss.SmartCollection
 import com.example.shopify.homeFragment.UI.View.FileName
 import com.example.shopify.homeFragment.UI.View.HomeFragmentDirections
 import com.example.shopify.network
+import com.example.shopify.utilities.MySharedPreferences
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -87,6 +88,27 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         productAdapter = ProductAdapter(productsList, requireContext(), this)
 
 
+        subCatBinding.minPriceValue.text =
+            formatDouble((minPrice * MySharedPreferences.getInstance(requireContext())
+                .getExchangeRate()))
+        subCatBinding.maxPriceValue.text =
+            formatDouble((maxPrice * MySharedPreferences.getInstance(requireContext())
+                .getExchangeRate()))
+
+
+//        val exchangeRate = MySharedPreferences.getInstance(requireContext()).getExchangeRate()
+//        subCatBinding.priceRangeSlider.apply {
+//            valueFrom = 20 * exchangeRate
+//            valueTo = 300 * exchangeRate
+//            stepSize = 10 *exchangeRate
+//
+//        }
+        subCatBinding.minPriceCode.text =
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
+        subCatBinding.maxPriceCode.text =
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
+
+        subCatBinding.priceRangeSlider.values= listOf(50f)
         subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
             RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {
@@ -94,7 +116,9 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
             override fun onStopTrackingTouch(slider: RangeSlider) {
                 maxPrice = slider.values[0].toDouble()
-                subCatBinding.maxPriceValue.text = "$maxPrice"
+                subCatBinding.maxPriceValue.text =
+                    formatDouble((maxPrice * MySharedPreferences.getInstance(requireContext())
+                        .getExchangeRate()))
             }
         })
 
@@ -150,7 +174,8 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                     }
 
                                     override fun onStopTrackingTouch(slider: RangeSlider) {
-                                        val priceFilterList = filterProductsByPrice(productsList, minPrice, maxPrice)
+                                        val priceFilterList =
+                                            filterProductsByPrice(productsList, minPrice, maxPrice)
                                         productAdapter.setProductList(priceFilterList)
                                         Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
                                     }
@@ -176,9 +201,11 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                         }
 
                                         override fun onStopTrackingTouch(slider: RangeSlider) {
-                                            val priceFilterList = filterProductsByPrice(shoesList, minPrice, maxPrice)
+                                            val priceFilterList =
+                                                filterProductsByPrice(shoesList, minPrice, maxPrice)
                                             productAdapter.setProductList(priceFilterList)
-                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
+                                            Log.i("TAG",
+                                                "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
                                     })
 
@@ -204,9 +231,12 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                         }
 
                                         override fun onStopTrackingTouch(slider: RangeSlider) {
-                                            val priceFilterList = filterProductsByPrice(tShirtList, minPrice, maxPrice)
+                                            val priceFilterList = filterProductsByPrice(tShirtList,
+                                                minPrice,
+                                                maxPrice)
                                             productAdapter.setProductList(priceFilterList)
-                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
+                                            Log.i("TAG",
+                                                "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
                                     })
 
@@ -227,9 +257,12 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                         }
 
                                         override fun onStopTrackingTouch(slider: RangeSlider) {
-                                            val priceFilterList = filterProductsByPrice(accessList, minPrice, maxPrice)
+                                            val priceFilterList = filterProductsByPrice(accessList,
+                                                minPrice,
+                                                maxPrice)
                                             productAdapter.setProductList(priceFilterList)
-                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
+                                            Log.i("TAG",
+                                                "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
                                     })
 
@@ -322,9 +355,13 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                                         }
 
                                         override fun onStopTrackingTouch(slider: RangeSlider) {
-                                            val priceFilterList = filterProductsByPrice(productsList, minPrice, maxPrice)
+                                            val priceFilterList =
+                                                filterProductsByPrice(productsList,
+                                                    minPrice,
+                                                    maxPrice)
                                             productAdapter.setProductList(priceFilterList)
-                                            Log.i("TAG", "onStopTrackingTouch: $minPrice and $maxPrice")
+                                            Log.i("TAG",
+                                                "onStopTrackingTouch: $minPrice and $maxPrice")
                                         }
                                     })
                                     val gridLayoutmanager = GridLayoutManager(requireContext(), 2,
@@ -463,9 +500,17 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
         return productsList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
     }
 
-    fun filterProductsByPrice(productsList: List<Product>, minPrice: Double, maxPrice: Double): List<Product> {
+    fun filterProductsByPrice(
+        productsList: List<Product>,
+        minPrice: Double,
+        maxPrice: Double,
+    ): List<Product> {
         return productsList.filter { product ->
             product.variants[0].price?.toDouble()!! >= minPrice && product.variants[0].price?.toDouble()!! <= maxPrice
         }
+    }
+
+    fun formatDouble(value: Double): String {
+        return String.format("%.2f", value)
     }
 }

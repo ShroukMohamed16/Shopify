@@ -69,6 +69,8 @@ data class Order(
     var user_id: String? = null,
 ) : Parcelable
 
+data class OrderReq (val order: Order)
+
 @Parcelize
 data class CustomerOrder(
     val id: Long = 0,
