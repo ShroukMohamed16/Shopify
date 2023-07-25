@@ -237,7 +237,11 @@
     <fragment
         android:id="@+id/addAddressFragment"
         android:name="com.example.shopify.address.ui.view.AddAddressFragment"
-        android:label="AddAddressFragment" />
+        android:label="AddAddressFragment" >
+        <action
+            android:id="@+id/action_addAddressFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
     <fragment
         android:id="@+id/paymentFragment"
         android:name="com.example.shopify.Payment.UI.View.PaymentFragment"

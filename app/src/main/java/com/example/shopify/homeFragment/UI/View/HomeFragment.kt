@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -37,6 +38,7 @@ import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeVi
 import com.example.shopify.network
 import com.example.shopify.utilities.MyPriceRules
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.copyToClipboard
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import java.lang.Runnable
@@ -201,11 +203,8 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
             viewModel.discount.collect { result ->
                 when (result) {
                     is State.Loading -> {
-                        Log.i("MYTAG", "onCreate: loaaaaaaaading")
                     }
                     is State.Success -> {
-                        Log.i("MYTAG", "onCreate: successsssssss")
-                        Log.i("MYTAG", "onCreate: ${result.data}")
                         copouns.add(result.data.discount_codes[0].code)
                         Log.i("MYTAG", "$copouns")
                     }
@@ -278,7 +277,8 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
         couponDialog.CopounCodeTv.text = code
         couponDialog.copounSaveBtn.setOnClickListener {
             MySharedPreferences.getInstance(requireContext()).saveCouponCode(code)
-            Toast.makeText(requireContext(), "coupon saved", Toast.LENGTH_SHORT)
+            copyToClipboard(code,requireContext())
+            Toast.makeText(requireContext(), getString(R.string.couponSaved), Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
         couponDialog.copounCancelBtn.setOnClickListener {
@@ -296,4 +296,6 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
             }
         }
     }
+
+
 }

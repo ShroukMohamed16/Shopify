@@ -1,5 +1,7 @@
 package com.example.shopify.utilities
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.location.Geocoder
@@ -72,7 +74,11 @@ fun getAddress(context: Context, latitude: Double, longitude: Double) {
             MyAddress.country=country
             MyAddress.province=province
             MyAddress.zipCode=zipCode
-
         }
     }
+}
+fun copyToClipboard(text: String, context: Context) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("text", text)
+    clipboard.setPrimaryClip(clip)
 }
