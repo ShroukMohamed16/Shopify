@@ -6,6 +6,7 @@ import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,17 +25,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
-
 class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { map ->
         val googleMap = map
 
         //handle intial map
-            googleMap.setOnMapClickListener { latLng ->
-                val geocoder =
-                    Geocoder(requireContext(), Locale.getDefault())
+        googleMap.setOnMapClickListener { latLng ->
+            val geocoder =
+                Geocoder(requireContext(), Locale.getDefault())
+            try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
                 if (addresses!!.isNotEmpty()) {
                     val address = addresses[0]
@@ -59,9 +61,12 @@ class MapsFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "${context?.getString(R.string.errorFavMapAlert)}", Toast.LENGTH_SHORT).show()
                 }
+            } catch (e: IOException) {
+                // Handle the exception and show a user-friendly error message
+                Log.e("MapsFragment", "Error getting location: ${e.message}")
+                Toast.makeText(requireContext(), "Error getting location", Toast.LENGTH_SHORT).show()
             }
-
-
+        }
 
         val alex = LatLng(23.22, 33.3)
         googleMap.addMarker(MarkerOptions().position(alex).title("Marker"))

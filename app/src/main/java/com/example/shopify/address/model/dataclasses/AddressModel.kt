@@ -16,9 +16,19 @@ data class Address(
     val province_code: String?,
     val country_code: String?,
     val country_name: String?,
-    val id:Long = 0
+    val id:Long = 0,
+    var default : Boolean? = null
+)
+data class AddressModel( val address1: String,
+                         val address2: String, val city: String,val country: String, val phone: String)
+data class AddressBody(
+    val address: AddressModel
 )
 
 data class AddressResponse(
-    val address: List<Address>
+    val customer_address :Address
+)
+
+data class GetAddressResponse(
+    var addresses :List<Address?>
 )

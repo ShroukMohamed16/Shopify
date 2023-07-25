@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.authentication.model.pojo.CustomerListResponse
 import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.authentication.model.repository.AuthenticationRepositoryInterface
+import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.utilities.Constants
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,9 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
 
     private var customerByEmail: MutableStateFlow<State<CustomerListResponse>> = MutableStateFlow(State.Loading)
     val customer: StateFlow<State<CustomerListResponse>> = customerByEmail
+
+    private var draftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val draft: StateFlow<State<DraftOrderResponse>> = draftOrder
 
 
     fun addCustomer(customer: CustomerResponse){

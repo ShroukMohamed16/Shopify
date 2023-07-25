@@ -39,11 +39,12 @@
     <string name="show_less">show less</string>
     <string name="coupon">Coupon</string>
     <string name="save_the_code_to_apply_the_discount">Save the code to apply the discount</string>
-    <string name="save">Save</string>
+    <string name="copy">Copy</string>
     <string name="cancel">Cancel</string>
     <string name="lastname">lastname</string>
     <string name="firstname">firstname</string>
     <string name="ok">ok</string>
+    <string name="save">Save</string>
     <string name="Oreders">Orders</string>
     <string name="OrderNum">Order Num</string>
     <string name="OrderItems">Order Items</string>
@@ -62,4 +63,12 @@
     <string name="yesMapAlert">Yes</string>
     <string name="CancelMapAlert">Cancel</string>
     <string name="errorFavMapAlert"> Could not find location</string>
+    <string name="couponSaved"> coupon saved</string>
+
+    <string name="deleteAddressTitle"> Delete Address</string>
+
+    <string name="deleteAddressMessage"> Are you sure you want to delete this address?</string>
+    <string name="homeDeleteAddressMessage">Default address Can\'t be deleted</string>
+
+
 </resources>

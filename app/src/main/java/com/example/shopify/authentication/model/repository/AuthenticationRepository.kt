@@ -3,6 +3,7 @@ package com.example.shopify.authentication.model.repository
 import com.example.shopify.authentication.model.pojo.CustomerListResponse
 import com.example.shopify.authentication.model.pojo.CustomerResponse
 import com.example.shopify.authentication.remote.AuthenticationRemoteSource
+import com.example.shopify.base.DraftOrderResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -26,5 +27,7 @@ class AuthenticationRepository(val remoteSource: AuthenticationRemoteSource):Aut
     override suspend fun getCustomerByEmailFromAPI(email: String): Flow<CustomerListResponse> {
         return flowOf(remoteSource.getCustomerByEmail(email))
     }
+
+
 
 }

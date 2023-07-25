@@ -2,7 +2,10 @@ package com.example.shopify.authentication.remote
 
 import com.example.shopify.authentication.model.pojo.CustomerListResponse
 import com.example.shopify.authentication.model.pojo.CustomerResponse
+import com.example.shopify.base.DraftOrder
+import com.example.shopify.base.DraftOrderResponse
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.*
 
 interface AuthenticationService {
@@ -18,4 +21,6 @@ interface AuthenticationService {
 
     @DELETE
     suspend fun deleteCustomer(customerID: Long)
+
+
 }

@@ -1,12 +1,10 @@
 package com.example.shopify.address.model.repository
 
-import com.example.shopify.CategoryFragment.Model.Repository.AllCategoriesRepository
-import com.example.shopify.CategoryFragment.Remote.AllCategoriesRemoteSource
-import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
+import com.example.shopify.address.model.GetAddressResponse
 import com.example.shopify.address.remote.AddressRemoteSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import retrofit2.http.Path
 
 class AddressRepository(var remoteAddress : AddressRemoteSource):AddressRepositoryInterface {
@@ -21,12 +19,19 @@ class AddressRepository(var remoteAddress : AddressRemoteSource):AddressReposito
             }
         }
     }
-    override suspend fun getCustomerAddress(id: Long): Flow<AddressResponse> {
+    override suspend fun getCustomerAddress(id: Long): Flow<GetAddressResponse?> {
         return remoteAddress.getCustomerAddress(id)
     }
 
     override
-    suspend fun addCustomerAddress(@Path("id") id: String, address: Address):Flow<AddressResponse >{
-      return flowOf( remoteAddress.addCustomerAddress(id,address))
+    suspend fun addCustomerAddress(@Path("id") id: Long, address: AddressBody):Flow<AddressResponse?>{
+      return remoteAddress.addCustomerAddress(id,address)
+    }
+
+    override suspend fun deleteCustomerAddress(
+        customer_id: Long,
+        address_id: Long
+    ){
+         remoteAddress.deleteCustomerAddress(customer_id,address_id)
     }
 }
