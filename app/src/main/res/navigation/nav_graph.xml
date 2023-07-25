@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_cartFragment_to_productInfoFragment22"
             app:destination="@id/productInfoFragment2" />
+        <action
+            android:id="@+id/action_cartFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -249,6 +252,9 @@
         <action
             android:id="@+id/action_paymentFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
     </fragment>
 
 

@@ -105,4 +105,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
+/*
+    //payment
+    implementation "com.paypal.checkout:android-sdk:0.112.2"*/
 }

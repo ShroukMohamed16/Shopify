@@ -72,6 +72,17 @@
 
     <string name="deleteAddressMessage"> Are you sure you want to delete this address?</string>
     <string name="homeDeleteAddressMessage">Default address Can\'t be deleted</string>
+    <string name="online_payment">Online Payment</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="discount_code">Discount Code</string>
+    <string name="check_out">Check Out</string>
+    <string name="product_fees">Product fees:</string>
+    <string name="delivery_fees">Delivery fees:</string>
+    <string name="discount">Discount:</string>
+    <string name="total_price">Total Price:</string>
+    <string name="checkout">CheckOut</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="todo">TODO</string>
 
 
 </resources>
