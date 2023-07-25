@@ -72,10 +72,7 @@ fun getAddress(context: Context, latitude: Double, longitude: Double) {
             MyAddress.country=country
             MyAddress.province=province
             MyAddress.zipCode=zipCode
-            MySharedPreferences.getInstance(context).saveCountryName(country)
-            MySharedPreferences.getInstance(context).saveCityName(city)
-            MySharedPreferences.getInstance(context).saveProvinceName(province)
-            MySharedPreferences.getInstance(context).saveZipCode(zipCode)
+
         }
     }
 }

@@ -52,5 +52,10 @@ class ProfileFragment : Fragment() {
                 .navigate(R.id.action_profileFragment_to_allOrdersFragment)
         }
 
+        profileBinding.profileMoreOrdersTv.setOnClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.action_profileFragment_to_paymentFragment)
+        }
+
     }
 }

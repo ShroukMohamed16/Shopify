@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shopify.authentication.model.pojo.CustomerBodey
 import com.example.shopify.authentication.model.pojo.CustomerListResponse
 import com.example.shopify.authentication.model.pojo.CustomerResponse
+import com.example.shopify.authentication.model.pojo.Customerbody
 import com.example.shopify.authentication.model.repository.AuthenticationRepositoryInterface
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
@@ -77,5 +79,10 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
                 }
         }
 
+    }
+    fun updateCustomer(customer_id:Long,customer: Customerbody){
+        viewModelScope.launch{
+         repositoryInterface.updateCustomer(customer_id,customer)
+        }
     }
 }

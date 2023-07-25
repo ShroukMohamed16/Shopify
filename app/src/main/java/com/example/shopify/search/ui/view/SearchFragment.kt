@@ -102,8 +102,9 @@ class SearchFragment : Fragment(), OnSearchItemClick {
     }
 
     private fun filteredProductList(s: String): List<Product>? {
-        return productList?.filter { it.title!!.lowercase().contains(s.lowercase()) }
+        return productList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
     }
+
 
 
 }

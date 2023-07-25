@@ -55,6 +55,7 @@ class OrderFragment : Fragment(),OnClickOrderItem {
         orderBinding.backImg.setOnClickListener {
             val action = OrderFragmentDirections.actionOrderFragmentToAllOrdersFragment()
             orderBinding.root.findNavController().navigate(action)
+            orderBinding.root.findNavController().navigate(R.id.allOrdersFragment)
         }
 
 
