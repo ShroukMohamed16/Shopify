@@ -6,97 +6,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="Payment.UI.View.PaymentFragment">
+
     <androidx.cardview.widget.CardView
         android:id="@+id/settingTembratureCardView"
-        android:backgroundTint="#F4DEDE"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
         android:elevation="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/settingTembratureConstraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingTembratureConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-        <TextView
+            <TextView
 
-            android:id="@+id/settingTembratureTV"
+                android:id="@+id/settingTembratureTV"
 
-            android:text="Payment Method"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="35dp"
-            android:textColor="@color/primary"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.271" />
-
-        <RadioGroup
-            android:id="@+id/settingTembratureRadioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settingTembratureTV"
-            app:layout_constraintVertical_bias="0.523">
-
-            <RadioButton
-                android:id="@+id/settingTempratureCelsiusRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="2dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/payment_method"
+                android:textColor="@color/primary"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                android:buttonTint="@color/primary"
-                android:text="Online Payment"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                tools:ignore="TouchTargetSizeCheck" />
-
-            <RadioButton
-                android:id="@+id/settingTempratureKelvinRadioButton"
+            <RadioGroup
+                android:id="@+id/settingTembratureRadioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:buttonTint="@color/primary"
-                android:text="Cash On Delivery"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settingTembratureTV"
+                app:layout_constraintVertical_bias="0.523">
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/onlinePaymentRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+
+                    android:buttonTint="@color/primary"
+                    android:text="@string/online_payment"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <RadioButton
+                    android:id="@+id/cashPaymentRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:buttonTint="@color/primary"
+                    android:text="@string/cash_on_delivery"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </RadioGroup>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/discountCode"
-        android:backgroundTint="#F4DEDE"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
         android:elevation="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/settingTembratureCardView"
         app:layout_constraintStart_toStartOf="@id/settingTembratureCardView"
         app:layout_constraintTop_toBottomOf="@id/settingTembratureCardView">
 
@@ -110,29 +106,53 @@
 
                 android:id="@+id/discount"
 
-                android:text="Discount Code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="35dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/discount_code"
                 android:textColor="@color/primary"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.271" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="5X5D5F5G"
-                android:textSize="20sp"
+
+            <ImageView
+                android:id="@+id/discountImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/coupon_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.055"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/discount" />
+                app:layout_constraintTop_toBottomOf="@+id/discount"
+                android:contentDescription="@string/todo" />
 
+            <EditText
+                android:id="@+id/discountCodeET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/coupon"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/discountImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.055"
+                app:layout_constraintStart_toEndOf="@id/discountImage"
+                app:layout_constraintTop_toTopOf="@+id/discountImage" />
+
+            <ImageView
+                android:id="@+id/verfyIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@id/discountCodeET"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/discountCodeET"
+                app:layout_constraintTop_toTopOf="@id/discountCodeET" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -140,18 +160,15 @@
     </androidx.cardview.widget.CardView>
 
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/CheckOutCard"
-        android:backgroundTint="#F4DEDE"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
         android:elevation="20dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/discountCode"
         app:layout_constraintStart_toStartOf="@id/discountCode"
         app:layout_constraintTop_toBottomOf="@id/discountCode">
 
@@ -167,56 +184,86 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="35dp"
-                android:text="Check Out"
+                android:layout_marginTop="5dp"
+                android:text="@string/check_out"
                 android:textColor="@color/primary"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.12" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/productFees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Product fees: 200 EGP"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/product_fees"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-android:textSize="20sp"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/CheckOut"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/CheckOut" />
+
             <TextView
-                android:id="@+id/discountCheckOut"
+                android:id="@+id/deliveryFeesET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Product fees: 200 EGP"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:text="@string/delivery_fees"
                 android:textColor="@color/black"
                 android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/productFees"
                 app:layout_constraintTop_toBottomOf="@+id/productFees" />
 
             <TextView
 
-                android:id="@+id/total"
+                android:id="@+id/DiscountValueET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Product fees: 200 EGP"
+                android:text="@string/discount"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/discountCheckOut"
-                app:layout_constraintTop_toBottomOf="@+id/discountCheckOut" />
+                app:layout_constraintStart_toStartOf="@+id/deliveryFeesET"
+                app:layout_constraintTop_toBottomOf="@+id/deliveryFeesET"
+                app:layout_constraintVertical_bias="0.281" />
+
+            <TextView
+
+                android:id="@+id/totalTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/total_price"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/DiscountValueET"
+                app:layout_constraintTop_toBottomOf="@+id/DiscountValueET" />
+
+            <TextView
+
+                android:id="@+id/totalPriceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="100 EGP"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/totalTV"
+                app:layout_constraintStart_toEndOf="@id/totalTV"
+                app:layout_constraintTop_toTopOf="@id/totalTV" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -227,16 +274,35 @@ android:textSize="20sp"
         android:id="@+id/checkoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/primary"
-        android:text="CheckOut"
+        android:text="@string/checkout"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/CheckOutCard"
-        app:layout_constraintHorizontal_bias="0.393"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="@+id/CheckOutCard"
         app:layout_constraintTop_toBottomOf="@+id/CheckOutCard"
+        app:layout_constraintVertical_bias="0.012"
         app:rippleColor="@color/black" />
+<!--    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+        android:id="@+id/payment_button_container"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/CheckOutCard"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/CheckOutCard"
+        app:layout_constraintTop_toBottomOf="@+id/CheckOutCard"
+        app:paypal_button_color="silver"
+        app:paypal_button_enabled="true"
+        app:paypal_button_label="pay"
+        app:paypal_button_shape="rectangle"
+        app:paypal_button_size="large" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@ class AddressFragment : Fragment(), OnAddressClickListener {
         addressAdapter =
             AddressAdapter(GetAddressResponse(listOf()), requireContext(), this@AddressFragment)
 
-        addressRecyclerView = addressBinding.favouriteRecycler
+        addressRecyclerView = addressBinding.addressRecycler
         addressRecyclerView.adapter = addressAdapter
         addressRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -72,10 +72,10 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                             addressBinding.noAddressImage.visibility=View.GONE
                             addressBinding.textView2.visibility=View.GONE
                             addressAdapter.setAddressList(result.data?.addresses)
-                            addressBinding.favouriteRecycler.adapter = addressAdapter
+                            addressBinding.addressRecycler.adapter = addressAdapter
                         }else{
                             addressBinding.addressProgressBar.visibility = View.GONE
-                            addressBinding.favouriteRecycler.visibility=View.GONE
+                            addressBinding.addressRecycler.visibility=View.GONE
                             addressBinding.noAddressImage.visibility=View.VISIBLE
                             addressBinding.textView2.visibility=View.VISIBLE
                         }
