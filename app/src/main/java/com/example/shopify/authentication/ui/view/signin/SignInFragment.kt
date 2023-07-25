@@ -14,7 +14,9 @@ import androidx.navigation.Navigation
 import com.example.shopify.AllOrdersFragment.Model.LineItemsOrder
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.Customer
+import com.example.shopify.authentication.model.pojo.CustomerBodey
 import com.example.shopify.authentication.model.pojo.CustomerResponse
+import com.example.shopify.authentication.model.pojo.Customerbody
 import com.example.shopify.authentication.model.repository.AuthenticationRepository
 import com.example.shopify.authentication.remote.AuthenticationClient
 import com.example.shopify.authentication.ui.viewmodel.AuthenticationViewModel
@@ -41,26 +43,31 @@ import com.google.firebase.auth.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import kotlin.properties.Delegates
 
 private const val TAG = "SignInFragment"
 
 class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
-    private  var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     lateinit var authenticationViewModel: AuthenticationViewModel
     lateinit var authenticationViewModelFactory: AuthenticationViewModelFactory
-    lateinit var  cartDraftOrder:DraftOrderResponse
-    lateinit var  favDraftOrder:DraftOrderResponse
+    lateinit var cartDraftOrder: DraftOrderResponse
+    lateinit var favDraftOrder: DraftOrderResponse
     var mGoogleSignInClient: GoogleSignInClient? = null
     private val RC_SIGN_IN = 100
     private val TAG = "Google_SIGN_IN_TAG"
+    var customerLogin_id by Delegates.notNull<Long>()
+    var card_id: Long = 0
+    var fav_id: Long = 0
+    lateinit var updatedCustomer: CustomerBodey
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View{
+        savedInstanceState: Bundle?,
+    ): View {
         binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,41 +75,50 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        
-       
+
+        customerLogin_id = MySharedPreferences.getInstance(requireContext()).getCustomerID()!!
+        card_id = MySharedPreferences.getInstance(requireContext()).getCartID()!!
+        fav_id = MySharedPreferences.getInstance(requireContext()).getFavID()!!
+
+        val customer = Customerbody(customerLogin_id,note = card_id.toString(), tags = fav_id.toString())
+        updatedCustomer = CustomerBodey(customer)
 
         val cart_line_item = line_items(title = "cart item", quantity = 2, price = "1200")
-        val cart_draftOrder = DraftOrder(line_items= listOf(cart_line_item), note = Constants.CART_NOTE)
+        val cart_draftOrder =
+            DraftOrder(line_items = listOf(cart_line_item), note = Constants.CART_NOTE)
         cartDraftOrder = DraftOrderResponse(cart_draftOrder)
 
         val fav_line_item = line_items(title = "fav item", quantity = 1, price = "1500")
-        val fav_draftOrder = DraftOrder(line_items= listOf(fav_line_item), note = Constants.FAV_NOTE)
+        val fav_draftOrder =
+            DraftOrder(line_items = listOf(fav_line_item), note = Constants.FAV_NOTE)
         favDraftOrder = DraftOrderResponse(fav_draftOrder)
 
-        
+
         authenticationViewModelFactory = AuthenticationViewModelFactory(
             AuthenticationRepository.getInstance(
                 AuthenticationClient()
             ))
-        authenticationViewModel = ViewModelProvider(this,authenticationViewModelFactory)[AuthenticationViewModel::class.java]
-
+        authenticationViewModel = ViewModelProvider(this,
+            authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
         val firstname = Constants.first_name
         val lastname = Constants.last_name
 
         binding.loginBtn.setOnClickListener {
-            signInWithEmailAndPassword(firstname,lastname)
+           // authenticationViewModel.updateCustomer(customerLogin_id, customer)
+            signInWithEmailAndPassword(firstname, lastname)
         }
         binding.signUpTxt.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_signUpFragment)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_signInFragment_to_signUpFragment)
 
         }
         binding.googleLoginBtn.setOnClickListener {
@@ -110,43 +126,46 @@ class SignInFragment : Fragment() {
         }
 
         binding.guestBtn.setOnClickListener {
+            MySharedPreferences.getInstance(requireContext()).saveCurrencyCode("EGP")
+            MySharedPreferences.getInstance(requireContext()).saveExchangeRate(1.0f)
             signInAnonymously()
         }
 
     }
-    private fun signInAnonymously(){
+
+    private fun signInAnonymously() {
         auth.signInAnonymously()
             .addOnCompleteListener {
-                if(it.isSuccessful){
-                    startActivity(Intent(activity,HomeActivity::class.java))
+                if (it.isSuccessful) {
+                    startActivity(Intent(activity, HomeActivity::class.java))
                     activity?.finish()
-                    Toast.makeText(requireContext(),"logged as Guest",Toast.LENGTH_LONG).show()
-                }
-                else{
+                    Toast.makeText(requireContext(), "logged as Guest", Toast.LENGTH_LONG).show()
+                } else {
                     val errorMessage = it.exception?.localizedMessage
-                    Toast.makeText(requireContext(),errorMessage,Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
     }
 
-    private fun signInWithEmailAndPassword( firstName:String , lastName:String){
+    private fun signInWithEmailAndPassword(firstName: String, lastName: String) {
         val email = binding.emailTextField.editText?.text.toString()
         val password = binding.passwordTextField.editText?.text.toString()
-        if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(requireContext(),"Please Fill All Data",Toast.LENGTH_LONG).show()
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(requireContext(), "Please Fill All Data", Toast.LENGTH_LONG).show()
             return
         }
-        if(password.length<6 || password.length >20){
-            Toast.makeText(requireContext(),"Enter Correct Password",Toast.LENGTH_LONG).show()
+        if (password.length < 6 || password.length > 20) {
+            Toast.makeText(requireContext(), "Enter Correct Password", Toast.LENGTH_LONG).show()
             return
         }
-        if(!isValidEmail(email)){
-            Toast.makeText(requireContext(),"Enter Valid format in email ",Toast.LENGTH_LONG).show()
+        if (!isValidEmail(email)) {
+            Toast.makeText(requireContext(), "Enter Valid format in email ", Toast.LENGTH_LONG)
+                .show()
             return
         }
         lifecycleScope.launch {
             val job = lifecycleScope.launch {
-                authenticationViewModel.getCustomerByEmail(email,requireContext())
+                authenticationViewModel.getCustomerByEmail(email, requireContext())
             }
             job.join()
             auth.signInWithEmailAndPassword(email, password)
@@ -155,22 +174,24 @@ class SignInFragment : Fragment() {
                         if (auth.currentUser?.isEmailVerified!!) {
                             Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
                             if (Constants.CustomerListResponseSize == 0) {
-                                authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
-                                lifecycleScope.launch { 
-                                    authenticationViewModel.customer.collect{result->
-                                        when(result){
-                                            is State.Success ->{
+                                authenticationViewModel.addCustomer(CustomerResponse(Customer(email,
+                                    firstName,
+                                    lastName)))
+                                lifecycleScope.launch {
+                                    authenticationViewModel.customer.collect { result ->
+                                        when (result) {
+                                            is State.Success -> {
                                                 createDraftOrder(cartDraftOrder)
                                                 createDraftOrder(favDraftOrder)
                                             }
-                                            else ->{
+                                            else -> {
                                                 //Toast.makeText()
-                                                
+
                                             }
                                         }
-                                        
+
                                     }
-                                    
+
 
                                 }
                             }
@@ -199,13 +220,15 @@ class SignInFragment : Fragment() {
         }
 
     }
+
     private fun isValidEmail(email: String): Boolean {
-        val pattern =  Pattern.compile(
+        val pattern = Pattern.compile(
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
         val matcher = pattern.matcher(email)
         return matcher.matches()
 
     }
+
     private fun signIn() {
         Log.i(TAG, "signIn: ")
         val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
@@ -241,26 +264,29 @@ class SignInFragment : Fragment() {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("TAGsigninsuccess", "signInWithCredential:success")
                         val user: FirebaseUser? = auth.getCurrentUser()
-                        val emailWithGoogle:String = user?.email!!
+                        val emailWithGoogle: String = user?.email!!
                         val names = user.displayName?.split("\\s".toRegex())
                         val firstNameWithGoogle = names?.get(0)
                         val lastNameWithGoogle = names?.get(1)
-                        Log.i(TAG, "firebaseAuthWithGoogle: $emailWithGoogle\n $firstNameWithGoogle\n $lastNameWithGoogle\n")
+                        Log.i(TAG,
+                            "firebaseAuthWithGoogle: $emailWithGoogle\n $firstNameWithGoogle\n $lastNameWithGoogle\n")
 
                         lifecycleScope.launch {
                             val job = lifecycleScope.launch {
-                                authenticationViewModel.getCustomerByEmail(emailWithGoogle,requireContext())
+                                authenticationViewModel.getCustomerByEmail(emailWithGoogle,
+                                    requireContext())
                             }
                             job.join()
                             if (Constants.CustomerListResponseSize == 0) {
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(
-                                            emailWithGoogle,
-                                            firstNameWithGoogle,
-                                            lastNameWithGoogle)))
+                                    emailWithGoogle,
+                                    firstNameWithGoogle,
+                                    lastNameWithGoogle)))
                             }
                         }
 
-                        if (task.result.additionalUserInfo!!.isNewUser) {}
+                        if (task.result.additionalUserInfo!!.isNewUser) {
+                        }
                         Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                         val intent = Intent(requireActivity(), HomeActivity::class.java)
                         startActivity(intent)
@@ -274,34 +300,35 @@ class SignInFragment : Fragment() {
                     }
                 })
     }
-    
-  private fun createDraftOrder(draftOrderResponse: DraftOrderResponse){
-      authenticationViewModel.createDraftOrder(draftOrderResponse)
-      lifecycleScope.launch {
-              authenticationViewModel.draftOrder.collect{result->
-                  when(result){
-                      is State.Success ->{
-                          if (result.data.draft_order!!.note.equals(Constants.CART_NOTE)) {
-                              MySharedPreferences.getInstance(requireContext())
-                                  .saveCartID(result.data.draft_order!!.id!!)
-                              Log.i(TAG, "createCartDraftOrder: ${result.data.draft_order!!.id!!}")
 
-                          }
-                          else if(result.data.draft_order!!.note.equals(Constants.FAV_NOTE)){
-                              MySharedPreferences.getInstance(requireContext())
-                                  .saveFavID(result.data.draft_order!!.id!!)
-                              Log.i(TAG, "createFavDraftOrder: ${result.data.draft_order!!.id!!}")
+    private fun createDraftOrder(draftOrderResponse: DraftOrderResponse) {
+        authenticationViewModel.createDraftOrder(draftOrderResponse)
+        lifecycleScope.launch {
+            authenticationViewModel.draftOrder.collect { result ->
+                when (result) {
+                    is State.Success -> {
+                        if (result.data.draft_order!!.note.equals(Constants.CART_NOTE)) {
+                            MySharedPreferences.getInstance(requireContext())
+                                .saveCartID(result.data.draft_order!!.id!!)
+                            Log.i(TAG, "createCartDraftOrder: ${result.data.draft_order!!.id!!}")
 
-                          }
-                      }
-                      else->{
+                        } else if (result.data.draft_order!!.note.equals(Constants.FAV_NOTE)) {
+                            MySharedPreferences.getInstance(requireContext())
+                                .saveFavID(result.data.draft_order!!.id!!)
+                            Log.i(TAG, "createFavDraftOrder: ${result.data.draft_order!!.id!!}")
 
-                      }
-                  }
 
-              }
-          
-      }
-  }
+                        }
+                       // authenticationViewModel.updateCustomer(customerLogin_id, updatedCustomer)
+                    }
+                    else -> {
+
+                    }
+                }
+
+            }
+
+        }
+    }
 
 }

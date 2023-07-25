@@ -96,15 +96,19 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
                 .getExchangeRate()))
 
 
-        val exchangeRate = MySharedPreferences.getInstance(requireContext()).getExchangeRate()
-        subCatBinding.priceRangeSlider.apply {
-            valueFrom = 20 * exchangeRate
-            valueTo = 300 * exchangeRate
-            stepSize = 10 *exchangeRate
+//        val exchangeRate = MySharedPreferences.getInstance(requireContext()).getExchangeRate()
+//        subCatBinding.priceRangeSlider.apply {
+//            valueFrom = 20 * exchangeRate
+//            valueTo = 300 * exchangeRate
+//            stepSize = 10 *exchangeRate
+//
+//        }
+        subCatBinding.minPriceCode.text =
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
+        subCatBinding.maxPriceCode.text =
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
 
-        }
-
-
+        subCatBinding.priceRangeSlider.values= listOf(50f)
         subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :
             RangeSlider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: RangeSlider) {

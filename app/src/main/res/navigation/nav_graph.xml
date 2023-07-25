@@ -132,6 +132,9 @@
         <action
             android:id="@+id/action_profileFragment_to_allOrdersFragment"
             app:destination="@id/allOrdersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -149,6 +152,16 @@
             app:destination="@id/allOrdersFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.shopify.search.ui.view.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
+        </fragment>
     <fragment
         android:id="@+id/subCategoryFragment"
         android:name="com.example.shopify.SubCategoryFragment.UI.View.SubCategoryFragment"
@@ -188,9 +201,6 @@
         <action
             android:id="@+id/action_settingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
-        <action
-            android:id="@+id/action_settingFragment_to_currencyFragment"
-            app:destination="@id/currencyFragment" />
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
@@ -228,15 +238,14 @@
         android:id="@+id/addAddressFragment"
         android:name="com.example.shopify.address.ui.view.AddAddressFragment"
         android:label="AddAddressFragment" />
-    <dialog
-        android:id="@+id/currencyFragment"
-        android:name="com.example.shopify.setting.ui.view.CurrencyFragment"
-        android:label="fragment_currency"
-        tools:layout="@layout/fragment_currency" >
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.shopify.Payment.UI.View.PaymentFragment"
+        android:label="PaymentFragment" >
         <action
-            android:id="@+id/action_currencyFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-    </dialog>
+            android:id="@+id/action_paymentFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 
 
 </navigation>

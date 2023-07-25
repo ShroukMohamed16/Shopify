@@ -118,13 +118,27 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/min_price_text_view"
                     app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/min_price_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/min_price_value"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.slider.RangeSlider
                     android:id="@+id/price_range_slider"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-
+                    android:stepSize="10"
+                    android:valueFrom="20"
+                    android:valueTo="300"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/min_price_text_view"
                     app:thumbColor="#917E7E"
@@ -156,6 +170,18 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/max_price_text_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/max_price_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/max_price_value"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
