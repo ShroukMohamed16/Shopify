@@ -1,5 +1,6 @@
 package com.example.shopify.address.remote
 
+
 import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
 import com.example.shopify.address.model.GetAddressResponse
@@ -18,5 +19,6 @@ interface AddressService {
     @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
     @DELETE("customers/{customer_id}/addresses/{address_id}.json")
     suspend fun deleteCustomerAddress(@Path(value="customer_id") customer_id:Long ,@Path (value="address_id") address_id:Long)
+
 
 }
