@@ -41,7 +41,7 @@
     <string name="save_the_code_to_apply_the_discount">Save the code to apply the discount</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">ok</string>
+    <string name="ok"> ok </string>
     <string name="are_you_sure">are you sure you want to sign out ?</string>
     <string name="Orders">Orders</string>
     <string name="OrderNum">OrderNum :</string>
@@ -49,22 +49,13 @@
     <string name="data">Created At :</string>
     <string name="lastname">lastname</string>
     <string name="firstname">firstname</string>
-    <string name="ok">ok</string>
     <string name="Oreders">Orders</string>
-    <string name="OrderNum">Order Num</string>
-    <string name="OrderItems">Order Items</string>
-
-    <string name="are_you_sure">are you sure</string>
     <string name="add_location">Add Location</string>
     <string name="your_current_location">Your Current Location</string>
     <string name="choose_another_location">Choose Another Location</string>
     <string name="complete_location_details">Complete Location Details</string>
-
-
     <string name="messageHomeMapAlert">Are you sure you want to choose </string>
-
     <string name="chooseSpecificPlace">choose more specific place please</string>
-
     <string name="yesMapAlert">Yes</string>
     <string name="CancelMapAlert">Cancel</string>
     <string name="errorFavMapAlert"> Could not find location</string>

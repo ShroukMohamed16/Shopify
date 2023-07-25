@@ -124,9 +124,7 @@
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:stepSize="10"
-                    android:valueFrom="20"
-                    android:valueTo="300"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/min_price_text_view"
                     app:thumbColor="#917E7E"

@@ -2,6 +2,7 @@ package com.example.shopify.address.remote
 
 import com.example.shopify.CategoryFragment.Remote.AllCategoriesService
 import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
 import com.example.shopify.base.Remote.RetrofitHelper
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ class AddressClient private constructor():AddressRemoteSource {
         return flowOf(addressService.getCustomerAddress(id))
     }
 
-    override suspend fun addCustomerAddress(@Path("id") id: String, address: Address):AddressResponse{
+    override suspend fun addCustomerAddress( id: String, address: AddressBody):AddressResponse{
         return addressService.addCustomerAddress(id,address)
     }
 }

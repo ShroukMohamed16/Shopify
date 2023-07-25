@@ -97,7 +97,12 @@ class SubCategoryFragment : Fragment(), OnClickProduct {
 
 
         val exchangeRate = MySharedPreferences.getInstance(requireContext()).getExchangeRate()
+        subCatBinding.priceRangeSlider.apply {
+            valueFrom = 20 * exchangeRate
+            valueTo = 300 * exchangeRate
+            stepSize = 10 *exchangeRate
 
+        }
 
 
         subCatBinding.priceRangeSlider.addOnSliderTouchListener(object :

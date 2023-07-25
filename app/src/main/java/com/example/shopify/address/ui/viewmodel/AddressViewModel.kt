@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.CategoryFragment.Model.DataClass.Allcategories
 import com.example.shopify.CategoryFragment.Model.Repository.AllCategoriesRepositoryInterface
 import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
 import com.example.shopify.address.model.repository.AddressRepositoryInterface
 import com.example.shopify.base.State
@@ -32,7 +33,7 @@ class AddressViewModel(private val repo : AddressRepositoryInterface) : ViewMode
                 }
         }
     }
-    fun addCustomerAddress(id: String,address: Address){
+    fun addCustomerAddress(id: String,address: AddressBody){
         viewModelScope.launch {
             repo.addCustomerAddress(id, address)?.catch { e ->
                 Log.e("TAG", "address: $e",)

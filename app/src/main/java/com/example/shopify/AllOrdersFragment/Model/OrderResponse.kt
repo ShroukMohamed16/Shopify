@@ -69,6 +69,8 @@ data class Order(
     var user_id: String? = null,
 ) : Parcelable
 
+data class OrderReq (val order: Order)
+
 @Parcelize
 data class CustomerOrder(
     val id: Long = 0,
@@ -88,15 +90,3 @@ data class Property(
     val name: String = "",
     val value: String? = "",
 ) : Parcelable
-
-//fun LineItem.toLineItemOrder():LineItemsOrder{
-//    val arr = applied_discount.description?.split(")")
-//    var url:String? = ""
-//    if((arr?.size?:0)>1)
-//    {
-//        url = arr?.get(1)
-//    }
-//    return LineItemsOrder(price,quantity, title ="${title})${arr?.get(0)}", listOf(
-//        Property(this.properties[0].name?:"", value = url)
-//    ))
-//}

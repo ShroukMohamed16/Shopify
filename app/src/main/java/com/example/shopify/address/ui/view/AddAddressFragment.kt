@@ -1,6 +1,5 @@
 package com.example.shopify.address.ui.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,26 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import com.example.shopify.CategoryFragment.Model.Repository.AllCategoriesRepository
-import com.example.shopify.CategoryFragment.Remote.AllCategoriesClient
-import com.example.shopify.CategoryFragment.UI.ViewModel.CategoryViewModel.AllCategoriesViewModel
-import com.example.shopify.CategoryFragment.UI.ViewModel.CategoryViewModelFactory.AllCategoriesViewModelFactory
-import com.example.shopify.R
 import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.repository.AddressRepository
 import com.example.shopify.address.remote.AddressClient
 import com.example.shopify.address.ui.viewmodel.AddressViewModel
 import com.example.shopify.address.ui.viewmodel.AddressViewModelFactory
 import com.example.shopify.databinding.FragmentAddAddressBinding
-import com.example.shopify.databinding.FragmentAddressBinding
 import com.example.shopify.utilities.MyAddress
 import com.example.shopify.utilities.MyLocation
-import com.example.shopify.utilities.MySharedPreferences
 import com.example.shopify.utilities.getAddress
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import java.util.*
 
 
 class AddAddressFragment : Fragment() {
@@ -42,7 +31,7 @@ class AddAddressFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         addAddressBinding = FragmentAddAddressBinding.inflate(inflater, container, false)
         return addAddressBinding.root
@@ -68,21 +57,43 @@ class AddAddressFragment : Fragment() {
         val address2 = addAddressBinding.address2ET.text
         val phone = addAddressBinding.PhoneET.text
 
-        val address = Address(7169338474770,
-            address1.toString(),
-            address2.toString(),
-            MyAddress.city,
-            "",
-            "",
-            "",
-            phone.toString(),
-            MyAddress.province,
-            MyAddress.country,
-            MyAddress.zipCode,
-            "",
-            "",
-            "",
-            ""
+//        val address = Address(7169338474770,
+//            address1.toString(),
+//            address2.toString(),
+//            MyAddress.city,
+//            "",
+//            "",
+//            "",
+//            phone.toString(),
+//            MyAddress.province,
+//            MyAddress.country,
+//            MyAddress.zipCode,
+//            "",
+//            "",
+//            "",
+//            ""
+//        )
+
+
+        val addressuser = Address(
+            "1 Rue des Carrieres",
+            "Suite 1234",
+            "Montreal",
+            "Fancy Co.",
+            "Samuel",
+            "123",
+            "canada",
+            7169338474770,
+            true,
+            "noha",
+            0,
+            "ahmed",
+            "hieloo",
+            "01127376269",
+            "dhh",
+            "g12",
+            "hg44"
+
         )
         addAddressBinding.addressSaveBtn.setOnClickListener {
             if (addAddressBinding.PhoneET.text.length != 11) {
@@ -93,10 +104,10 @@ class AddAddressFragment : Fragment() {
                 Toast.makeText(requireContext(), "You must fill all the fields", Toast.LENGTH_SHORT)
                 Log.i("TAG", "onViewCreated: You must fill all the fields")
             } else {
-                viewModel.addCustomerAddress("7169338474770", address)
+                viewModel.addCustomerAddress("7169338474770", AddressBody(addressuser))
                 Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT)
                 Log.i("TAG", "onViewCreated: saved")
-               // lifecycleScope.launch {  }
+                // lifecycleScope.launch {  }
                 //viewModel.address.collect(){}
 
             }

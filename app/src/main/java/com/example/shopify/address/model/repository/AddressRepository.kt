@@ -3,6 +3,7 @@ package com.example.shopify.address.model.repository
 import com.example.shopify.CategoryFragment.Model.Repository.AllCategoriesRepository
 import com.example.shopify.CategoryFragment.Remote.AllCategoriesRemoteSource
 import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
 import com.example.shopify.address.remote.AddressRemoteSource
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ class AddressRepository(var remoteAddress : AddressRemoteSource):AddressReposito
     }
 
     override
-    suspend fun addCustomerAddress(@Path("id") id: String, address: Address):Flow<AddressResponse >{
+    suspend fun addCustomerAddress(@Path("id") id: String, address: AddressBody):Flow<AddressResponse >{
       return flowOf( remoteAddress.addCustomerAddress(id,address))
     }
 }
