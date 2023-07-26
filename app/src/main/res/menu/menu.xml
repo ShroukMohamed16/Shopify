@@ -3,24 +3,24 @@
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="home" />
+        android:title="@string/home" />
 
     <item
         android:id="@+id/categoryFragment"
         android:icon="@drawable/ic_baseline_category_24"
-        android:title="category"
+        android:title="@string/category"
         />
     <item
         android:id="@+id/favouriteFragment"
         android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="favourites" />
+        android:title="@string/favourites" />
     <item
         android:id="@+id/cartFragment"
         android:icon="@drawable/ic_baseline_shopping_cart_24"
-        android:title="Cart" />
+        android:title="@string/cart" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="Profile" />
+        android:title="@string/profile" />
 
 </menu>

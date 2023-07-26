@@ -94,4 +94,11 @@ class MySharedPreferences private constructor(context: Context) {
     fun getZipCode(): String? {
         return sharedPreferences.getString(Constants.ZIP_CODE,"")
     }
+    fun saveLanguagePreference(language: String) {
+        sharedPreferences.edit().putString(Constants.LANGUAGE, language).apply()
+    }
+
+    fun getLanguagePreference(): String? {
+        return sharedPreferences.getString(Constants.LANGUAGE, Constants.ENGLISH)
+    }
 }

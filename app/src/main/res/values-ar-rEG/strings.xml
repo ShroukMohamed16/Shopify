@@ -77,4 +77,24 @@
     <string name="todo">قائمة المهام</string>
     <string name="cant_pay_in_cash">لا يمكن الدفع نقدًا</string>
     <string name="large_amount_of_money">إنها مبلغ كبير من المال. يجب عليك الدفع باستخدام باي بال.</string>
+    <string name="currency">العملة</string>
+    <string name="language">اللغة</string>
+    <string name="addressSetting">العنوان</string>
+    <string name="english">الانجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="home">الرئيسية</string>
+    <string name="category">الفئات</string>
+    <string name="favourites">المفضلة</string>
+    <string name="cart">السلة</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="wishlist">قائمة الأمنيات</string>
+    <string name="hello">مرحبًا</string>
+    <string name="orders">الطلبات</string>
+    <string name="more">المزيد</string>
+    <string name="item_name">اسم العنصر</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="search">بحث</string>
+    <string name="brands">الماركات </string>
+    <string name="find_product">بحث عن منتج</string>
+    <string name="choose_language">اختر اللغة</string>
 </resources>
