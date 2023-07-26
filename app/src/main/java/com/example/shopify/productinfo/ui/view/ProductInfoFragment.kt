@@ -12,11 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.shopify.base.State
 import com.example.shopify.databinding.FragmentProductInfoBinding
-import com.example.shopify.productinfo.model.pojo.Option
 import com.example.shopify.productinfo.model.pojo.Reviews
+import com.example.shopify.productinfo.model.pojo.Variant
 import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
 import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
@@ -33,10 +32,9 @@ class ProductInfoFragment : Fragment() {
     private lateinit var productBinding: FragmentProductInfoBinding
     private lateinit var productsDetailsViewModel: ProductsDetailsViewModel
     private lateinit var productsDetailsViewModelFactory: ProductsDetailsViewModelFactory
-    lateinit var sizeAdapter: SizeAdapter
-    lateinit var colorAdapter: ColorAdapter
+    lateinit var variantAdapter: VariantAdapter
     private var currentPage = 0
-    private var optionList: List<String> = listOf()
+    private var variantList: List<Variant> = listOf()
     private val reviews = arrayOf(
         Reviews("Bassant Mohamed",
             "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
@@ -71,8 +69,7 @@ class ProductInfoFragment : Fragment() {
 
         reviews.shuffle()
 
-        colorAdapter = ColorAdapter(optionList)
-        sizeAdapter = SizeAdapter(optionList)
+        variantAdapter = VariantAdapter(variantList)
 
 
         productsDetailsViewModelFactory =
@@ -111,10 +108,8 @@ class ProductInfoFragment : Fragment() {
                         productBinding.thirdReviewerName.text = reviews[2].name
                         productBinding.thirdReviewerComment.text = reviews[2].comment
 
-                        colorAdapter.setColorList(result.data.product!!.options!!.get(1).values)
-                        sizeAdapter.setSizeList(result.data.product!!.options!!.get(0).values)
-                        productBinding.productInfoSizeRv.adapter = sizeAdapter
-                        productBinding.productInfoColorRv.adapter = colorAdapter
+                        variantAdapter.setSizeList(result.data.product!!.variants)
+                        productBinding.productInfoItemsRv.adapter = variantAdapter
 
                         val images = result.data.product?.images
                         val countOfImages = result.data.product?.images?.size
@@ -124,13 +119,10 @@ class ProductInfoFragment : Fragment() {
                         productBinding.productInfoViewPager.orientation =
                             ViewPager2.ORIENTATION_HORIZONTAL
 
-                        //productBinding.productInfoViewPager.offscreenPageLimit = 3
-                        //imageSlider.setPageMargin(20)
 
                         productBinding.productInfoViewPager.registerOnPageChangeCallback(object :
                             ViewPager2.OnPageChangeCallback() {
                             override fun onPageSelected(position: Int) {
-                                //captionView.text = "Image ${position + 1}"
                             }
                         })
                         val handler = Handler(Looper.getMainLooper())

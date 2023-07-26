@@ -188,9 +188,7 @@
         <action
             android:id="@+id/action_settingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
-        <action
-            android:id="@+id/action_settingFragment_to_currencyFragment"
-            app:destination="@id/currencyFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
@@ -221,10 +219,11 @@
             android:id="@+id/action_searchFragment_to_productInfoFragment2"
             app:destination="@id/productInfoFragment2" />
     </fragment>
+    <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.shopify.address.ui.view.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" >
+        tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
@@ -236,15 +235,6 @@
         android:id="@+id/addAddressFragment"
         android:name="com.example.shopify.address.ui.view.AddAddressFragment"
         android:label="AddAddressFragment" />
-    <dialog
-        android:id="@+id/currencyFragment"
-        android:name="com.example.shopify.setting.ui.view.CurrencyFragment"
-        android:label="fragment_currency"
-        tools:layout="@layout/fragment_currency" >
-        <action
-            android:id="@+id/action_currencyFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-    </dialog>
 
 
 </navigation>

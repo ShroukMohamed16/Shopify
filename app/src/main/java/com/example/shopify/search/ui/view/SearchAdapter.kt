@@ -23,7 +23,7 @@ class SearchAdapter (private var productList: List<Product>, val context: Contex
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentProduct = productList[position]
-        holder.binding.searchProductName.text = currentProduct.title
+        holder.binding.searchProductName.text = splitTitle(currentProduct.title)
         Glide.with(context)
             .load(currentProduct.images.get(0).src)
             .into(holder.binding.searchProductImg)
@@ -39,5 +39,9 @@ class SearchAdapter (private var productList: List<Product>, val context: Contex
     fun setProductList(values: List<Product?>?) {
         this.productList = values as List<Product>
         notifyDataSetChanged()
+    }
+    fun splitTitle(title:String?):String{
+        val titles = title?.split("|")
+        return titles!![1]
     }
 }

@@ -56,9 +56,10 @@ class SearchFragment : Fragment(), OnSearchItemClick {
             searchViewModel.products.collect { result ->
                 when (result) {
                     is State.Success -> {
+                        binding.imageView.visibility = View.GONE
                         productList = result.data.getProducts()
-                        //searchAdapter.setProductList(productList)
-                        // binding.searchRv.adapter = searchAdapter
+                        searchAdapter.setProductList(productList)
+                         binding.searchRv.adapter = searchAdapter
 
                     }
                     else -> {

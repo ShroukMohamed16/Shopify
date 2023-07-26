@@ -157,9 +157,11 @@ class SignInFragment : Fragment() {
                             if (Constants.CustomerListResponseSize == 0) {
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
                                 lifecycleScope.launch { 
-                                    authenticationViewModel.customer.collect{result->
+                                    authenticationViewModel.customerDetails.collect{result->
                                         when(result){
                                             is State.Success ->{
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .saveCustomerID(result.data.customer!!.id!!)
                                                 createDraftOrder(cartDraftOrder)
                                                 createDraftOrder(favDraftOrder)
                                             }
