@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shopify</string>
+    <string name="app_name">Frenzy</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="frenzy">Frenzy</string>
@@ -84,5 +84,6 @@
     <string name="payment_method">Payment Method</string>
     <string name="todo">TODO</string>
 
-
+    <string name="cant_pay_in_cash">Can\'t Pay in Cash</string>
+    <string name="large_amount_of_money">It is a large amount of money. You should pay with PayPal.</string>
 </resources>
