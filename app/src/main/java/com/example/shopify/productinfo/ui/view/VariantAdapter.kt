@@ -11,9 +11,10 @@ import com.example.shopify.databinding.ProductInfoRawBinding
 import com.example.shopify.productinfo.model.pojo.Variant
 
 
-class VariantAdapter(var list:List<Variant>) : RecyclerView.Adapter<VariantAdapter.VariantViewHolder>() {
+class VariantAdapter(var list:List<Variant>, var listener: OnProductVariantClickListener) : RecyclerView.Adapter<VariantAdapter.VariantViewHolder>() {
     private lateinit var binding: ProductInfoRawBinding
     var selectedItemPosition:Int = RecyclerView.NO_POSITION
+
 
     inner class VariantViewHolder(var binding: ProductInfoRawBinding):RecyclerView.ViewHolder(binding.root) {
         fun onBind(currentItem: Variant, position: Int) {
@@ -30,6 +31,7 @@ class VariantAdapter(var list:List<Variant>) : RecyclerView.Adapter<VariantAdapt
                 }
             binding.variantCard.setOnClickListener {
                 // Save the selected position and update the UI
+                listener.onProductVariantClick(currentItem.id!!)
                 val previousSelectedItemPosition = selectedItemPosition
                 selectedItemPosition = position
                 notifyItemChanged(previousSelectedItemPosition)
@@ -61,43 +63,6 @@ class VariantAdapter(var list:List<Variant>) : RecyclerView.Adapter<VariantAdapt
         notifyDataSetChanged()
     }
 
-    /*
-    * override fun onBindViewHolder(holder: SizeViewHolder, position: Int) {
-        val currentItem = getItem(position)
-        holder.onBind(currentItem, position)
-    }
-
-    inner class SizeViewHolder(private val binding: ItemSizeBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun onBind(currentItem: Variant, position: Int) {
-            if (!currentItem.option1.isNullOrBlank()) {
-                binding.tvVariantSize.text = currentItem.option1
-
-                // Set background color based on selected position
-                if (selectedItemPosition == position) {
-                    binding.cvVariantSize.setCardBackgroundColor(
-                        ContextCompat.getColor(binding.cvVariantSize.context, R.color.orange)
-                    )
-                } else {
-                    binding.cvVariantSize.setCardBackgroundColor(
-                        ContextCompat.getColor(binding.cvVariantSize.context, R.color.light_grey)
-                    )
-                }
-
-                binding.cvVariantSize.setOnClickListener {
-                    // Save the selected position and update the UI
-                    val previousSelectedItemPosition = selectedItemPosition
-                    selectedItemPosition = position
-                    notifyItemChanged(previousSelectedItemPosition)
-                    notifyItemChanged(selectedItemPosition)
-
-                    onClick(currentItem)
-                }
-            }
-        }
-    }
-}*/
 
 
 }

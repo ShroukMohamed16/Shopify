@@ -5,7 +5,9 @@ import android.util.Log
 import com.example.shopify.homeFragment.Model.Repository.BrandsRepository
 import com.example.shopify.homeFragment.Remote.BrandsClient
 import com.example.shopify.utilities.MyPriceRules
+import com.example.shopify.utilities.MySharedPreferences
 import com.example.shopify.utilities.checkConnectivity
+import com.example.shopify.utilities.setAppLanguage
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.config.CheckoutConfig
 import com.paypal.checkout.config.Environment
@@ -47,7 +49,9 @@ class App : Application() {
             )
         )
         PayPalCheckout.setConfig(config)
-
+        setAppLanguage(
+            MySharedPreferences.getInstance(applicationContext).getLanguagePreference()!!
+        )
 
     }
 }
