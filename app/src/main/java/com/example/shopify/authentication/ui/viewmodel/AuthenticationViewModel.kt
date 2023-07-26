@@ -4,8 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shopify.authentication.model.pojo.CustomerListResponse
-import com.example.shopify.authentication.model.pojo.CustomerResponse
+import com.example.shopify.authentication.model.pojo.*
 import com.example.shopify.authentication.model.repository.AuthenticationRepositoryInterface
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
@@ -29,7 +28,8 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
     private var draftOrderState: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
     val draftOrder: StateFlow<State<DraftOrderResponse>> = draftOrderState
 
-
+    private var customerUpdatedState: MutableStateFlow<State<CustomerResponsePut>> = MutableStateFlow(State.Loading)
+    val customerUpdated: StateFlow<State<CustomerResponsePut>> = customerUpdatedState
     fun addCustomer(customer: CustomerResponse){
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.addNewCustomerToAPI(customer)
@@ -77,5 +77,17 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
                 }
         }
 
+    }
+    fun updateCustomer(customer_id:Long,customer: CustomerResponsePut){
+        viewModelScope.launch{
+         repositoryInterface.updateCustomer(customer_id,customer)
+             ?.catch { e->
+                 customerUpdatedState.value=State.Failure(e)
+             }
+             ?.collect{ data->
+                 Log.i("TAG", "getDraftOrder: $data")
+                 customerUpdatedState.value=State.Success(data)
+             }
+        }
     }
 }

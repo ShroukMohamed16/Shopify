@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_cartFragment_to_productInfoFragment22"
             app:destination="@id/productInfoFragment2" />
+        <action
+            android:id="@+id/action_cartFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
@@ -132,6 +135,12 @@
         <action
             android:id="@+id/action_profileFragment_to_allOrdersFragment"
             app:destination="@id/allOrdersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_favouriteFragment"
+            app:destination="@id/favouriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -149,6 +158,16 @@
             app:destination="@id/allOrdersFragment" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.shopify.search.ui.view.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
+        </fragment>
     <fragment
         android:id="@+id/subCategoryFragment"
         android:name="com.example.shopify.SubCategoryFragment.UI.View.SubCategoryFragment"
@@ -169,13 +188,13 @@
     <fragment
         android:id="@+id/productInfoFragment2"
         android:name="com.example.shopify.productinfo.ui.view.ProductInfoFragment"
-        android:label="Product Details"
+        android:label="fragment_product_info"
         tools:layout="@layout/fragment_product_info">
 
         <argument
             android:name="productID"
             app:argType="string"
-            app:nullable="true" />
+            app:nullable="true"/>
         />
 
 
@@ -220,6 +239,7 @@
             app:destination="@id/productInfoFragment2" />
     </fragment>
     <fragment
+
         android:id="@+id/mapsFragment"
         android:name="com.example.shopify.address.ui.view.MapsFragment"
         android:label="fragment_maps"
@@ -234,7 +254,25 @@
     <fragment
         android:id="@+id/addAddressFragment"
         android:name="com.example.shopify.address.ui.view.AddAddressFragment"
+
         android:label="AddAddressFragment" />
+
+        android:label="AddAddressFragment" >
+        <action
+            android:id="@+id/action_addAddressFragment_to_addressFragment"
+            app:destination="@id/addressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.shopify.Payment.UI.View.PaymentFragment"
+        android:label="PaymentFragment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_paymentFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
+    </fragment>
 
 
 </navigation>

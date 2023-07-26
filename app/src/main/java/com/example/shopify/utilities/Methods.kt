@@ -1,5 +1,7 @@
 package com.example.shopify.utilities
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.location.Geocoder
@@ -7,6 +9,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import java.util.*
 
 fun checkConnectivity(context: Context): Boolean {
@@ -72,10 +76,15 @@ fun getAddress(context: Context, latitude: Double, longitude: Double) {
             MyAddress.country=country
             MyAddress.province=province
             MyAddress.zipCode=zipCode
-            MySharedPreferences.getInstance(context).saveCountryName(country)
-            MySharedPreferences.getInstance(context).saveCityName(city)
-            MySharedPreferences.getInstance(context).saveProvinceName(province)
-            MySharedPreferences.getInstance(context).saveZipCode(zipCode)
         }
     }
+}
+fun copyToClipboard(text: String, context: Context) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("text", text)
+    clipboard.setPrimaryClip(clip)
+}
+fun  setAppLanguage(language:String) {
+    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(language)
+    AppCompatDelegate.setApplicationLocales(appLocale)
 }

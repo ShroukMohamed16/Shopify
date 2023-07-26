@@ -1,7 +1,6 @@
 package com.example.shopify.authentication.model.repository
 
-import com.example.shopify.authentication.model.pojo.CustomerListResponse
-import com.example.shopify.authentication.model.pojo.CustomerResponse
+import com.example.shopify.authentication.model.pojo.*
 import com.example.shopify.authentication.remote.AuthenticationRemoteSource
 import com.example.shopify.base.DraftOrderResponse
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +29,10 @@ class AuthenticationRepository(val remoteSource: AuthenticationRemoteSource):Aut
 
     override suspend fun addDraftOrder( draftOrderResponse: DraftOrderResponse): Flow<DraftOrderResponse> {
         return flowOf(remoteSource.createDraftOrder(draftOrderResponse))
+    }
+
+    override suspend fun updateCustomer(id: Long, customer: CustomerResponsePut): Flow<CustomerResponsePut> {
+        return flowOf(remoteSource.updateCustomer(id , customer))
     }
 
 }

@@ -6,18 +6,18 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context="CartFragment.UI.View.CartFragment">
 
-
     <TextView
-        android:id="@+id/favouriteFAB"
+        android:id="@+id/totalPriceTV"
         android:layout_width="0dp"
         android:layout_height="26dp"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="24dp"
+        android:gravity="center"
         android:text="Total Price:  50 EGP"
         android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/favouriteRecycler"
-        app:layout_constraintTop_toBottomOf="@+id/favouriteRecycler" />
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/cartRecycler"
+        app:layout_constraintStart_toStartOf="@+id/cartRecycler"
+        app:layout_constraintTop_toBottomOf="@+id/cartRecycler" />
 
     <Button
         android:id="@+id/checkoutBtn"
@@ -30,13 +30,13 @@ tools:context="CartFragment.UI.View.CartFragment">
         android:textSize="14sp"
         android:textStyle="bold"
         app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/favouriteFAB"
-        app:layout_constraintStart_toStartOf="@+id/favouriteFAB"
-        app:layout_constraintTop_toBottomOf="@+id/favouriteFAB"
+        app:layout_constraintEnd_toEndOf="@+id/totalPriceTV"
+        app:layout_constraintStart_toStartOf="@+id/totalPriceTV"
+        app:layout_constraintTop_toBottomOf="@+id/totalPriceTV"
         app:rippleColor="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favouriteRecycler"
+        android:id="@+id/cartRecycler"
         android:layout_width="346dp"
         android:layout_height="450dp"
         android:layout_marginTop="20dp"
@@ -54,7 +54,7 @@ tools:context="CartFragment.UI.View.CartFragment">
     </androidx.recyclerview.widget.RecyclerView>
 
 <ImageView
-    android:id="@+id/FavouriteIcon"
+    android:id="@+id/NoCartIcon"
     android:layout_width="150dp"
     android:layout_height="150dp"
     android:layout_marginTop="250dp"
@@ -67,17 +67,17 @@ tools:context="CartFragment.UI.View.CartFragment">
     tools:visibility="invisible" />
 
     <TextView
-        android:id="@+id/noAlertTv"
+        android:id="@+id/noCartTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No Items Yet"
-        android:textColor="#D3132F5B"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/FavouriteIcon"
-        app:layout_constraintStart_toStartOf="@+id/FavouriteIcon"
-        app:layout_constraintTop_toBottomOf="@+id/FavouriteIcon"
+        app:layout_constraintEnd_toEndOf="@+id/NoCartIcon"
+        app:layout_constraintStart_toStartOf="@+id/NoCartIcon"
+        app:layout_constraintTop_toBottomOf="@+id/NoCartIcon"
         tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

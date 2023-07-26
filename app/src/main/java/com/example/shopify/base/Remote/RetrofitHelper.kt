@@ -2,6 +2,8 @@ package com.example.shopify.base.Remote
 
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.flow.Flow
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,7 +13,16 @@ object RetrofitHelper {
     val gson = GsonBuilder()
         .setLenient()
         .create()
+
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    val logClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
     val retrofitInstance = Retrofit.Builder().baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(GsonConverterFactory.create(gson)).client(logClient)
         .build()
 }

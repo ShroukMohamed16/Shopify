@@ -1,8 +1,8 @@
 package com.example.shopify.address.remote
 
-import com.example.shopify.CategoryFragment.Remote.AllCategoriesService
-import com.example.shopify.address.model.Address
+import com.example.shopify.address.model.AddressBody
 import com.example.shopify.address.model.AddressResponse
+import com.example.shopify.address.model.GetAddressResponse
 import com.example.shopify.base.Remote.RetrofitHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -22,11 +22,18 @@ class AddressClient private constructor():AddressRemoteSource {
             }
         }
     }
-    override suspend fun getCustomerAddress(id: Long): Flow<AddressResponse> {
+    override suspend fun getCustomerAddress(id: Long): Flow<GetAddressResponse?> {
         return flowOf(addressService.getCustomerAddress(id))
     }
 
-    override suspend fun addCustomerAddress(@Path("id") id: String, address: Address):AddressResponse{
-        return addressService.addCustomerAddress(id,address)
+    override suspend fun addCustomerAddress(@Path("id") id: Long, address: AddressBody): Flow<AddressResponse?> {
+        return flowOf(addressService.addCustomerAddress(id,address).body())
+    }
+
+    override suspend fun deleteCustomerAddress(
+        customer_id: Long,
+        address_id: Long
+    ){
+         flowOf(addressService.deleteCustomerAddress(customer_id,address_id))
     }
 }
