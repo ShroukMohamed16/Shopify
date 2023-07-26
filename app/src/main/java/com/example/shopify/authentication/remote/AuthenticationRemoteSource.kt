@@ -1,9 +1,6 @@
 package com.example.shopify.authentication.remote
 
-import com.example.shopify.authentication.model.pojo.CustomerBodey
-import com.example.shopify.authentication.model.pojo.CustomerListResponse
-import com.example.shopify.authentication.model.pojo.CustomerResponse
-import com.example.shopify.authentication.model.pojo.Customerbody
+import com.example.shopify.authentication.model.pojo.*
 import com.example.shopify.base.DraftOrderResponse
 import kotlinx.coroutines.flow.Flow
 
@@ -16,6 +13,6 @@ interface AuthenticationRemoteSource {
 
     suspend fun updateCustomer(
         customer_id: Long,
-        customer: Customerbody
-    ): CustomerBodey
+        customer: CustomerResponsePut
+    ): CustomerResponsePut
 }
