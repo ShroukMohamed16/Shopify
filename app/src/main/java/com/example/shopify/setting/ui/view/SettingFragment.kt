@@ -1,6 +1,7 @@
 package com.example.shopify.setting.ui.view
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -9,7 +10,9 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -26,10 +29,13 @@ import com.example.shopify.setting.Model.SettingRepository.SettingRepository
 import com.example.shopify.setting.Remote.CurrencyClient
 import com.example.shopify.setting.ui.viewModel.SettingViewModel
 import com.example.shopify.setting.ui.viewModel.SettingViewModelFactory
+import com.example.shopify.utilities.Constants
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.setAppLanguage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class SettingFragment : Fragment(), OnClickCurrency {
     lateinit var viewModel: SettingViewModel
@@ -145,6 +151,25 @@ class SettingFragment : Fragment(), OnClickCurrency {
         builder.setView(languageDialog.root)
         val dialog = builder.create()
         dialog.show()
+        when (MySharedPreferences.getInstance(requireContext()).getLanguagePreference()) {
+            Constants.ENGLISH -> languageDialog.settingLanguageEnglishRadioButton.isChecked = true
+            Constants.ARABIC -> languageDialog.settingLanguageArabicRadioButton.isChecked = true
+        }
+        languageDialog.settingLanguageArabicRadioButton.setOnClickListener {
+            MySharedPreferences.getInstance(requireContext())
+                .saveLanguagePreference(Constants.ARABIC)
+        }
+        languageDialog.settingLanguageEnglishRadioButton.setOnClickListener {
+            MySharedPreferences.getInstance(requireContext())
+                .saveLanguagePreference(Constants.ENGLISH)
+        }
+        languageDialog.settingLanguageSaveBtn.setOnClickListener {
+            setAppLanguage(
+                MySharedPreferences.getInstance(requireContext()).getLanguagePreference()!!
+            )
+            dialog.dismiss()
+        }
+
     }
 
     override fun changeCurrency(code: String) {
@@ -152,5 +177,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
         MySharedPreferences.getInstance(requireContext()).saveCurrencyCode(code)
 
     }
+
 
 }

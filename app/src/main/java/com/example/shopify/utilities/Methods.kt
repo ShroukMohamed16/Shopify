@@ -9,6 +9,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import java.util.*
 
 fun checkConnectivity(context: Context): Boolean {
@@ -81,4 +83,8 @@ fun copyToClipboard(text: String, context: Context) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText("text", text)
     clipboard.setPrimaryClip(clip)
+}
+fun  setAppLanguage(language:String) {
+    val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(language)
+    AppCompatDelegate.setApplicationLocales(appLocale)
 }

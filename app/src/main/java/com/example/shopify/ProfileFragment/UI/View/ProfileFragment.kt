@@ -54,7 +54,7 @@ class ProfileFragment : Fragment() {
 
         profileBinding.profileMoreOrdersTv.setOnClickListener {
             Navigation.findNavController(view)
-                .navigate(R.id.action_profileFragment_to_paymentFragment)
+                .navigate(R.id.action_profileFragment_to_favouriteFragment)
         }
 
     }
