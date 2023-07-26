@@ -1,9 +1,6 @@
 package com.example.shopify.authentication.remote
 
-import com.example.shopify.authentication.model.pojo.CustomerBodey
-import com.example.shopify.authentication.model.pojo.CustomerListResponse
-import com.example.shopify.authentication.model.pojo.CustomerResponse
-import com.example.shopify.authentication.model.pojo.Customerbody
+import com.example.shopify.authentication.model.pojo.*
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.Remote.RetrofitHelper
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +28,7 @@ class AuthenticationClient:AuthenticationRemoteSource {
       authenticationService.deleteCustomer(customerID)
     }
 
-    override suspend fun updateCustomer(customer_id: Long, customer: Customerbody): CustomerBodey {
+    override suspend fun updateCustomer(customer_id: Long, customer: CustomerResponsePut): CustomerResponsePut {
         return authenticationService.updateCustomer(customer_id,customer)
     }
 }
