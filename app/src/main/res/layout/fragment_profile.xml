@@ -212,7 +212,7 @@
        android:id="@+id/text_view_1"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="Created At:"
+       android:text="@string/date"
        android:textColor="@android:color/black"
        android:textSize="20sp"
        android:textStyle="bold"
@@ -370,7 +370,7 @@
 
  <com.google.android.material.button.MaterialButton
      android:id="@+id/profileLogoutBtn"
-     android:layout_width="350dp"
+     android:layout_width="250dp"
      android:layout_height="wrap_content"
      android:backgroundTint="@color/primary"
      android:text="@string/logout"
