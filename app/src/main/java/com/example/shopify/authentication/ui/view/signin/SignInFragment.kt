@@ -183,6 +183,16 @@ class SignInFragment : Fragment() {
                         if (auth.currentUser?.isEmailVerified!!) {
                             Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
                             if (Constants.CustomerListResponseSize == 0) {
+
+                                authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
+                                lifecycleScope.launch { 
+                                    authenticationViewModel.customerDetails.collect{result->
+                                        when(result){
+                                            is State.Success ->{
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .saveCustomerID(result.data.customer!!.id!!)
+                                                createDraftOrder(cartDraftOrder)
+                                                createDraftOrder(favDraftOrder)
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(email,
                                     firstName,
                                     lastName)))
@@ -203,6 +213,7 @@ class SignInFragment : Fragment() {
                                                     updatedCustomer = CustomerResponsePut(
                                                         CustomerBody(id =customer.id,note = customer.note, tags = customer.tags ))
                                                     authenticationViewModel.updateCustomer(customer.id!!, updatedCustomer)
+
 
 
                                             }

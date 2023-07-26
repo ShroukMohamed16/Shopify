@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     tools:context=".favourite.ui.view.FavouriteFragment">
-
-
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

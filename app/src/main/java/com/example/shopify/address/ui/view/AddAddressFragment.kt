@@ -87,6 +87,13 @@ class AddAddressFragment : Fragment() {
                 Toast.makeText(requireContext(), "You must fill all the fields", Toast.LENGTH_SHORT)
                     .show()
             } else {
+
+                //viewModel.addCustomerAddress("7169338474770", address)
+                Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT)
+                Log.i("TAG", "onViewCreated: saved")
+               // lifecycleScope.launch {  }
+                //viewModel.address.collect(){}
+
                 val address = AddressBody(
                     AddressModel(
                         address1,

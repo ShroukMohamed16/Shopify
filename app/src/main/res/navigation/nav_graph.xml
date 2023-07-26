@@ -207,6 +207,7 @@
         <action
             android:id="@+id/action_settingFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/addressFragment"
@@ -229,10 +230,20 @@
             app:destination="@id/orderFragment" />
     </fragment>
     <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.shopify.search.ui.view.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_productInfoFragment2"
+            app:destination="@id/productInfoFragment2" />
+    </fragment>
+    <fragment
+
         android:id="@+id/mapsFragment"
         android:name="com.example.shopify.address.ui.view.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" >
+        tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_mapsFragment_to_addressFragment"
             app:destination="@id/addressFragment" />
@@ -243,6 +254,9 @@
     <fragment
         android:id="@+id/addAddressFragment"
         android:name="com.example.shopify.address.ui.view.AddAddressFragment"
+
+        android:label="AddAddressFragment" />
+
         android:label="AddAddressFragment" >
         <action
             android:id="@+id/action_addAddressFragment_to_addressFragment"

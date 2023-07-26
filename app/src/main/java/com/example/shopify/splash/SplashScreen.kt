@@ -46,7 +46,7 @@ class SplashScreen : AppCompatActivity() {
         } else {
             GlobalScope.launch(Dispatchers.Main) {
                 delay(4000)
-                if (auth.currentUser == null) {
+                if (auth.currentUser == null || !auth.currentUser!!.isEmailVerified) {
                     val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
