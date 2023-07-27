@@ -44,6 +44,7 @@
     <string name="save">Save</string>
     <string name="ok"> ok </string>
     <string name="are_you_sure">are you sure you want to sign out ?</string>
+
     <string name="data">Created At :</string>
     <string name="lastname">lastname</string>
     <string name="firstname">firstname</string>
@@ -51,6 +52,19 @@
     <string name="OrderNum">Order Num</string>
     <string name="OrderItems">Order Items</string>
     <string name="Oreders">Orders</string>
+
+
+
+
+
+    <string name="Orders">Orders</string>
+    <string name="Oreders">Orders</string>
+    <string name="OrderNum">OrderNum :</string>
+    <string name="OrderItems">Order Items</string>
+    <string name="data">Created At :</string>
+    <string name="lastname">lastname</string>
+    <string name="firstname">firstname</string>
+
     <string name="add_location">Add Location</string>
     <string name="your_current_location">Your Current Location</string>
     <string name="choose_another_location">Choose Another Location</string>
@@ -99,4 +113,8 @@
     <string name="brands">Brands</string>
     <string name="find_product">find product</string>
     <string name="choose_language">Choose Language</string>
+    <string name="proceed_to_checkout">Proceed To CheckOut</string>
+    <string name="shop_with_joy_not_stress">Shop with joy , not stress</string>
+    <string name="choose_size_color_title">Choose Size and Color</string>
+    <string name="must_choose_size_color_message">You must choose the size and the color of the product</string>
 </resources>

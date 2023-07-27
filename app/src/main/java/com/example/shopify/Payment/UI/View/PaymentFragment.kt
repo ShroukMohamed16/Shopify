@@ -24,6 +24,7 @@ import com.example.shopify.Payment.UI.ViewModel.PaymentViewModelFactory
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentPaymentBinding
 import com.example.shopify.utilities.MyPriceRules
+import com.example.shopify.utilities.createAlert
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
@@ -145,7 +146,7 @@ class PaymentFragment : Fragment() {
         }
         paymentBinding.checkoutBtn.setOnClickListener {
             if (totalPrice > 1000) {
-                createAlert(getString(R.string.cant_pay_in_cash),getString(R.string.large_amount_of_money))
+                createAlert(getString(R.string.cant_pay_in_cash),getString(R.string.large_amount_of_money),requireContext())
 
             } else {
 
@@ -187,16 +188,6 @@ class PaymentFragment : Fragment() {
             }
         )
 
-    }
-
-    fun createAlert(title: String, message: String) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(title)
-        builder.setMessage(message)
-        builder.setPositiveButton("${context?.getString(R.string.ok)}") { dialog, which ->
-        }
-        val alertDialog = builder.create()
-        alertDialog.show()
     }
 
 }

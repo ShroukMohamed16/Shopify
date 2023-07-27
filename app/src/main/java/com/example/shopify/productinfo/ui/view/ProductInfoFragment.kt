@@ -15,6 +15,13 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopify.Payment.Model.DataClass.LineItem
 import com.example.shopify.R
+import com.example.shopify.CartFragment.UI.viewmodel.CartViewModel
+import com.example.shopify.CartFragment.UI.viewmodel.CartViewModelFactory
+import com.example.shopify.CartFragment.model.CartRepository
+import com.example.shopify.CartFragment.remote.CartClient
+import com.example.shopify.Payment.Model.DataClass.LineItem
+import com.example.shopify.R
+import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.Property
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
@@ -27,13 +34,18 @@ import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModelFactory
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.createAlert
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 
 const val TAG = "ProductInfoFragment"
 
-class ProductInfoFragment : Fragment() {
+class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
+    lateinit var cartViewModel: CartViewModel
+    lateinit var cartViewModelFactory: CartViewModelFactory
     private val args: ProductInfoFragmentArgs by navArgs()
     private lateinit var productBinding: FragmentProductInfoBinding
     private lateinit var productsDetailsViewModel: ProductsDetailsViewModel
@@ -61,7 +73,10 @@ class ProductInfoFragment : Fragment() {
         Reviews("Mohamed Tawfik", "I was disappointed with the quality of this Product")
 
     )
-
+    lateinit var cartProduct:Product
+    lateinit var cartImageProperty:Property
+    var cartLineItemList = mutableListOf<line_items>()
+    private var variantID:Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,10 +89,13 @@ class ProductInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cartViewModelFactory =
+            CartViewModelFactory(CartRepository.getInstance(CartClient.getInstance()))
+        cartViewModel = ViewModelProvider(this, cartViewModelFactory)[CartViewModel::class.java]
 
         reviews.shuffle()
 
-        variantAdapter = VariantAdapter(variantList)
+        variantAdapter = VariantAdapter(variantList,this)
 
 
         productsDetailsViewModelFactory =
@@ -98,6 +116,7 @@ class ProductInfoFragment : Fragment() {
                     }
                     is State.Success -> {
                         Log.i("TAG", "onViewCreated: success")
+                        cartProduct=result.data.product!!
                         val price = result.data.product?.variants!![0]?.price
                         product = result.data.product!!
                         productBinding.productInfoProgressBar.visibility = View.GONE
@@ -210,11 +229,55 @@ class ProductInfoFragment : Fragment() {
 
                }
            }
+        productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
+            if (variantID == 0L){
+                createAlert(getString(R.string.choose_size_color_title),getString(R.string.must_choose_size_color_message),requireContext())
+            }else{
+                cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString())
+                lifecycleScope.launch(Dispatchers.IO) {
+                    cartViewModel.getCart.collect{result->
+                        when(result){
+                            is State.Success->{
+
+                                cartImageProperty =Property( cartProduct.image!!.src,"")
+                                var lineItem = line_items(title = cartProduct.title!! , price = cartProduct.variants!!.get(0).price!!
+                                    , variant_id = variantID, product_id = cartProduct.id!!, properties = arrayListOf(cartImageProperty) )
+
+                                cartLineItemList = result.data.draft_order!!.line_items.toMutableList()
+                                cartLineItemList.add(lineItem)
+                                result.data.draft_order!!.line_items = cartLineItemList.toList()
+
+                                cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                                    DraftOrderResponse(result.data.draft_order)
+                                )
+                            }
+                            is State.Loading->{
+                                withContext(Dispatchers.Main){
+                                    Toast.makeText(requireContext(),"Loading",Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                            is State.Failure->{
+                                withContext(Dispatchers.Main){
+                                    Toast.makeText(requireContext(),"failed to add to cart",Toast.LENGTH_SHORT).show()
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            }
         }
     }
+
 
     fun formatDecimal(decimal: Double): String {
         val decimalFormat = DecimalFormat("0.00")
         return decimalFormat.format(decimal)
+    }
+
+    override fun onProductVariantClick(variantId: Long) {
+        this.variantID=variantId
     }
 }

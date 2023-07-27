@@ -97,4 +97,9 @@
     <string name="brands">الماركات </string>
     <string name="find_product">بحث عن منتج</string>
     <string name="choose_language">اختر اللغة</string>
+    <string name="proceed_to_checkout">المتابعة إلى الدفع</string>
+    <string name="shop_with_joy_not_stress">تسوق بمرح، لا بتوتر</string>
+    <string name="available_items">Available Items</string>
+    <string name="choose_size_color_title">اختر الحجم واللون</string>
+    <string name="must_choose_size_color_message">يجب عليك اختيار حجم ولون المنتج</string>
 </resources>

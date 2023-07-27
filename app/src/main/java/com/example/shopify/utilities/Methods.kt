@@ -1,5 +1,6 @@
 package com.example.shopify.utilities
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -11,6 +12,7 @@ import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import com.example.shopify.R
 import java.util.*
 
 fun checkConnectivity(context: Context): Boolean {
@@ -87,4 +89,15 @@ fun copyToClipboard(text: String, context: Context) {
 fun  setAppLanguage(language:String) {
     val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(language)
     AppCompatDelegate.setApplicationLocales(appLocale)
+}
+
+
+fun createAlert(title: String, message: String,context: Context) {
+    val builder = AlertDialog.Builder(context)
+    builder.setTitle(title)
+    builder.setMessage(message)
+    builder.setPositiveButton("${context?.getString(R.string.ok)}") { dialog, which ->
+    }
+    val alertDialog = builder.create()
+    alertDialog.show()
 }

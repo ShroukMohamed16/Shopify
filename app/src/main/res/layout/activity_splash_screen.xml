@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="190dp"
         android:layout_marginTop="20dp"
-        android:text="Shop with joy , not stress"
+        android:text="@string/shop_with_joy_not_stress"
         android:textColor="@color/primary"
         android:fontFamily="@font/fontfile"
         android:textSize="30sp"
