@@ -16,7 +16,7 @@ data class DraftOrder(
     var currency: String? = null,
     var invoice_sent_at: String? = null,
     var invoice_url: String? = null,
-    var line_items: List<line_items> = listOf(),
+    var line_items: ArrayList<line_items> = arrayListOf(),
     var shipping_line: shipping_line? = shipping_line(),
     var source_name: String? = null,
     var tags: String? = null,

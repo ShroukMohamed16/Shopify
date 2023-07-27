@@ -24,6 +24,7 @@ import com.example.shopify.databinding.FragmentProductInfoBinding
 import com.example.shopify.productinfo.model.pojo.Product
 import com.example.shopify.productinfo.model.pojo.Reviews
 import com.example.shopify.productinfo.model.pojo.Variant
+import com.example.shopify.productinfo.model.pojo.toLineItems
 import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
 import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
@@ -50,6 +51,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
     private var variantList: List<Variant> = listOf()
     lateinit var product: Product
      var property = Property("","")
+    private lateinit var favDraftOrderResponse :DraftOrderResponse
     private val reviews = arrayOf(
         Reviews("Bassant Mohamed",
             "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
@@ -196,7 +198,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
             productsDetailsViewModel.getDraftOrder(MySharedPreferences.getInstance(requireContext())
                 .getFavID()!!)
             lifecycleScope.launch {
-                productsDetailsViewModel.draftOrderInfo.collect { result ->
+                productsDetailsViewModel.getDraftOrderInfo.collect { result ->
                     when (result) {
                         is State.Loading -> {
                             Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
@@ -204,20 +206,11 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                         is State.Success -> {
                             property.name = product.image!!.src
                             Log.i(TAG, "onViewCreated product image: ${product.image!!.src}")
-                            val lineItem = line_items(title = product.title!!,
-                                quantity = 1,
-                                price = product.variants!!.get(0).price!!,
-                                variant_id = product.variants!!.get(0).id!!,
-                                product_id = product.id!!,
-                                properties = arrayListOf(property))
+                            favDraftOrderResponse = result.data
+                            favDraftOrderResponse.draft_order?.line_items?.add(product!!.toLineItems()!!)
 
-                            var oldlineItemsList = result.data.draft_order!!.line_items
-                            var newLineItem = lineItem
-                            var updatedLineItem = oldlineItemsList+newLineItem
-
-                            var draft_order = DraftOrderResponse(DraftOrder(email = "", line_items = listOf(newLineItem)))
                             productsDetailsViewModel.modifyDraftOrder(MySharedPreferences.getInstance(
-                                requireContext()).getFavID()!!, draft_order)
+                                requireContext()).getFavID()!!,favDraftOrderResponse)
 
                         }
                         is State.Failure -> {
@@ -232,6 +225,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
                 }
             }
+        }
           /*  productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
                 if (variantID == 0L) {
                     createAlert(getString(R.string.choose_size_color_title),
@@ -290,7 +284,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                     }
                 }
             }*/
-        }
+
 
     }
     fun formatDecimal(decimal: Double): String {
