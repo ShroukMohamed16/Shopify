@@ -106,6 +106,8 @@ class FavouriteFragment : Fragment(), OnClickListener {
                 when (result) {
                     is State.Loading -> {
                         Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
+
                     }
                     is State.Success -> {
                         val alertDialog = AlertDialog.Builder(context)
