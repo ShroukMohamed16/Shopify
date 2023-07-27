@@ -191,10 +191,13 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
         }
 
         productBinding.productInfoAddToFavoriteIcon.setOnClickListener {
+
             productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
 
-            productsDetailsViewModel.getDraftOrder(MySharedPreferences.getInstance(requireContext())
-                .getFavID()!!)
+            productsDetailsViewModel.getDraftOrder(
+                MySharedPreferences.getInstance(requireContext())
+                    .getFavID()!!
+            )
             lifecycleScope.launch {
                 productsDetailsViewModel.draftOrderInfo.collect { result ->
                     when (result) {
@@ -202,28 +205,41 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                             Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
                         }
                         is State.Success -> {
+                            //product.status = "true"
                             property.name = product.image!!.src
                             Log.i(TAG, "onViewCreated product image: ${product.image!!.src}")
-                            val lineItem = line_items(title = product.title!!,
+                            val lineItem = line_items(
+                                title = product.title!!,
                                 quantity = 1,
                                 price = product.variants!!.get(0).price!!,
                                 variant_id = product.variants!!.get(0).id!!,
                                 product_id = product.id!!,
-                                properties = arrayListOf(property))
+                                properties = arrayListOf(property)
+                            )
 
-                            var oldlineItemsList = result.data.draft_order!!.line_items
+                            var oldLineItemsList = result.data.draft_order!!.line_items
                             var newLineItem = lineItem
-                            var updatedLineItem = oldlineItemsList+newLineItem
+                            var updatedLineItem = oldLineItemsList + newLineItem
 
-                            var draft_order = DraftOrderResponse(DraftOrder(email = "", line_items = listOf(newLineItem)))
-                            productsDetailsViewModel.modifyDraftOrder(MySharedPreferences.getInstance(
-                                requireContext()).getFavID()!!, draft_order)
+                            var draft_order = DraftOrderResponse(
+                                DraftOrder(
+                                    email = "",
+                                    line_items = updatedLineItem
+                                )
+                            )
+                            productsDetailsViewModel.modifyDraftOrder(
+                                MySharedPreferences.getInstance(
+                                    requireContext()
+                                ).getFavID()!!, draft_order
+                            )
 
                         }
                         is State.Failure -> {
-                            Toast.makeText(requireContext(),
+                            Toast.makeText(
+                                requireContext(),
                                 "Fail to get Draft Order",
-                                Toast.LENGTH_LONG)
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
 
                         }
@@ -232,6 +248,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
                 }
             }
+        }
           /*  productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
                 if (variantID == 0L) {
                     createAlert(getString(R.string.choose_size_color_title),
@@ -290,7 +307,6 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                     }
                 }
             }*/
-        }
 
     }
     fun formatDecimal(decimal: Double): String {

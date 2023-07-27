@@ -30,15 +30,14 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
 
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
         var currentItem = list[position+1]
-//        Glide.with(holder.itemView)
-//            .load(currentItem.properties.get(0).name.toString())
-//            .placeholder(R.drawable.ic_launcher_foreground)
-//            .error(R.drawable.ic_launcher_background)
-//            .into(holder.binding.favProductImg)
+        /*Glide.with(holder.itemView)
+            .load(currentItem.properties.get(0).name.toString())
+            .placeholder(R.drawable.ic_launcher_foreground)
+            .error(R.drawable.ic_launcher_background)
+            .into(holder.binding.favProductImg)*/
         holder.binding.favProductName.text = currentItem.title
         val price=  MySharedPreferences.getInstance(context).getExchangeRate() * currentItem.price!!.toDouble()
-        holder.binding.favProductPrice.text = "Price: " + price.toString()+ MySharedPreferences.getInstance(context)
-            .getCurrencyCode()
+        holder.binding.favProductPrice.text = "Price: $price" + MySharedPreferences.getInstance(context).getCurrencyCode()
         holder.binding.favProductDeleteIcon.setOnClickListener{
             onClickListener.onClickDeleteIcon(currentItem)
         }

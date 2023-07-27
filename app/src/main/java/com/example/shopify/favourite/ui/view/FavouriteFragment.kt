@@ -1,6 +1,7 @@
 package com.example.shopify.favourite.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.example.shopify.R
+import com.example.shopify.base.DraftOrder
+import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
 import com.example.shopify.databinding.FragmentFavouriteBinding
@@ -22,13 +26,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
+private const val TAG = "FavouriteFragment"
 class FavouriteFragment : Fragment(),OnClickListener{
 
     lateinit var binding: FragmentFavouriteBinding
-    lateinit var favouriteAdapter: FavouriteAdapter
+    var favouriteAdapter = FavouriteAdapter(listOf(),this)
     lateinit var favouriteViewModel: FavouriteViewModel
     lateinit var favouriteViewModelFactory:FavouriteViewModelFactory
+    lateinit var draftOrderResponse:DraftOrderResponse
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +48,8 @@ class FavouriteFragment : Fragment(),OnClickListener{
         super.onViewCreated(view, savedInstanceState)
         favouriteViewModelFactory = FavouriteViewModelFactory(FavouriteRepository.getInstance(FavouriteClient()))
         favouriteViewModel = ViewModelProvider(this,favouriteViewModelFactory)[FavouriteViewModel::class.java]
-        favouriteAdapter = FavouriteAdapter(listOf(),this)
 
-        favouriteViewModel.getFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString())
+        favouriteViewModel.getFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID()!!)
 
         lifecycleScope.launch{
             favouriteViewModel.draftOrderDetailsList.collect { result->
@@ -58,21 +62,20 @@ class FavouriteFragment : Fragment(),OnClickListener{
 
                     }
                     is State.Success ->{
-                        val lineItemsList = result.data.draft_order!!.line_items
-                        if (lineItemsList.isNullOrEmpty()) {
-                            binding.noFavTxt.visibility = View.VISIBLE
-                            binding.favProgressBar.visibility = View.GONE
-                            binding.favRv.visibility = View.GONE
-
-
-                        } else {
+                        if(!result.data.draft_order!!.line_items.isEmpty() || result.data.draft_order!!.line_items.size != 1){
+                            val lineItemsList = result.data.draft_order!!.line_items
                             binding.noFavTxt.visibility = View.GONE
                             binding.favProgressBar.visibility = View.GONE
+                            draftOrderResponse = result.data
                             binding.favRv.visibility = View.VISIBLE
                             favouriteAdapter.setFavList(lineItemsList)
                             binding.favRv.adapter = favouriteAdapter
+                        }else{
+                            binding.noFavTxt.visibility = View.VISIBLE
 
                         }
+
+
                     }
                     is State.Failure ->{
                         Toast.makeText(context,"Fail to get draft order",Toast.LENGTH_LONG).show()
@@ -86,33 +89,20 @@ class FavouriteFragment : Fragment(),OnClickListener{
 
     }
 
-    override fun onClickDeleteIcon(lineItems: line_items) {
-        favouriteViewModel.getFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString())
-        lifecycleScope.launch {
-            favouriteViewModel.draftOrderDetails.collect{ result->
-                when(result){
-                    is State.Loading->{
-                        Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
-                    }
-                    is State.Success->{
-                        var line_items_list = mutableListOf<line_items>()
-                        line_items_list = result.data.draft_order!!.line_items.toMutableList()
-                        line_items_list.remove(lineItems)
-                        result.data.draft_order!!.line_items = line_items_list.toList()
-                        var draft_order = result.data
-                        favouriteViewModel.modifyFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString()
-                            ,draft_order)
-                    }
-                    is State.Failure ->{
-                        Toast.makeText(requireContext(), "Fail to get Draft Order", Toast.LENGTH_LONG)
-                            .show()
+    override fun onClickDeleteIcon(lineItem: line_items) {
+        //favouriteAdapter.setFavList(listOf())
+        val list = draftOrderResponse.draft_order?.line_items
+        val mutableList = list?.toMutableList()
+        mutableList?.remove(lineItem)
+        //favouriteAdapter.setFavList(mutableList)
+        draftOrderResponse.draft_order?.line_items = mutableList!!.toList()
+        favouriteViewModel.modifyFavDraftOrder(
+            MySharedPreferences.getInstance(
+                requireContext()
+            ).getFavID()!!, draftOrderResponse
+        )
 
-                    }
 
-                }
-
-            }
-        }
     }
 
     override fun onClickProductCard(id: Long) {

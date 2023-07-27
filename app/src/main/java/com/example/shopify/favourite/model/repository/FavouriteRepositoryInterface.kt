@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface FavouriteRepositoryInterface {
 
-    suspend fun getFavDraftOrder(id:String): Flow<DraftOrderResponse>
-    suspend fun modifyFavDraftOrder(id:String,orderResponse: DraftOrderResponse): Flow<DraftOrderResponse>
+    suspend fun getFavDraftOrder(id:Long): Flow<DraftOrderResponse>
+    suspend fun modifyFavDraftOrder(id:Long,orderResponse: DraftOrderResponse): Flow<DraftOrderResponse>
 }
