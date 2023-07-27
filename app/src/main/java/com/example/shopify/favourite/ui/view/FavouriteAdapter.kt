@@ -35,11 +35,11 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
 //            .placeholder(R.drawable.ic_launcher_foreground)
 //            .error(R.drawable.ic_launcher_background)
 //            .into(holder.binding.favProductImg)
-        holder.binding.favProductName.text = currentItem.title
+        holder.binding.favProductName.text = splitTitle(currentItem.title)
         val price=  MySharedPreferences.getInstance(context).getExchangeRate() * currentItem.price!!.toDouble()
         holder.binding.favProductPrice.text = "Price: " + price.toString()+ MySharedPreferences.getInstance(context)
             .getCurrencyCode()
-        holder.binding.favProductDeleteIcon.setOnClickListener{
+        holder.binding.favDelete.setOnClickListener{
             onClickListener.onClickDeleteIcon(currentItem)
         }
         holder.binding.favProductCard.setOnClickListener {
@@ -57,10 +57,10 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
         this.list = values as List<line_items>
         notifyDataSetChanged()
     }
-//    fun splitTitle(title:String?):String{
-//        val titles = title?.split("|")
-//        return titles!![1]
-//        }
+    fun splitTitle(title:String?):String{
+        val titles = title?.split("|")
+        return titles!![1]
+        }
 
 
 }

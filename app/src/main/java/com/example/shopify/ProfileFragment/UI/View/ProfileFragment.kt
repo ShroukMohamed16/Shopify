@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,10 +31,12 @@ class ProfileFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val first_name = MySharedPreferences.getInstance(requireContext()).getCustomerFirstName()
+        val last_name = MySharedPreferences.getInstance(requireContext()).getCustomerLastName()
+        Log.i("TAG", "onViewCreated: $first_name")
+        Log.i("TAG", "onViewCreated: $last_name")
 
-        profileBinding.profileNameTV.text = "${
-            MySharedPreferences.getInstance(requireContext()).getCustomerFirstName()
-        }" +" "+ "${MySharedPreferences.getInstance(requireContext()).getCustomerLastName()}"
+        profileBinding.profileNameTV.text = first_name+ " " + last_name
 
 
         profileBinding.profileSettingIcon.setOnClickListener {
