@@ -3,6 +3,8 @@ package com.example.shopify.productinfo.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shopify.base.DraftOrder
+import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.homeFragment.Model.DataCalss.AllBrandsModel
 import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodeModel
@@ -19,6 +21,10 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
     private var productInfo: MutableStateFlow<State<ProductResponse>> = MutableStateFlow(State.Loading)
     val product: StateFlow<State<ProductResponse>> = productInfo
 
+    private var draftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val draftOrderInfo: StateFlow<State<DraftOrderResponse>> = draftOrder
+
+
     fun getProductDetailsByID(id:String) {
         Log.i("TAG", "start to get Product Info")
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,6 +40,30 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
 
         }
         Log.i("TAG", "Finish Product Info")
+    }
+
+    fun getDraftOrder(id: String){
+        viewModelScope.launch(Dispatchers.IO){
+            repositoryInterface.getDraftOrderById(id)
+                ?.catch { e ->
+                    draftOrder.value = State.Failure(e)
+                }
+                ?.collect{ data ->
+                    draftOrder.value = State.Success(data)
+                }
+        }
+    }
+
+    fun modifyDraftOrder(id: String,order: DraftOrderResponse){
+        viewModelScope.launch(Dispatchers.IO){
+            repositoryInterface.modifyDraftOrder(id,order)
+                ?.catch { e ->
+                    //draftOrder.value = State.Failure(e)
+                }
+                ?.collect{ data ->
+                   // draftOrder.value = State.Success(data)
+                }
+        }
     }
 
 
