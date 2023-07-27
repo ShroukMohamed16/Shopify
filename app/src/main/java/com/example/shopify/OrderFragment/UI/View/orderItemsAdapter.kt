@@ -33,9 +33,9 @@ class orderItemsAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItemOrder = itemOrderList[position]
-        val result = splitItemOrder(currentItemOrder.title!!)
-        val title = result.first
-        holder.binding.orderTitle.text = title
+       // val result = splitItemOrder(currentItemOrder.title!!)
+       // val title = result.first
+        holder.binding.orderTitle.text = currentItemOrder.title
         holder.binding.quantityValue.text = currentItemOrder.quantity.toString()
        holder.binding.pricevalue.text = formatDecimal(currentItemOrder.price!!.toDouble()* MySharedPreferences
            .getInstance(context).getExchangeRate() )+" "+"${MySharedPreferences.getInstance(context).getCurrencyCode()}"

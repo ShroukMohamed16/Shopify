@@ -42,7 +42,7 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
         Log.i("TAG", "Finish Product Info")
     }
 
-    fun getDraftOrder(id: String){
+    fun getDraftOrder(id: Long){
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.getDraftOrderById(id)
                 ?.catch { e ->
@@ -54,14 +54,12 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
         }
     }
 
-    fun modifyDraftOrder(id: String,order: DraftOrderResponse){
+    fun modifyDraftOrder(id: Long,order: DraftOrderResponse){
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.modifyDraftOrder(id,order)
                 ?.catch { e ->
-                    //draftOrder.value = State.Failure(e)
                 }
                 ?.collect{ data ->
-                   // draftOrder.value = State.Success(data)
                 }
         }
     }

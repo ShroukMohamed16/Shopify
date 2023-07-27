@@ -12,7 +12,7 @@ data class DraftOrder(
     var billing_address: billing_address? = billing_address(),
     var note: String? = null,
     var note_attributes: List<String>? = listOf(),
-    var email: String? = null,
+    var email: String,
     var currency: String? = null,
     var invoice_sent_at: String? = null,
     var invoice_url: String? = null,

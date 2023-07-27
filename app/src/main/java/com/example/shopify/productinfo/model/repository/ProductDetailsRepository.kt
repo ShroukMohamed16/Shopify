@@ -26,12 +26,12 @@ class ProductDetailsRepository(private val productDetailsRemoteSource: ProductDe
         return flowOf(productDetailsRemoteSource.getProductByID(id))
     }
 
-    override suspend fun getDraftOrderById(id: String): Flow<DraftOrderResponse> {
+    override suspend fun getDraftOrderById(id: Long): Flow<DraftOrderResponse> {
         return flowOf(productDetailsRemoteSource.getDraftOrderByID(id))
     }
 
     override suspend fun modifyDraftOrder(
-        id: String,
+        id: Long,
         draftOrder: DraftOrderResponse
     ): Flow<DraftOrderResponse> {
         return flowOf(productDetailsRemoteSource.modifyDraftOrder(id,draftOrder))

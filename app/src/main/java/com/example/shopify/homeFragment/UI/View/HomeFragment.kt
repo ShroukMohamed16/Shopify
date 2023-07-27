@@ -87,6 +87,17 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
 
         adsViewPager = homeBinding.adsViewPager
 
+
+        val card_id = MySharedPreferences.getInstance(requireContext()).getCartID()
+        Log.i("TAG", "onViewCreated: $card_id")
+        val fav_id = MySharedPreferences.getInstance(requireContext()).getFavID()
+        Log.i("TAG", "onViewCreated: $fav_id")
+
+
+
+
+
+
         viewModel.getAllBrands()
         brandAdapter = BrandAdapter(brandList, requireContext(), this)
         Log.i("TAG", "onViewCreated: get all brands")

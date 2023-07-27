@@ -12,10 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.example.shopify.databinding.FragmentSearchBinding
 import com.example.shopify.R
 import com.example.shopify.SubCategoryFragment.Model.Product
 import com.example.shopify.base.State
-import com.example.shopify.databinding.FragmentSearchBinding
 import com.example.shopify.homeFragment.Model.DataCalss.SmartCollection
 import com.example.shopify.homeFragment.UI.View.HomeFragmentDirections
 import com.example.shopify.network
@@ -38,7 +38,7 @@ class SearchFragment : Fragment(), OnSearchItemClick {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        binding =FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,7 +59,7 @@ class SearchFragment : Fragment(), OnSearchItemClick {
                         binding.imageView.visibility = View.GONE
                         productList = result.data.getProducts()
                         searchAdapter.setProductList(productList)
-                         binding.searchRv.adapter = searchAdapter
+                        binding.searchRv.adapter = searchAdapter
 
                     }
                     else -> {
@@ -103,8 +103,8 @@ class SearchFragment : Fragment(), OnSearchItemClick {
     }
 
     private fun filteredProductList(s: String): List<Product>? {
-        return productList?.filter { it.title!!.lowercase().startsWith(s.lowercase()) }
-    }
+        return productList?.filter { it.title!!.lowercase().startsWith(s.lowercase())}
+        }
 
 
 

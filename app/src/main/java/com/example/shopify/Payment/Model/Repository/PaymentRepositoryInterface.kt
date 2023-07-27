@@ -7,5 +7,5 @@ import com.example.shopify.Payment.Model.DataClass.PostOrder
 import kotlinx.coroutines.flow.Flow
 
 interface PaymentRepositoryInterface {
-    suspend fun postOrder(id : Long) : Flow<OrderResponse>
+    suspend fun postOrder(id : Long) :Flow<Boolean>
 }

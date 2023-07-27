@@ -17,15 +17,18 @@ class FavouriteViewModel(var favouriteRepositoryInterface: FavouriteRepositoryIn
     private var draftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
     val draftOrderDetails: StateFlow<State<DraftOrderResponse>> = draftOrder
 
+    private var draftOrderList: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val draftOrderDetailsList: StateFlow<State<DraftOrderResponse>> = draftOrderList
+
 
      fun getFavDraftOrder(id:String){
          viewModelScope.launch(Dispatchers.IO){
              favouriteRepositoryInterface.getFavDraftOrder(id)
                  ?.catch { e ->
-                     draftOrder.value = State.Failure(e)
+                     draftOrderList.value = State.Failure(e)
                  }
                  ?.collect { data ->
-                     draftOrder.value = State.Success(data)
+                     draftOrderList.value = State.Success(data)
                  }
          }
     }

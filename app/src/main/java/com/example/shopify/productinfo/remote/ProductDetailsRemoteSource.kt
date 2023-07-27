@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductDetailsRemoteSource {
     suspend fun getProductByID(id:String) : ProductResponse
-    suspend fun getDraftOrderByID(id:String):DraftOrderResponse
-    suspend fun modifyDraftOrder(id: String,draftOrder: DraftOrderResponse):DraftOrderResponse
+    suspend fun getDraftOrderByID(id:Long):DraftOrderResponse
+    suspend fun modifyDraftOrder(id: Long,draftOrder: DraftOrderResponse):DraftOrderResponse
 }

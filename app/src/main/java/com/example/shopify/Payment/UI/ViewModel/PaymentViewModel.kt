@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PaymentViewModel(private val repo: PaymentRepositoryInterface) : ViewModel() {
-    private var orderState: MutableStateFlow<State<OrderResponse>> = MutableStateFlow(State.Loading)
-    val order: StateFlow<State<OrderResponse>> = orderState
+    private var orderState: MutableStateFlow<State<Boolean>> = MutableStateFlow(State.Loading)
+    val order: StateFlow<State<Boolean>> = orderState
 
 
     fun postOrder(id : Long) {
@@ -27,7 +27,7 @@ class PaymentViewModel(private val repo: PaymentRepositoryInterface) : ViewModel
                     orderState.value=State.Failure(e) }
                 ?.collect{ data->
                     Log.i("TAG", "getAllBrands: $data")
-                    orderState.value=State.Success(data)
+                    orderState.value=State.Success(true)
                 }
         }
     }

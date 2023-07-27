@@ -48,31 +48,37 @@ class FavouriteFragment : Fragment(),OnClickListener{
         favouriteViewModel.getFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString())
 
         lifecycleScope.launch{
-            favouriteViewModel.draftOrderDetails.collect { result->
+            favouriteViewModel.draftOrderDetailsList.collect { result->
                 when(result){
+                    is State.Loading ->{
+                        binding.favProgressBar.visibility = View.VISIBLE
+                        binding.favRv.visibility = View.GONE
+                        binding.noFavTxt.visibility = View.GONE
+                        Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
+
+                    }
                     is State.Success ->{
-                        if(result.data.draft_order!!.line_items.size > 1) {
-                            binding.noFavTxt.visibility = View.GONE
-                            binding.favProgressBar.visibility = View.GONE
-                            favouriteAdapter.setFavList(result.data.draft_order!!.line_items)
-                            binding.favRv.adapter = favouriteAdapter
-                        }else{
+                        val lineItemsList = result.data.draft_order!!.line_items
+                        if (lineItemsList.isNullOrEmpty()) {
                             binding.noFavTxt.visibility = View.VISIBLE
                             binding.favProgressBar.visibility = View.GONE
                             binding.favRv.visibility = View.GONE
 
-                        }
 
+                        } else {
+                            binding.noFavTxt.visibility = View.GONE
+                            binding.favProgressBar.visibility = View.GONE
+                            binding.favRv.visibility = View.VISIBLE
+                            favouriteAdapter.setFavList(lineItemsList)
+                            binding.favRv.adapter = favouriteAdapter
+
+                        }
                     }
                     is State.Failure ->{
                         Toast.makeText(context,"Fail to get draft order",Toast.LENGTH_LONG).show()
 
                     }
-                    is State.Loading ->{
-                        binding.favProgressBar.visibility = View.VISIBLE
-                        Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
 
-                    }
                 }
 
             }
@@ -113,6 +119,6 @@ class FavouriteFragment : Fragment(),OnClickListener{
         val action =
             FavouriteFragmentDirections.actionFavouriteFragmentToProductInfoFragment2(id.toString())
         binding.root.findNavController().navigate(action)
-    }
+        }
 
 }

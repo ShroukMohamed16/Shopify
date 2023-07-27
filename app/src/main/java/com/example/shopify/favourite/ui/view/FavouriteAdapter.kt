@@ -29,19 +29,24 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
     }
 
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
-            var currentItem = list[position + 1]
-            holder.binding.favProductName.text = splitTitle(currentItem.title)
-            val price = MySharedPreferences.getInstance(context)
-                .getExchangeRate() * currentItem.price!!.toDouble()
-            holder.binding.favProductPrice.text =
-                "Price: " + price.toString() + MySharedPreferences.getInstance(context)
-                    .getCurrencyCode()
-            holder.binding.favProductDeleteIcon.setOnClickListener {
-                onClickListener.onClickDeleteIcon(currentItem)
-            }
-            holder.binding.favProductCard.setOnClickListener {
-                onClickListener.onClickProductCard(currentItem.product_id!!)
-            }
+        var currentItem = list[position+1]
+//        Glide.with(holder.itemView)
+//            .load(currentItem.properties.get(0).name.toString())
+//            .placeholder(R.drawable.ic_launcher_foreground)
+//            .error(R.drawable.ic_launcher_background)
+//            .into(holder.binding.favProductImg)
+        holder.binding.favProductName.text = currentItem.title
+        val price=  MySharedPreferences.getInstance(context).getExchangeRate() * currentItem.price!!.toDouble()
+        holder.binding.favProductPrice.text = "Price: " + price.toString()+ MySharedPreferences.getInstance(context)
+            .getCurrencyCode()
+        holder.binding.favProductDeleteIcon.setOnClickListener{
+            onClickListener.onClickDeleteIcon(currentItem)
+        }
+        holder.binding.favProductCard.setOnClickListener {
+            onClickListener.onClickProductCard(currentItem.product_id!!)
+
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -52,10 +57,10 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
         this.list = values as List<line_items>
         notifyDataSetChanged()
     }
-    fun splitTitle(title:String?):String{
-        val titles = title?.split("|")
-        return titles!![1]
-    }
+//    fun splitTitle(title:String?):String{
+//        val titles = title?.split("|")
+//        return titles!![1]
+//        }
 
 
 }

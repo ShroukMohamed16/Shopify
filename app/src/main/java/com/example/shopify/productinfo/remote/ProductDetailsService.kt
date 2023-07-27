@@ -14,11 +14,11 @@ interface ProductDetailsService {
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
     @GET("draft_orders/{id}.json")
-    suspend fun getFavDraftOrderById(@Path("id") id:String) : DraftOrderResponse
+    suspend fun getFavDraftOrderById(@Path("id") id:Long) : DraftOrderResponse
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token: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")
     @PUT("draft_orders/{id}.json")
-    suspend fun modifyFavDraftOrder(@Path("id") id:String,@Body draft_order: DraftOrderResponse) : DraftOrderResponse
+    suspend fun modifyFavDraftOrder(@Path("id") id:Long,@Body draft_order: DraftOrderResponse) : DraftOrderResponse
 
 
 

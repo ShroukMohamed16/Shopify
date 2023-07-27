@@ -1,6 +1,7 @@
 package com.example.shopify
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.example.shopify.homeFragment.Model.Repository.BrandsRepository
 import com.example.shopify.homeFragment.Remote.BrandsClient
@@ -22,8 +23,13 @@ class App : Application() {
     var YOUR_CLIENT_ID = "AR1RF8SwyYYNScjOhH6BjWL4wkpUApI_G6WbPPbj0Dw6w-qaU8CQno-srkC5BtVemRvRC9lBDnPnCEOH"
     var returnUrl = "nativexo://paypalpay"
     lateinit var repository: BrandsRepository
+    companion object {
+        lateinit var appContext: Context
+        private set
+    }
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         if (checkConnectivity(this)) {
             repository = BrandsRepository.getInstance(BrandsClient())
 

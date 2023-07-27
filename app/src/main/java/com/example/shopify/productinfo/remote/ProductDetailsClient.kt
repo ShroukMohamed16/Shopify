@@ -17,11 +17,11 @@ class ProductDetailsClient:ProductDetailsRemoteSource {
         return productDetailsService.getProductById(id)
     }
 
-    override suspend fun getDraftOrderByID(id: String): DraftOrderResponse {
+    override suspend fun getDraftOrderByID(id: Long): DraftOrderResponse {
         return productDetailsService.getFavDraftOrderById(id)
     }
 
-    override suspend fun modifyDraftOrder(id: String, draftOrder: DraftOrderResponse): DraftOrderResponse {
+    override suspend fun modifyDraftOrder(id: Long, draftOrder: DraftOrderResponse): DraftOrderResponse {
         return productDetailsService.modifyFavDraftOrder(id,draftOrder)
     }
 }

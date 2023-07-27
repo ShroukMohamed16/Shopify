@@ -22,7 +22,7 @@ class PaymentRepository (var paymentRemote : PaymentRemoteSource) : PaymentRepos
         }
     }
 
-    override suspend fun postOrder(id : Long): Flow<OrderResponse> {
+    override suspend fun postOrder(id : Long):Flow<Boolean> {
         return flowOf(paymentRemote.postOrder(id))
     }
 }

@@ -6,5 +6,5 @@ import com.example.shopify.AllOrdersFragment.Model.OrderResponse
 import com.example.shopify.Payment.Model.DataClass.PostOrder
 
 interface PaymentRemoteSource {
-    suspend fun postOrder(id : Long): OrderResponse
+    suspend fun postOrder(id : Long): Boolean
 }

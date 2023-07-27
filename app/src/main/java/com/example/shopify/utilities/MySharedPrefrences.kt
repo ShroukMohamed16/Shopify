@@ -101,4 +101,26 @@ class MySharedPreferences private constructor(context: Context) {
     fun getLanguagePreference(): String? {
         return sharedPreferences.getString(Constants.LANGUAGE, Constants.ENGLISH)
     }
+
+    fun saveCustomerEmail(language: String) {
+        sharedPreferences.edit().putString(Constants.CUSTOMER_EMAIL, language).apply()
+    }
+
+    fun getCustomerEmail(): String? {
+        return sharedPreferences.getString(Constants.CUSTOMER_EMAIL, Constants.ENGLISH)
+    }
+
+    fun saveCustomerFirstName(name:String){
+        sharedPreferences.edit().putString(Constants.FIRST_NAME, name).apply()
+    }
+    fun getCustomerFirstName(): String? {
+        return sharedPreferences.getString(Constants.FIRST_NAME,"")
+    }
+
+    fun saveCustomerLastName(name:String){
+        sharedPreferences.edit().putString(Constants.LAST_NAME, name).apply()
+    }
+    fun getCustomerLastName(): String? {
+        return sharedPreferences.getString(Constants.LAST_NAME,"")
+    }
 }

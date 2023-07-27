@@ -17,6 +17,7 @@ import com.example.shopify.AllOrdersFragment.UI.ViewModel.ALlOrderViewModel
 import com.example.shopify.AllOrdersFragment.UI.ViewModel.AllOrderViewModelFactory
 import com.example.shopify.base.State
 import com.example.shopify.databinding.FragmentAllOrdersBinding
+import com.example.shopify.utilities.MySharedPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -41,8 +42,8 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
         orderAdapter = AllOrdersAdapter(ArrayList(), requireContext(), this)
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-
-        viewModel.getAllOrdersOfUser("egnition_sample_70@egnition.com")
+        val customerEmail = MySharedPreferences.getInstance(requireContext()).getCustomerEmail()
+        viewModel.getAllOrdersOfUser(customerEmail!!)
         lifecycleScope.launch {
             viewModel.order.collect { result ->
                 when (result) {
@@ -57,10 +58,15 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
                         Log.i("TAG", "onViewCreated: success the order List")
                         val orderList = result.data.orders
                         if (orderList.isNullOrEmpty()) {
+                            allOrderBinding.noOrderAnmi.visibility =View.VISIBLE
+                            allOrderBinding.noOrdersTxt.visibility = View.VISIBLE
+                            allOrderBinding.listScroll.visibility = View.GONE
                             Log.i("TAG", "onViewCreated: null listssssssssss")
                         } else {
                             Log.i("TAG", "onViewCreated: not null listssssssssss")
                             allOrderBinding.progressBar.visibility = View.GONE
+                            allOrderBinding.noOrderAnmi.visibility =View.GONE
+                            allOrderBinding.noOrdersTxt.visibility = View.GONE
                             allOrderBinding.ordersRecyclerView.visibility = View.VISIBLE
                             allOrderBinding.ordersRecyclerView.layoutManager = layoutManager
                             orderAdapter.setOrderList(orderList)
@@ -68,6 +74,7 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
                         }
                     }
                     else -> {
+                        Log.i("TAG", "onViewCreated: ")
 
                     }
 
