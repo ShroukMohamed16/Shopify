@@ -110,7 +110,7 @@ class SignInFragment : Fragment() {
         val lastname = Constants.last_name
 
         binding.loginBtn.setOnClickListener {
-         //  authenticationViewModel.updateCustomer(customerLogin_id, updatedCustomer)
+            //  authenticationViewModel.updateCustomer(customerLogin_id, updatedCustomer)
             //Log.i(TAG, "onViewCreated: $updatedCustomer")
             Log.i(TAG, "onViewCreated: $customerLogin_id")
             signInWithEmailAndPassword(firstname, lastname)
@@ -129,16 +129,16 @@ class SignInFragment : Fragment() {
             MySharedPreferences.getInstance(requireContext()).saveExchangeRate(1.0f)
             signInAnonymously()
         }
-        lifecycleScope.launch { 
+        lifecycleScope.launch {
             authenticationViewModel.customerUpdated.collect{
                 when(it){
                     is State.Success ->{
                         val updatedCustomerResponse = it.data.customer
                         Log.i(TAG, "onViewCreated: $updatedCustomerResponse")
-                        
+
                     } else ->{
                     Log.i(TAG, "onViewCreated: canot response cusromer updated")
-                    }
+                }
                 }
             }
         }
@@ -183,16 +183,6 @@ class SignInFragment : Fragment() {
                         if (auth.currentUser?.isEmailVerified!!) {
                             Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
                             if (Constants.CustomerListResponseSize == 0) {
-
-                                authenticationViewModel.addCustomer(CustomerResponse(Customer(email,firstName,lastName)))
-                                lifecycleScope.launch { 
-                                    authenticationViewModel.customerDetails.collect{result->
-                                        when(result){
-                                            is State.Success ->{
-                                                MySharedPreferences.getInstance(requireContext())
-                                                    .saveCustomerID(result.data.customer!!.id!!)
-                                                createDraftOrder(cartDraftOrder)
-                                                createDraftOrder(favDraftOrder)
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(email,
                                     firstName,
                                     lastName)))
@@ -202,18 +192,17 @@ class SignInFragment : Fragment() {
                                             is State.Success -> {
                                                 Log.i(TAG, "signInWithEmailAndPassword: ${result.data.customer}")
                                                 customer = result.data.customer
-                                                        createDraftOrder(cartDraftOrder)
-                                                       createDraftOrder(favDraftOrder)
+                                                createDraftOrder(cartDraftOrder)
+                                                createDraftOrder(favDraftOrder)
 
-                                                    customer.note = card_id.toString()
-                                                    Log.i(TAG, "createDraftOrder: $card_id")
-                                                    customer.tags = fav_id.toString()
-                                                    Log.i(TAG, "createDraftOrder: $fav_id")
-                                                    Log.i(TAG, "createDraftOrder: Before:    ${customer.toString()}")
-                                                    updatedCustomer = CustomerResponsePut(
-                                                        CustomerBody(id =customer.id,note = customer.note, tags = customer.tags ))
-                                                    authenticationViewModel.updateCustomer(customer.id!!, updatedCustomer)
-
+                                                customer.note = card_id.toString()
+                                                Log.i(TAG, "createDraftOrder: $card_id")
+                                                customer.tags = fav_id.toString()
+                                                Log.i(TAG, "createDraftOrder: $fav_id")
+                                                Log.i(TAG, "createDraftOrder: Before:    ${customer.toString()}")
+                                                updatedCustomer = CustomerResponsePut(
+                                                    CustomerBody(id =customer.id,note = customer.note, tags = customer.tags ))
+                                                authenticationViewModel.updateCustomer(customer.id!!, updatedCustomer)
 
 
                                             }
@@ -305,16 +294,44 @@ class SignInFragment : Fragment() {
                             "firebaseAuthWithGoogle: $emailWithGoogle\n $firstNameWithGoogle\n $lastNameWithGoogle\n")
 
                         lifecycleScope.launch {
-                            val job = lifecycleScope.launch {
                                 authenticationViewModel.getCustomerByEmail(emailWithGoogle,
                                     requireContext())
-                            }
-                            job.join()
                             if (Constants.CustomerListResponseSize == 0) {
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(
                                     emailWithGoogle,
                                     firstNameWithGoogle,
                                     lastNameWithGoogle)))
+                               /* authenticationViewModel.customerDetails.collect { result ->
+                                    when (result) {
+                                        is State.Success -> {
+                                            Log.i(TAG, "signInWithEmailAndPassword: ${result.data.customer}")
+                                            customer = result.data.customer
+                                            createDraftOrder(cartDraftOrder)
+                                            createDraftOrder(favDraftOrder)
+
+                                            customer.note = card_id.toString()
+                                            Log.i(TAG, "createDraftOrder: $card_id")
+                                            customer.tags = fav_id.toString()
+                                            Log.i(TAG, "createDraftOrder: $fav_id")
+                                            Log.i(TAG, "createDraftOrder: Before:    ${customer.toString()}")
+                                            updatedCustomer = CustomerResponsePut(
+                                                CustomerBody(id =customer.id,note = customer.note, tags = customer.tags ))
+                                            authenticationViewModel.updateCustomer(customer.id!!, updatedCustomer)
+
+
+                                        }
+                                        is State.Failure -> {
+                                            Toast.makeText(context,"Fail Create Customer with google account",Toast.LENGTH_LONG)
+                                                .show()
+
+                                        }
+                                        is State.Loading->Toast.makeText(context,"Loading",Toast.LENGTH_LONG)
+                                            .show()
+                                    }
+
+                                }*/
+
+
                             }
                         }
 

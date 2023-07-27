@@ -8,12 +8,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.example.shopify.Payment.Model.DataClass.LineItem
+import com.example.shopify.R
+import com.example.shopify.base.Property
 import com.example.shopify.base.State
+import com.example.shopify.base.line_items
 import com.example.shopify.databinding.FragmentProductInfoBinding
+import com.example.shopify.productinfo.model.pojo.Product
 import com.example.shopify.productinfo.model.pojo.Reviews
 import com.example.shopify.productinfo.model.pojo.Variant
 import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
@@ -35,6 +41,8 @@ class ProductInfoFragment : Fragment() {
     lateinit var variantAdapter: VariantAdapter
     private var currentPage = 0
     private var variantList: List<Variant> = listOf()
+    lateinit var product: Product
+     var property = Property("","")
     private val reviews = arrayOf(
         Reviews("Bassant Mohamed",
             "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
@@ -91,6 +99,7 @@ class ProductInfoFragment : Fragment() {
                     is State.Success -> {
                         Log.i("TAG", "onViewCreated: success")
                         val price = result.data.product?.variants!![0]?.price
+                        product = result.data.product!!
                         productBinding.productInfoProgressBar.visibility = View.GONE
                         productBinding.productInfoConstraint.visibility = View.VISIBLE
                         productBinding.productInfoItemName.text = result.data.product!!.title
@@ -165,6 +174,42 @@ class ProductInfoFragment : Fragment() {
             productBinding.showMoreTxt.visibility = View.VISIBLE
             productBinding.showLessTxt.visibility = View.GONE
 
+        }
+
+        productBinding.productInfoAddToFavoriteIcon.setOnClickListener {
+            productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
+
+           productsDetailsViewModel.getDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString())
+           lifecycleScope.launch {
+               productsDetailsViewModel.draftOrderInfo.collect { result->
+                   when(result){
+                       is State.Loading->{
+                           Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
+                       }
+                       is State.Success->{
+                           property.name = product.image!!.src
+                           val lineItem = line_items(title = product.title!! , quantity = 1, price = product.variants!!.get(0).price!!
+                               , variant_id = product.variants!!.get(0).id!!, product_id = product.id!!, properties = arrayListOf(property) )
+
+                           var line_items_list = mutableListOf<line_items>()
+                           line_items_list = result.data.draft_order!!.line_items.toMutableList()
+                           line_items_list.add(lineItem)
+                           result.data.draft_order!!.line_items = line_items_list.toList()
+                           var draft_order = result.data
+                           productsDetailsViewModel.modifyDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID().toString()
+                               ,draft_order)
+
+                       }
+                       is State.Failure ->{
+                           Toast.makeText(requireContext(), "Fail to get Draft Order", Toast.LENGTH_LONG)
+                               .show()
+
+                       }
+
+                   }
+
+               }
+           }
         }
     }
 

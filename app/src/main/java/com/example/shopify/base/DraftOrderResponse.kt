@@ -98,7 +98,7 @@ data class TaxLine(
 )
 
 data class Property(
-    val name: String? = "url_image",
+    var name: String? = "url_image",
     val value: String?,
 )
 
