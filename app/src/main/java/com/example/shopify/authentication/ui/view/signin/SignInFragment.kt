@@ -56,11 +56,13 @@ class SignInFragment : Fragment() {
     var mGoogleSignInClient: GoogleSignInClient? = null
     private val RC_SIGN_IN = 100
     private val TAG = "Google_SIGN_IN_TAG"
-    var customerLogin_id :Long =0
+    var customerLogin_id: Long = 0
     var card_id: Long = 0
     var fav_id: Long = 0
+    var customer_id: Long = 0
     lateinit var updatedCustomer: CustomerResponsePut
     lateinit var customer: Customer
+    var isHomeStarted : Boolean = false
 
 
     override fun onCreateView(
@@ -88,21 +90,15 @@ class SignInFragment : Fragment() {
         card_id = MySharedPreferences.getInstance(requireContext()).getCartID()!!
         fav_id = MySharedPreferences.getInstance(requireContext()).getFavID()!!
 
-       var favOrder= DraftOrder(email = "it",
-            name = "cart_draft",
-            line_items = listOf(
-                line_items(
-                    title = "empty",
-                    quantity = 1,
-                    price = "0"
-                )
-            ))
-       favDraftOrder = DraftOrderResponse(favOrder)
+        val cart_line_item = line_items(title = "cart item", quantity = 2, price = "1200")
+        val cart_draftOrder =
+            DraftOrder(line_items = listOf(cart_line_item), note = Constants.CART_NOTE)
+        cartDraftOrder = DraftOrderResponse(cart_draftOrder)
 
-//        val fav_line_item = line_items(title = "fav item", quantity = 1, price = "1500")
-//        val fav_draftOrder =
-//            DraftOrder(email ="",line_items = listOf(fav_line_item), note = Constants.FAV_NOTE)
-//        favDraftOrder = DraftOrderResponse(fav_draftOrder)
+        val fav_line_item = line_items(title = "fav item", quantity = 1, price = "1500")
+        val fav_draftOrder =
+            DraftOrder(line_items = listOf(fav_line_item), note = Constants.FAV_NOTE)
+        favDraftOrder = DraftOrderResponse(fav_draftOrder)
 
 
         authenticationViewModelFactory = AuthenticationViewModelFactory(
@@ -113,8 +109,8 @@ class SignInFragment : Fragment() {
             authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
-        val firstname = Constants.first_name
-        val lastname = Constants.last_name
+        val firstname = Constants.FIRST_NAME
+        val lastname = Constants.LAST_NAME
 
         binding.loginBtn.setOnClickListener {
             Log.i(TAG, "onViewCreated: $customerLogin_id")
@@ -133,19 +129,6 @@ class SignInFragment : Fragment() {
             MySharedPreferences.getInstance(requireContext()).saveCurrencyCode("EGP")
             MySharedPreferences.getInstance(requireContext()).saveExchangeRate(1.0f)
             signInAnonymously()
-        }
-        lifecycleScope.launch {
-            authenticationViewModel.customerUpdated.collect{
-                when(it){
-                    is State.Success ->{
-                        val updatedCustomerResponse = it.data.customer
-                        Log.i(TAG, "onViewCreated: $updatedCustomerResponse")
-
-                    } else ->{
-                    Log.i(TAG, "onViewCreated: canot response cusromer updated")
-                }
-                }
-            }
         }
 
     }
@@ -197,33 +180,10 @@ class SignInFragment : Fragment() {
                                     authenticationViewModel.customerDetails.collect { result ->
                                         when (result) {
                                             is State.Success -> {
-                                                Log.i(TAG, "signInWithEmailAndPassword: ${result.data.customer}")
+                                                Log.i(TAG,
+                                                    "signInWithEmailAndPassword: ${result.data.customer}")
                                                 customer = result.data.customer
-
-                                                Log.i(TAG, "signInWithEmailAndPassword: ${customer.email}")
-                                                Log.i(TAG, "signInWithEmailAndPassword: ${customer.id}")
-
-                                                createDraftOrder(cartDraftOrder)
-                                                createDraftOrder(favDraftOrder)
-
-                                                customer.note = card_id.toString()
-                                                Log.i(TAG, "createDraftOrder card id: $card_id")
-                                                customer.tags = fav_id.toString()
-                                                Log.i(TAG, "createDraftOrder fav id: $fav_id")
-                                                Log.i(TAG, "createDraftOrder: Before:    ${customer.toString()}")
-
-                                                updatedCustomer = CustomerResponsePut(
-                                                    CustomerBody(id =customer.id,note = customer.note, tags = customer.tags ))
-
-                                                authenticationViewModel.updateCustomer(customer.id!!, updatedCustomer)
-                                                MySharedPreferences.getInstance(requireContext()).saveCustomerID(
-                                                    customer.id!!.toLong())
-                                                MySharedPreferences.getInstance(requireContext()).saveCartID(card_id)
-                                                MySharedPreferences.getInstance(requireContext()).saveFavID(fav_id)
-                                                MySharedPreferences.getInstance(requireContext()).saveCustomerFirstName(customer.firstName!!)
-                                                MySharedPreferences.getInstance(requireContext()).saveCustomerLastName(customer.lastName!!)
-
-
+                                                createFavDraftOrder(favDraftOrder)
 
                                             }
                                             else -> {
@@ -236,18 +196,34 @@ class SignInFragment : Fragment() {
 
 
                                 }
-                            }else{
-                                authenticationViewModel.getCustomerByEmail(email,requireContext())
+                            } else {
+                                authenticationViewModel.getCustomerByEmail(email, requireContext())
                                 lifecycleScope.launch {
-                                    authenticationViewModel.customer.collect{
-                                        when(it) {
-                                            is State.Success ->{
-                                                MySharedPreferences.getInstance(requireContext()).saveCustomerID(
-                                                    it.data.getCustomers()?.get(0)?.id!!.toLong())
-                                                MySharedPreferences.getInstance(requireContext()).saveCartID( it.data.getCustomers()?.get(0)?.note!!.toLong())
-                                                MySharedPreferences.getInstance(requireContext()).saveFavID(it.data.getCustomers()?.get(0)?.tags!!.toLong())
+                                    authenticationViewModel.customer.collect {
+                                        when (it) {
+                                            is State.Success -> {
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .saveCustomerID(
+                                                        it.data.getCustomers()
+                                                            ?.get(0)?.id!!.toLong())
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .saveCartID(it.data.getCustomers()
+                                                        ?.get(0)?.note!!.toLong())
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .saveFavID(it.data.getCustomers()
+                                                        ?.get(0)?.tags!!.toLong())
+                                                startActivity(Intent(requireActivity(),
+                                                    HomeActivity::class.java))
+                                                requireActivity().finish()
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "Sign in Successfully",
+                                                    Toast.LENGTH_LONG
+                                                )
+                                                    .show()
 
-                                            } else ->{
+                                            }
+                                            else -> {
 
                                             }
                                         }
@@ -255,14 +231,7 @@ class SignInFragment : Fragment() {
                                 }
                             }
 
-                            startActivity(Intent(requireActivity(), HomeActivity::class.java))
-                            requireActivity().finish()
-                            Toast.makeText(
-                                requireContext(),
-                                "Sign in Successfully",
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
+
                         } else {
                             Toast.makeText(
                                 requireContext(),
@@ -360,32 +329,92 @@ class SignInFragment : Fragment() {
                 })
     }
 
-    private fun createDraftOrder(draftOrderResponse: DraftOrderResponse) {
-        authenticationViewModel.createDraftOrder(draftOrderResponse)
+    private fun createFavDraftOrder(draftOrderResponse: DraftOrderResponse) {
+        authenticationViewModel.createFavDraftOrder(draftOrderResponse)
         lifecycleScope.launch {
-            authenticationViewModel.draftOrder.collect { result ->
+            authenticationViewModel.favDraftOrder.collect { result ->
                 when (result) {
                     is State.Success -> {
-                        if (result.data.draft_order!!.note.equals(Constants.CART_NOTE)) {
-                            MySharedPreferences.getInstance(requireContext())
-                                .saveCartID(result.data.draft_order!!.id!!)
-                            Log.i(TAG, "createCartDraftOrder: ${result.data.draft_order!!.id!!}")
+                        val favID = result.data.draft_order?.id
+                        MySharedPreferences.getInstance(requireContext()).saveFavID(favID!!)
+                        customer.tags = favID.toString()
+                        creatCartDraftOrder(cartDraftOrder)
+                    }
+                    else -> {
 
-                        } else if (result.data.draft_order!!.note.equals(Constants.FAV_NOTE)) {
-                            MySharedPreferences.getInstance(requireContext())
-                                .saveFavID(result.data.draft_order!!.id!!)
-                            Log.i(TAG, "createFavDraftOrder: ${result.data.draft_order!!.id!!}")
+                    }
+                }
 
+            }
 
-                        }
+        }
+    }
 
-//                        customer.note = card_id.toString()
-//                        Log.i(TAG, "createDraftOrder: $card_id")
-//                        customer.tags = fav_id.toString()
-//                        Log.i(TAG, "createDraftOrder: $fav_id")
-//                        Log.i(TAG, "createDraftOrder: Before:    ${customer.toString()}")
-//                        updatedCustomer = CustomerResponsePut(customer)
-//                        authenticationViewModel.updateCustomer(customerLogin_id, updatedCustomer)
+    private fun creatCartDraftOrder(draftOrderResponse: DraftOrderResponse) {
+        authenticationViewModel.createCartDraftOrder(draftOrderResponse)
+        lifecycleScope.launch {
+            authenticationViewModel.cartDraftOrder.collect { result ->
+                when (result) {
+                    is State.Success -> {
+                        val cartID = result.data.draft_order?.id
+                        MySharedPreferences.getInstance(requireContext()).saveCartID(cartID!!)
+                        customer.note = cartID.toString()
+
+                        updatedCustomer = CustomerResponsePut(
+                            CustomerBody(id = customer.id,
+                                note = customer.note,
+                                tags = customer.tags))
+                        updateCustomer(customer.id!!, updatedCustomer)
+
+                    }
+                    else -> {
+
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    private fun updateCustomer(id: Long, updatedCustomer: CustomerResponsePut) {
+        authenticationViewModel.updateCustomer(id, updatedCustomer)
+        lifecycleScope.launch {
+            authenticationViewModel.customerUpdated.collect { result ->
+                when (result) {
+                    is State.Loading ->{
+                        binding.loginFrame.visibility = View.VISIBLE
+                        binding.signInProgressBar.visibility = View.VISIBLE
+                        binding.loginBtn.visibility = View.GONE
+                        binding.googleLoginBtn.visibility = View.GONE
+
+                    }
+                    is State.Success -> {
+                        binding.loginFrame.visibility = View.GONE
+                        binding.signInProgressBar.visibility = View.GONE
+                        binding.loginBtn.visibility = View.VISIBLE
+                        binding.googleLoginBtn.visibility = View.VISIBLE
+
+                        val updatedCustomer = result.data.customer
+                        MySharedPreferences.getInstance(requireContext())
+                            .saveCartID(updatedCustomer.note?.toLong()!!)
+                        MySharedPreferences.getInstance(requireContext())
+                            .saveFavID(updatedCustomer.tags?.toLong()!!)
+                        MySharedPreferences.getInstance(requireContext())
+                            .saveCustomerFirstName(customer.firstName!!)
+                        MySharedPreferences.getInstance(requireContext())
+                            .saveCustomerLastName(customer.lastName!!)
+                        MySharedPreferences.getInstance(requireContext()).saveCustomerID(
+                            updatedCustomer.id!!)
+                        startActivity(Intent(requireActivity(), HomeActivity::class.java))
+                        requireActivity().finish()
+                        Toast.makeText(
+                            requireContext(),
+                            "Sign in Successfully",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+
 
                     }
                     else -> {

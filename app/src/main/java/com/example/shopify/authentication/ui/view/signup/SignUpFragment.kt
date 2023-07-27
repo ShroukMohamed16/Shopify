@@ -94,8 +94,8 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_LONG).show()
                 }
             }
-        Constants.first_name = firstname
-        Constants.last_name = lastname
+        MySharedPreferences.getInstance(requireContext()).saveCustomerFirstName(firstname)
+       MySharedPreferences.getInstance(requireContext()).saveCustomerLastName(lastname)
     }
 
     private fun verifyEmailAddress() {

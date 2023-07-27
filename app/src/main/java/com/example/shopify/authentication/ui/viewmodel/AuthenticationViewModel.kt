@@ -25,11 +25,17 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
     private var customerByEmail: MutableStateFlow<State<CustomerListResponse>> = MutableStateFlow(State.Loading)
     val customer: StateFlow<State<CustomerListResponse>> = customerByEmail
 
-    private var draftOrderState: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
-    val draftOrder: StateFlow<State<DraftOrderResponse>> = draftOrderState
+    private var favDraftOrderState: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val favDraftOrder: StateFlow<State<DraftOrderResponse>> = favDraftOrderState
 
+
+    private var cartDraftOrderState: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val cartDraftOrder: StateFlow<State<DraftOrderResponse>> = cartDraftOrderState
     private var customerUpdatedState: MutableStateFlow<State<CustomerResponsePut>> = MutableStateFlow(State.Loading)
     val customerUpdated: StateFlow<State<CustomerResponsePut>> = customerUpdatedState
+
+
+
     fun addCustomer(customer: CustomerResponse){
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.addNewCustomerToAPI(customer)
@@ -65,19 +71,33 @@ class AuthenticationViewModel(val repositoryInterface: AuthenticationRepositoryI
                 }
         }
     }
-    fun createDraftOrder(draftOrderResponse: DraftOrderResponse){
+    fun createFavDraftOrder(draftOrderResponse: DraftOrderResponse){
         viewModelScope.launch {
             repositoryInterface.addDraftOrder(draftOrderResponse)
                 ?.catch { e->
-                    draftOrderState.value=State.Failure(e)
+                    favDraftOrderState.value=State.Failure(e)
                 }
                 ?.collect{ data->
                     Log.i("TAG", "getDraftOrder: $data")
-                    draftOrderState.value=State.Success(data)
+                    favDraftOrderState.value=State.Success(data)
                 }
         }
 
     }
+    fun createCartDraftOrder(draftOrderResponse: DraftOrderResponse){
+        viewModelScope.launch {
+            repositoryInterface.addDraftOrder(draftOrderResponse)
+                ?.catch { e->
+                    cartDraftOrderState.value=State.Failure(e)
+                }
+                ?.collect{ data->
+                    Log.i("TAG", "getDraftOrder: $data")
+                    cartDraftOrderState.value=State.Success(data)
+                }
+        }
+
+    }
+
     fun updateCustomer(customer_id:Long,customer: CustomerResponsePut){
         viewModelScope.launch{
          repositoryInterface.updateCustomer(customer_id,customer)
