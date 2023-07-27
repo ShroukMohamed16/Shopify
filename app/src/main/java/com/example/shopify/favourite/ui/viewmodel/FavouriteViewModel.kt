@@ -21,7 +21,7 @@ class FavouriteViewModel(var favouriteRepositoryInterface: FavouriteRepositoryIn
     val draftOrderDetailsList: StateFlow<State<DraftOrderResponse>> = draftOrderList
 
 
-     fun getFavDraftOrder(id:String){
+     fun getFavDraftOrder(id:Long){
          viewModelScope.launch(Dispatchers.IO){
              favouriteRepositoryInterface.getFavDraftOrder(id)
                  ?.catch { e ->
@@ -33,11 +33,11 @@ class FavouriteViewModel(var favouriteRepositoryInterface: FavouriteRepositoryIn
          }
     }
 
-    fun modifyFavDraftOrder(id:String,draftOrderResponse: DraftOrderResponse){
+    fun modifyFavDraftOrder(id:Long,draftOrderResponse: DraftOrderResponse){
         viewModelScope.launch(Dispatchers.IO){
             favouriteRepositoryInterface.modifyFavDraftOrder(id,draftOrderResponse)
                 ?.catch { e ->
-                    draftOrder.value = State.Failure(e)
+                   draftOrder.value = State.Failure(e)
                 }
                 ?.collect { data ->
                     draftOrder.value = State.Success(data)
