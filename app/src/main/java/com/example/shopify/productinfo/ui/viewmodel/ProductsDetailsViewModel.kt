@@ -21,8 +21,8 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
     private var productInfo: MutableStateFlow<State<ProductResponse>> = MutableStateFlow(State.Loading)
     val product: StateFlow<State<ProductResponse>> = productInfo
 
-    private var getDraftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
-    val getDraftOrderInfo: StateFlow<State<DraftOrderResponse>> = getDraftOrder
+    private var draftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val draftOrderInfo: StateFlow<State<DraftOrderResponse>> = draftOrder
 
 
     fun getProductDetailsByID(id:String) {
@@ -46,10 +46,10 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.getDraftOrderById(id)
                 ?.catch { e ->
-                    getDraftOrder.value = State.Failure(e)
+                    draftOrder.value = State.Failure(e)
                 }
                 ?.collect{ data ->
-                    getDraftOrder.value = State.Success(data)
+                    draftOrder.value = State.Success(data)
                 }
         }
     }
@@ -61,8 +61,8 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
                 }
                 ?.collect{ data ->
                 }
+            }
         }
-    }
 
 
 

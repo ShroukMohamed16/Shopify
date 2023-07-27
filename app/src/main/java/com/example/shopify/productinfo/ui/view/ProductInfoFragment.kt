@@ -24,7 +24,6 @@ import com.example.shopify.databinding.FragmentProductInfoBinding
 import com.example.shopify.productinfo.model.pojo.Product
 import com.example.shopify.productinfo.model.pojo.Reviews
 import com.example.shopify.productinfo.model.pojo.Variant
-import com.example.shopify.productinfo.model.pojo.toLineItems
 import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
 import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
@@ -50,8 +49,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
     private var currentPage = 0
     private var variantList: List<Variant> = listOf()
     lateinit var product: Product
-     var property = Property("","")
-    private lateinit var favDraftOrderResponse :DraftOrderResponse
+    var property = Property("","")
     private val reviews = arrayOf(
         Reviews("Bassant Mohamed",
             "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
@@ -201,7 +199,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                     .getFavID()!!
             )
             lifecycleScope.launch {
-                productsDetailsViewModel.getDraftOrderInfo.collect { result ->
+                productsDetailsViewModel.draftOrderInfo.collect { result ->
                     when (result) {
                         is State.Loading -> {
                             Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
@@ -235,12 +233,6 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                                 ).getFavID()!!, draft_order
                             )
 
-                            favDraftOrderResponse = result.data
-                            favDraftOrderResponse.draft_order?.line_items?.add(product!!.toLineItems()!!)
-
-                            productsDetailsViewModel.modifyDraftOrder(MySharedPreferences.getInstance(
-                                requireContext()).getFavID()!!,favDraftOrderResponse)
-
                         }
                         is State.Failure -> {
                             Toast.makeText(
@@ -257,65 +249,64 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                 }
             }
         }
-          /*  productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
-                if (variantID == 0L) {
-                    createAlert(getString(R.string.choose_size_color_title),
-                        getString(R.string.must_choose_size_color_message),
-                        requireContext())
-                } else {
-                    lifecycleScope.launch {
-                        cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(
-                            requireContext()).getCartID().toString())
-                        cartViewModel.getCart.collect { result ->
-                            when (result) {
-                                is State.Success -> {
-                                    var cartLineItemList = mutableListOf<line_items>()
-                                    cartImageProperty =
-                                        Property(cartProduct.image!!.src.toString(), "")
-                                    var lineItem = line_items(title = cartProduct.title!!,
-                                        quantity = 1,
-                                        price = cartProduct.variants!!.get(0).price!!,
-                                        variant_id = variantID,
-                                        product_id = cartProduct.id!!,
-                                        properties = arrayListOf(cartImageProperty))
+        /*  productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
+              if (variantID == 0L) {
+                  createAlert(getString(R.string.choose_size_color_title),
+                      getString(R.string.must_choose_size_color_message),
+                      requireContext())
+              } else {
+                  lifecycleScope.launch {
+                      cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(
+                          requireContext()).getCartID().toString())
+                      cartViewModel.getCart.collect { result ->
+                          when (result) {
+                              is State.Success -> {
+                                  var cartLineItemList = mutableListOf<line_items>()
+                                  cartImageProperty =
+                                      Property(cartProduct.image!!.src.toString(), "")
+                                  var lineItem = line_items(title = cartProduct.title!!,
+                                      quantity = 1,
+                                      price = cartProduct.variants!!.get(0).price!!,
+                                      variant_id = variantID,
+                                      product_id = cartProduct.id!!,
+                                      properties = arrayListOf(cartImageProperty))
 
-                                    cartLineItemList =
-                                        result.data.draft_order!!.line_items.toMutableList()
-                                    cartLineItemList = mutableListOf(lineItem)
-                                    Log.i(TAG, "onViewCreated: ${cartLineItemList}")
-                                    Log.i(TAG, "onViewCreated: ${cartLineItemList}")
-                                    result.data.draft_order!!.line_items = cartLineItemList.toList()
-                                    val draft_order = result.data
-                                    cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(
-                                        requireContext()).getCartID().toString(),
-                                        draft_order
-                                    )
-                                    Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT)
-                                        .show()
+                                  cartLineItemList =
+                                      result.data.draft_order!!.line_items.toMutableList()
+                                  cartLineItemList = mutableListOf(lineItem)
+                                  Log.i(TAG, "onViewCreated: ${cartLineItemList}")
+                                  Log.i(TAG, "onViewCreated: ${cartLineItemList}")
+                                  result.data.draft_order!!.line_items = cartLineItemList.toList()
+                                  val draft_order = result.data
+                                  cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(
+                                      requireContext()).getCartID().toString(),
+                                      draft_order
+                                  )
+                                  Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT)
+                                      .show()
 
-                                }
-                                is State.Loading -> {
+                              }
+                              is State.Loading -> {
 
-                                    Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                        .show()
+                                  Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                                      .show()
 
 
-                                }
-                                is State.Failure -> {
-                                    withContext(Dispatchers.Main) {
-                                        Toast.makeText(requireContext(),
-                                            "failed to add to cart",
-                                            Toast.LENGTH_SHORT).show()
-                                    }
+                              }
+                              is State.Failure -> {
+                                  withContext(Dispatchers.Main) {
+                                      Toast.makeText(requireContext(),
+                                          "failed to add to cart",
+                                          Toast.LENGTH_SHORT).show()
+                                  }
 
-                                }
-                            }
+                              }
+                          }
 
-                        }
-                    }
-                }
-            }*/
-
+                      }
+                  }
+              }
+          }*/
 
     }
     fun formatDecimal(decimal: Double): String {
@@ -325,5 +316,5 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
     override fun onProductVariantClick(variantId: Long) {
         this.variantID=variantId
-    }
+        }
 }

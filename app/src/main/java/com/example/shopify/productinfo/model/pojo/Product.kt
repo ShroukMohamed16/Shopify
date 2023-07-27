@@ -27,31 +27,4 @@ data class Product(
     @SerializedName("image") var image: Image
 )
 
-fun Product.toLineItems(): line_items {
-    return line_items(
 
-        product_id = id!!,
-        title = title!!,
-        quantity = 1,
-        requires_shipping = false,
-        taxable = true,
-        gift_card = false,
-        fulfillment_service = "manual",
-        grams = 0,
-        tax_lines = arrayListOf(),
-        applied_discount = com.example.shopify.base.AppliedDiscount(
-            description = image.src,//line item /  image
-            value = "10.0",
-            title = "Custom",
-            amount = "20.00",
-            value_type = "percentage"
-        ),
-        name = title!!,
-        properties = arrayListOf(),
-        custom = true,
-        price = variants[0].price.toString(),
-        variant_id = variants[0].id!!, variant_title = bodyHtml.toString() // Product Description
-
-    )
-
-}
