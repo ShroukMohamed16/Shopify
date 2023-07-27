@@ -2,6 +2,7 @@ package com.example.shopify.authentication.ui.view.signup
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +62,10 @@ class SignUpFragment : Fragment() {
         val password = binding.signUpPasswordTextField.editText?.text.toString().trim()
         val confirmPassword =
             binding.signUpConfirmPasswordTextField.editText?.text.toString().trim()
+        MySharedPreferences.getInstance(requireContext()).saveCustomerFirstName(firstname)
+        MySharedPreferences.getInstance(requireContext()).saveCustomerLastName(lastname)
+        Log.i("TAG", "singUpWithEmailAndPassword: $firstname")
+        Log.i("TAG", "singUpWithEmailAndPassword: $lastname")
 
         if (email.isEmpty() || firstname.isEmpty() || lastname.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(requireContext(), "Please Fill All Data", Toast.LENGTH_LONG).show()
@@ -94,8 +99,7 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_LONG).show()
                 }
             }
-        MySharedPreferences.getInstance(requireContext()).saveCustomerFirstName(firstname)
-       MySharedPreferences.getInstance(requireContext()).saveCustomerLastName(lastname)
+
     }
 
     private fun verifyEmailAddress() {

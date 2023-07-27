@@ -58,7 +58,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fav_product_barrier" />
 
             <ImageView
-                android:id="@+id/fav_product_delete_icon"
+                android:id="@+id/favDelete"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="20dp"
