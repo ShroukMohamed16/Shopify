@@ -59,5 +59,10 @@ class App : Application() {
             MySharedPreferences.getInstance(applicationContext).getLanguagePreference()!!
         )
 
+        if(MySharedPreferences.getInstance(applicationContext).getCurrencyCode()==null){
+            MySharedPreferences.getInstance(applicationContext).saveCurrencyCode("EGP")
+            MySharedPreferences.getInstance(applicationContext).saveExchangeRate(1.0f)
+        }
+
     }
 }
