@@ -47,7 +47,7 @@ class CartFragment : Fragment(), OnCartClickListener {
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var cartRecyclerView: RecyclerView
     lateinit var draftOrderResponse: DraftOrderResponse
-    var totalPrice :Double = 0.0
+    var totalPrice: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +80,8 @@ class CartFragment : Fragment(), OnCartClickListener {
 
         if (checkConnectivity(requireContext())) {
 
-            cartBinding.noInternetConstraint.visibility=View.GONE
-            cartBinding.cartItemsConstraint.visibility=View.VISIBLE
+            cartBinding.noInternetConstraint.visibility = View.GONE
+            cartBinding.cartItemsConstraint.visibility = View.VISIBLE
             cartViewModel.getCartDraftOrderById(
                 MySharedPreferences.getInstance(requireContext()).getCartID().toString()
             )
@@ -126,8 +126,8 @@ class CartFragment : Fragment(), OnCartClickListener {
             }
 
         } else {
-            cartBinding.noInternetConstraint.visibility=View.VISIBLE
-            cartBinding.cartItemsConstraint.visibility=View.GONE
+            cartBinding.noInternetConstraint.visibility = View.VISIBLE
+            cartBinding.cartItemsConstraint.visibility = View.GONE
         }
         cartBinding.checkoutBtn.setOnClickListener {
             Navigation.findNavController(requireView())
@@ -163,28 +163,42 @@ class CartFragment : Fragment(), OnCartClickListener {
 
     }
 
-    override fun onCartIncreaseItemClickListener(inventoryQuantity: Int,position:Int,currentQuantity:Int) {
+    override fun onCartIncreaseItemClickListener(
+        inventoryQuantity: Int,
+        position: Int,
+        currentQuantity: Int
+    ) {
         var current = currentQuantity
-        if (currentQuantity<inventoryQuantity){
-            current+=1
-           draftOrderResponse.draft_order!!.line_items[position].quantity=current
-            cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString(), draftOrderResponse)
+        if (currentQuantity < inventoryQuantity) {
+            current += 1
+            draftOrderResponse.draft_order!!.line_items[position].quantity = current
+            cartViewModel.editCartDraftOrderById(
+                MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                draftOrderResponse
+            )
             cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
             calculateTotalPrice()
-        }else{
-            createAlert("","the available items finished out",requireContext())
+        } else {
+            createAlert("", "the available items finished out", requireContext())
         }
     }
 
-    override fun onCartDecreaseItemClickListener(inventoryQuantity: Int,position: Int,currentQuantity:Int) {
+    override fun onCartDecreaseItemClickListener(
+        inventoryQuantity: Int,
+        position: Int,
+        currentQuantity: Int
+    ) {
         var current = currentQuantity
-        if (currentQuantity ==1){
-            createAlert("","can't have less than one item",requireContext())
+        if (currentQuantity == 1) {
+            createAlert("", "can't have less than one item", requireContext())
 
-        }else{
-            current-=1
-            draftOrderResponse.draft_order!!.line_items[position].quantity=current
-            cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString(), draftOrderResponse)
+        } else {
+            current -= 1
+            draftOrderResponse.draft_order!!.line_items[position].quantity = current
+            cartViewModel.editCartDraftOrderById(
+                MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                draftOrderResponse
+            )
             cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
             calculateTotalPrice()
         }
@@ -192,18 +206,25 @@ class CartFragment : Fragment(), OnCartClickListener {
 
 
     @SuppressLint("SetTextI18n")
-    fun calculateTotalPrice(){
+    fun calculateTotalPrice() {
         var totalPrice = 0.0
         for (i in 1 until draftOrderResponse.draft_order?.line_items!!.size) {
             var price = draftOrderResponse.draft_order?.line_items!![i].price?.toDouble()
             Log.i("price", "onViewCreated: price $i $price")
-            var quantity =draftOrderResponse.draft_order!!.line_items[i].quantity!!
+            var quantity = draftOrderResponse.draft_order!!.line_items[i].quantity!!
             totalPrice += (price!!.times(quantity))
             Log.i("price", "onViewCreated: total price $i $totalPrice")
         }
+        if (totalPrice == 0.0) {
+            cartBinding.totalPriceTV.visibility = View.GONE
+            cartBinding.checkoutBtn.visibility = View.GONE
+        }
         MySharedPreferences.getInstance(requireContext()).saveTotalPrice(totalPrice.toString())
-
-        var totalPricex = formatDecimal(MySharedPreferences.getInstance(requireContext()).getExchangeRate() * totalPrice)
-        cartBinding.totalPriceTV.text="price: $totalPricex ${MySharedPreferences.getInstance(requireContext()).getCurrencyCode()}"
+        val exchangedTotalPrice = formatDecimal(
+            MySharedPreferences.getInstance(requireContext()).getExchangeRate() * totalPrice
+        )
+        cartBinding.totalPriceTV.text = "price: $exchangedTotalPrice ${
+            MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
+        }"
     }
 }
