@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.shopify.Payment.Model.DataClass.Order
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -80,7 +81,7 @@ class PaymentFragment : Fragment() {
 
     private lateinit var orderLineItemsList: List<LineItemm>
 
-    lateinit var discountCodes: DiscountCodes
+    lateinit var discountCodes: List<DiscountCode>
 
 
     override fun onCreateView(
@@ -103,7 +104,7 @@ class PaymentFragment : Fragment() {
         cartViewModel.getCartDraftOrderById(
             MySharedPreferences.getInstance(requireContext()).getCartID().toString()
         )
-        if(checkConnectivity(requireContext())){
+        if (checkConnectivity(requireContext())) {
 
             lifecycleScope.launch {
 
@@ -203,14 +204,20 @@ class PaymentFragment : Fragment() {
                 var mustableDisount = mutableListOf<DiscountCode>()
                 discountPrice = if (discountCodeET.text.toString() == "Summer60") {
                     mustableDisount.add(DiscountCode("Summer60", "60", "percentage"))
+                    discountCodes = mustableDisount.toList()
                     60f
+
 
                 } else if (discountCodeET.text.toString() == "Summer25") {
 
                     mustableDisount.add(DiscountCode("Summer60", "60", "fixed_amount"))
+                    discountCodes = mustableDisount.toList()
+
                     (productPrice * (1 - .25f))
                 } else {
                     mustableDisount.add(DiscountCode("", "0", "percentage"))
+                    discountCodes = mustableDisount.toList()
+
                     0f
                 }
                 totalPrice = productPrice + deliveryPrice
@@ -253,19 +260,29 @@ class PaymentFragment : Fragment() {
             paymentBinding.checkoutBtn.visibility = View.VISIBLE
             paymentBinding.paymentButtonContainer.visibility = View.GONE
         }
-        if (checkConnectivity(requireContext())){
-        paymentBinding.checkoutBtn.setOnClickListener {
-            if (totalPrice > 500) {
-                createAlert(
-                    getString(R.string.cant_pay_in_cash),
-                    getString(R.string.large_amount_of_money)
-                ,requireContext())
+        if (checkConnectivity(requireContext())) {
+            paymentBinding.checkoutBtn.setOnClickListener {
+                if (totalPrice > 500) {
+                    createAlert(
+                        getString(R.string.cant_pay_in_cash),
+                        getString(R.string.large_amount_of_money), requireContext())
 
-            } else {
-                createAlertGoToHome()
+                } else {
+                    val email =
+                        MySharedPreferences.getInstance(requireContext()).getCustomerEmail()
+
+                    val order = Order(email = email!!,
+                        line_items = orderLineItemsList,
+                        discount_codes = discountCodes)
+                    val orderData = OrderData(order)
+                    viewModel.postOrder(orderData)
+                    createAlertGoToHome()
+                }
             }
-        }}else{
-            createAlert(getString(R.string.network_lost), getString(R.string.network_lost_title),requireContext())
+        } else {
+            createAlert(getString(R.string.network_lost),
+                getString(R.string.network_lost_title),
+                requireContext())
         }
         if (checkConnectivity(requireContext())) {
             paymentBinding.paymentButtonContainer.setup(
@@ -294,12 +311,13 @@ class PaymentFragment : Fragment() {
                         Log.i("MYTAG", "CaptureOrderResult: $captureOrderResult")
                         val email =
                             MySharedPreferences.getInstance(requireContext()).getCustomerEmail()
-                        /*  val line_item = LineItemm()
-                           val discond_code = DiscountCode()
-                           val order = Order(email = email!!, line_items = listOf() ,discount_codes = listOf( discond_code ))
-                           val orderData = OrderData(order)
-                           viewModel.postOrder(orderData)*/
-                       createAlertGoToHome()
+
+                        val order = Order(email = email!!,
+                            line_items = orderLineItemsList,
+                            discount_codes = discountCodes)
+                        val orderData = OrderData(order)
+                        viewModel.postOrder(orderData)
+                        createAlertGoToHome()
                     }
                 }, onCancel = OnCancel {
                     Log.d("MYTAG", "Buyer canceled the PayPal experience.")
@@ -316,7 +334,9 @@ class PaymentFragment : Fragment() {
             )
 
         } else {
-            createAlert(getString(R.string.network_lost), getString(R.string.network_lost_title),requireContext())
+            createAlert(getString(R.string.network_lost),
+                getString(R.string.network_lost_title),
+                requireContext())
         }
 
     }
