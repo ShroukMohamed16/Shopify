@@ -1,5 +1,6 @@
 package com.example.shopify.productinfo.ui.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -37,7 +38,7 @@ import java.text.DecimalFormat
 
 const val TAG = "ProductInfoFragment"
 
-class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
+class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
 
     lateinit var cartViewModel: CartViewModel
     lateinit var cartViewModelFactory: CartViewModelFactory
@@ -49,29 +50,47 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
     private var currentPage = 0
     private var variantList: List<Variant> = listOf()
     lateinit var product: Product
-    var property = Property("","")
+
+    var property = Property("", "")
+
+
     private val reviews = arrayOf(
-        Reviews("Bassant Mohamed",
-            "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."),
-        Reviews("Noha Ahmed",
-            "Disappointed with this product. The quality was poor, and it didn't work as advertised."),
-        Reviews("Radwa Mohamed",
-            "The fit of this item is perfect. It's true to size and hugs my body in all the right places."),
-        Reviews("Sarah Mohamed",
-            "This item is a great value for the price. It's affordable and offers high-quality materials and construction."),
-        Reviews("Shrouk Mohamed",
-            "The quality of this product is impressive. It's well-made and durable, ensuring that it will last for a long time."),
-        Reviews("Ehsan Ahmed",
-            "This item is incredibly comfortable. The fabric is soft and breathable, and it feels great to wear."),
-        Reviews("Sabah Mahmoud",
-            "Love this skirt! The design is unique and eye-catching, and the material is soft and flowy."),
+        Reviews(
+            "Bassant Mohamed",
+            "This product is stylish and versatile. It looks great with a variety of outfits and can be dressed up or down."
+        ),
+        Reviews(
+            "Noha Ahmed",
+            "Disappointed with this product. The quality was poor, and it didn't work as advertised."
+        ),
+        Reviews(
+            "Radwa Mohamed",
+            "The fit of this item is perfect. It's true to size and hugs my body in all the right places."
+        ),
+        Reviews(
+            "Sarah Mohamed",
+            "This item is a great value for the price. It's affordable and offers high-quality materials and construction."
+        ),
+        Reviews(
+            "Shrouk Mohamed",
+            "The quality of this product is impressive. It's well-made and durable, ensuring that it will last for a long time."
+        ),
+        Reviews(
+            "Ehsan Ahmed",
+            "This item is incredibly comfortable. The fabric is soft and breathable, and it feels great to wear."
+        ),
+        Reviews(
+            "Sabah Mahmoud",
+            "Love this skirt! The design is unique and eye-catching, and the material is soft and flowy."
+        ),
         Reviews("Mohamed Tawfik", "I was disappointed with the quality of this Product")
 
     )
-    lateinit var cartProduct:Product
-    lateinit var cartImageProperty:Property
+    lateinit var cartProduct: Product
+    lateinit var cartImageProperty: Property
     var cartLineItemList = mutableListOf<line_items>()
-    private var variantID:Long = 0
+    private var variantID: Long = 0
+    private var varientPosition:Int =0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +101,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
         return productBinding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         cartViewModelFactory =
@@ -94,10 +114,15 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
 
         productsDetailsViewModelFactory =
-            ProductsDetailsViewModelFactory(ProductDetailsRepository.getInstance(
-                ProductDetailsClient()))
-        productsDetailsViewModel = ViewModelProvider(this,
-            productsDetailsViewModelFactory)[ProductsDetailsViewModel::class.java]
+            ProductsDetailsViewModelFactory(
+                ProductDetailsRepository.getInstance(
+                    ProductDetailsClient()
+                )
+            )
+        productsDetailsViewModel = ViewModelProvider(
+            this,
+            productsDetailsViewModelFactory
+        )[ProductsDetailsViewModel::class.java]
 
         val productID = args.productID
         productsDetailsViewModel.getProductDetailsByID(productID!!)
@@ -118,8 +143,10 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                         productBinding.productInfoConstraint.visibility = View.VISIBLE
                         productBinding.productInfoItemName.text = result.data.product!!.title
                         productBinding.productInfoItemPrice.text =
-                            formatDecimal(price!!.toDouble() * MySharedPreferences
-                                .getInstance(requireContext()).getExchangeRate()) + " " + "${
+                            formatDecimal(
+                                price!!.toDouble() * MySharedPreferences
+                                    .getInstance(requireContext()).getExchangeRate()
+                            ) + " " + "${
                                 MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
                             }"
                         productBinding.productInfoDescriptionContent.text =
@@ -157,12 +184,17 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                                     } else {
                                         currentPage++
                                     }
-                                    productBinding.productInfoViewPager.setCurrentItem(currentPage,
-                                        true)
-                                    handler.postDelayed(this,
-                                        5000) // Change the delay time as needed
+                                    productBinding.productInfoViewPager.setCurrentItem(
+                                        currentPage,
+                                        true
+                                    )
+                                    handler.postDelayed(
+                                        this,
+                                        5000
+                                    ) // Change the delay time as needed
                                 }
-                            }, 5000)
+                            }, 5000
+                        )
                     }
                     else -> {
                         Log.i("TAG", "onViewCreated: fail")
@@ -205,7 +237,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                             Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
                         }
                         is State.Success -> {
-                            //product.status = "true"
+
                             property.name = product.image!!.src
                             Log.i(TAG, "onViewCreated product image: ${product.image!!.src}")
                             val lineItem = line_items(
@@ -219,12 +251,17 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
                             var oldLineItemsList = result.data.draft_order!!.line_items
                             var newLineItem = lineItem
+
                             var updatedLineItem = oldLineItemsList + newLineItem
 
                             var draft_order = DraftOrderResponse(
                                 DraftOrder(
                                     email = "",
+
+                                    line_items = listOf(newLineItem)
+
                                     line_items = updatedLineItem
+
                                 )
                             )
                             productsDetailsViewModel.modifyDraftOrder(
@@ -248,72 +285,129 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
                 }
             }
+
         }
-        /*  productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
-              if (variantID == 0L) {
-                  createAlert(getString(R.string.choose_size_color_title),
-                      getString(R.string.must_choose_size_color_message),
-                      requireContext())
-              } else {
-                  lifecycleScope.launch {
-                      cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(
-                          requireContext()).getCartID().toString())
-                      cartViewModel.getCart.collect { result ->
-                          when (result) {
-                              is State.Success -> {
-                                  var cartLineItemList = mutableListOf<line_items>()
-                                  cartImageProperty =
-                                      Property(cartProduct.image!!.src.toString(), "")
-                                  var lineItem = line_items(title = cartProduct.title!!,
-                                      quantity = 1,
-                                      price = cartProduct.variants!!.get(0).price!!,
-                                      variant_id = variantID,
-                                      product_id = cartProduct.id!!,
-                                      properties = arrayListOf(cartImageProperty))
-
-                                  cartLineItemList =
-                                      result.data.draft_order!!.line_items.toMutableList()
-                                  cartLineItemList = mutableListOf(lineItem)
-                                  Log.i(TAG, "onViewCreated: ${cartLineItemList}")
-                                  Log.i(TAG, "onViewCreated: ${cartLineItemList}")
-                                  result.data.draft_order!!.line_items = cartLineItemList.toList()
-                                  val draft_order = result.data
-                                  cartViewModel.editCartDraftOrderById(MySharedPreferences.getInstance(
-                                      requireContext()).getCartID().toString(),
-                                      draft_order
-                                  )
-                                  Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT)
-                                      .show()
-
-                              }
-                              is State.Loading -> {
-
-                                  Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
-                                      .show()
 
 
-                              }
-                              is State.Failure -> {
-                                  withContext(Dispatchers.Main) {
-                                      Toast.makeText(requireContext(),
-                                          "failed to add to cart",
-                                          Toast.LENGTH_SHORT).show()
-                                  }
 
-                              }
-                          }
+        productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
+            if (variantID == 0L) {
+                createAlert(
+                    getString(R.string.choose_size_color_title),
+                    getString(R.string.must_choose_size_color_message),
+                    requireContext()
+                )
+            } else {
+                lifecycleScope.launch {
+                    cartViewModel.getCartDraftOrderById(
+                        MySharedPreferences.getInstance(
+                            requireContext()
+                        ).getCartID().toString()
+                    )
+                    cartViewModel.getCart.collect { result ->
+                        when (result) {
+                            is State.Success -> {
+                                cartImageProperty =
+                                    Property("imageUrl", cartProduct.image?.src.toString())
+                                val cartInventoryQuantity = Property(
+                                    "inventoryQuantity",
+                                    cartProduct?.variants?.get(varientPosition)?.inventoryQuantity.toString()
+                                )
+                                val lineItem = line_items(
+                                    title = cartProduct.title!!,
+                                    quantity = 1,
+                                    price = cartProduct.variants?.get(varientPosition)?.price!!,
+                                    variant_id = variantID,
+                                    product_id = cartProduct.id!!,
+                                    properties = arrayListOf(
+                                        cartImageProperty,
+                                        cartInventoryQuantity
+                                    )
 
-                      }
-                  }
-              }
-          }*/
+                                )
+                                var lineItemExists = false
+                                for (existingLineItem in result.data.draft_order!!.line_items) {
+                                    if (existingLineItem.title == lineItem.title
+                                        && existingLineItem.quantity == lineItem.quantity
+                                        && existingLineItem.price == lineItem.price
+                                        && existingLineItem.variant_id == lineItem.variant_id
+                                        && existingLineItem.product_id == lineItem.product_id
+                                        && existingLineItem.properties == lineItem.properties
+                                    ) {
+                                        lineItemExists = true
+                                        break
+                                    }
+                                }
+                                if(!lineItemExists) {
+
+                                    val list = result.data.draft_order?.line_items
+                                    val mutableList = list?.toMutableList()
+                                    mutableList?.add(lineItem)
+                                    result.data.draft_order?.line_items = mutableList!!.toList()
+                                    cartViewModel.editCartDraftOrderById(
+                                        MySharedPreferences.getInstance(
+                                            requireContext()
+                                        ).getCartID().toString(), result.data
+                                    )
+                                }else{
+                                    createAlert("already added", "this item is already added to cart", requireContext())
+                                }
+
+                                /*if (!result.data.draft_order?.line_items!!.contains(lineItem)) {
+                                    val list = result.data.draft_order?.line_items
+                                    val mutableList = list?.toMutableList()
+                                    mutableList?.add(lineItem)
+                                    result.data.draft_order?.line_items = mutableList!!.toList()
+                                    cartViewModel.editCartDraftOrderById(
+                                        MySharedPreferences.getInstance(
+                                            requireContext()
+                                        ).getCartID().toString(), result.data
+                                    )
+                                } else {
+                                    createAlert("already added", "this item is already added to cart", requireContext())
+                                }*/
+                                Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            is State.Loading -> {
+
+                                Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                                    .show()
+
+
+                            }
+                            is State.Failure -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "failed to add to cart",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        }
+      
 
     }
+
     fun formatDecimal(decimal: Double): String {
         val decimalFormat = DecimalFormat("0.00")
         return decimalFormat.format(decimal)
     }
 
+    override fun onProductVariantClick(variantId: Long,position:Int) {
+        this.variantID = variantId
+        this.varientPosition=position
+        Log.i("TAG", "onProductVariantClick: $variantID")
+    }
+}
     override fun onProductVariantClick(variantId: Long) {
         this.variantID=variantId
         }
