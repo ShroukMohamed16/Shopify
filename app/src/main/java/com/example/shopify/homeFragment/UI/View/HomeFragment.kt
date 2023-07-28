@@ -182,12 +182,9 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
                 }
             }, 6000) // Change the delay time as needed
 
-        homeBinding.searchByProduct.setOnClickListener {
+        homeBinding.searchConstraint.setOnClickListener {
            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
 
-        }
-        homeBinding.searchIcon.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }
 
 

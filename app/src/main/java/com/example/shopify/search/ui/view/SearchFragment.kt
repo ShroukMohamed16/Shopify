@@ -62,14 +62,16 @@ class SearchFragment : Fragment(), OnSearchItemClick {
                         binding.searchRv.adapter = searchAdapter
 
                     }
-                    else -> {
+                    is State.Loading->{
+                        Toast.makeText(requireContext(), "Loading", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                    is State.Failure -> {
                         Toast.makeText(requireContext(), "Fail to get Products", Toast.LENGTH_LONG)
                             .show()
 
                     }
                 }
-
-
             }
         }
 
@@ -103,7 +105,7 @@ class SearchFragment : Fragment(), OnSearchItemClick {
     }
 
     private fun filteredProductList(s: String): List<Product>? {
-        return productList?.filter { it.title!!.lowercase().startsWith(s.lowercase())}
+        return productList?.filter { it.title!!.lowercase().contains(s.lowercase())}
         }
 
 

@@ -66,8 +66,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/searchshape"
-                android:hint="search_hint"
                 app:boxStrokeColor="@color/purple_700"
                 app:hintTextColor="@color/purple_700"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,8 +76,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/searchEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/searchshape"
+                    android:hint="@string/search"
                     android:textSize="14sp"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
             </com.google.android.material.textfield.TextInputLayout>

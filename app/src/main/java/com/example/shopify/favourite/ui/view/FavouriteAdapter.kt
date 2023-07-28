@@ -30,31 +30,36 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
     }
 
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
-        var currentItem = list[position+1]
-        Glide.with(context)
-            .load(currentItem.properties.get(0).name.toString())
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .error(R.drawable.ic_launcher_background)
-            .into(holder.binding.favProductImg)
-        holder.binding.favProductName.text = currentItem.title
-        val price=  MySharedPreferences.getInstance(context).getExchangeRate() * currentItem.price!!.toDouble()
-        holder.binding.favProductPrice.text = "Price: $price" + MySharedPreferences.getInstance(context).getCurrencyCode()
-        holder.binding.favProductDeleteIcon.setOnClickListener{
-            val builder = AlertDialog.Builder(context)
-            builder.setMessage("Are You Sure Delete This Item?")
-            builder.setPositiveButton("Ok") { dialog, it ->
-                dialog.dismiss()
-                onClickListener.onClickDeleteIcon(currentItem)
-            }
-            builder.setNegativeButton("No"){dialog, which ->
-                dialog.dismiss()
-            }
-            val dialog = builder.create()
-            dialog.show()
+        var currentItem = list[position + 1]
+        if(currentItem.title!! != "fav item") {
+            Glide.with(context)
+                .load(currentItem.properties.get(0).name.toString())
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .error(R.drawable.ic_launcher_background)
+                .into(holder.binding.favProductImg)
+            holder.binding.favProductName.text = currentItem.title
+            val price = MySharedPreferences.getInstance(context)
+                .getExchangeRate() * currentItem.price!!.toDouble()
+            holder.binding.favProductPrice.text =
+                "Price: $price" + MySharedPreferences.getInstance(context).getCurrencyCode()
+            holder.binding.favProductDeleteIcon.setOnClickListener {
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("Are You Sure Delete This Item?")
+                builder.setPositiveButton("Ok") { dialog, it ->
+                    dialog.dismiss()
+                    onClickListener.onClickDeleteIcon(currentItem)
+                }
+                builder.setNegativeButton("No") { dialog, which ->
+                    dialog.dismiss()
+                }
+                val dialog = builder.create()
+                dialog.show()
 
-        }
-        holder.binding.favProductCard.setOnClickListener {
-            onClickListener.onClickProductCard(currentItem.product_id!!)
+            }
+            holder.binding.favProductCard.setOnClickListener {
+                onClickListener.onClickProductCard(currentItem.product_id!!)
+
+            }
 
         }
 

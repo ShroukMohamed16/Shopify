@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.base.DraftOrder
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
+import com.example.shopify.base.line_items
 import com.example.shopify.homeFragment.Model.DataCalss.AllBrandsModel
 import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodeModel
 import com.example.shopify.productinfo.model.pojo.ProductResponse
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRepositoryInterface):ViewModel() {
@@ -23,6 +25,10 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
 
     private var draftOrder: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
     val draftOrderInfo: StateFlow<State<DraftOrderResponse>> = draftOrder
+
+    private var foundProduct: MutableStateFlow<State<DraftOrderResponse>> = MutableStateFlow(State.Loading)
+    val productFound: StateFlow<State<DraftOrderResponse>> = foundProduct
+
 
 
     fun getProductDetailsByID(id:String) {
@@ -41,7 +47,20 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
         }
         Log.i("TAG", "Finish Product Info")
     }
-
+     fun isProductInDraftOrder(id: Long, productId: Long){
+         viewModelScope.launch(Dispatchers.IO){
+             repositoryInterface.getDraftOrderById(id)
+                 .filter {
+                     it.draft_order!!.line_items.any {it.product_id == productId}
+                 }
+                 ?.catch { e ->
+                     foundProduct.value = State.Failure(e)
+                 }
+                 ?.collect{ data ->
+                     foundProduct.value = State.Success(data)
+                 }
+         }
+    }
     fun getDraftOrder(id: Long){
         viewModelScope.launch(Dispatchers.IO){
             repositoryInterface.getDraftOrderById(id)
@@ -51,6 +70,7 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
                 ?.collect{ data ->
                     draftOrder.value = State.Success(data)
                 }
+
         }
     }
 

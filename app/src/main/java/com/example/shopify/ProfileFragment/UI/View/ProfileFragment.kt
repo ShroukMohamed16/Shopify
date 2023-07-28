@@ -31,13 +31,29 @@ class ProfileFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(MySharedPreferences.getInstance(requireContext()).getISGuest()) {
+            profileBinding.profileNameTV.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+            profileBinding.profileSettingIcon.visibility = View.GONE
+            profileBinding.profileLogoutBtn.visibility = View.VISIBLE
+            profileBinding.profileNameTV.visibility = View.GONE
+            profileBinding.profileFirstWishListCardView.visibility = View.GONE
+            profileBinding.firstOrderCardView.visibility = View.GONE
+            profileBinding.profileSecondWishListCardView.visibility = View.GONE
+            profileBinding.secondOrderCardView.visibility = View.GONE
+            profileBinding.profilefirstLine.visibility = View.GONE
+            profileBinding.profileSecondLine.visibility = View.GONE
+
+
+
+        }
         val first_name = MySharedPreferences.getInstance(requireContext()).getCustomerFirstName()
         val last_name = MySharedPreferences.getInstance(requireContext()).getCustomerLastName()
         Log.i("TAG", "onViewCreated: $first_name")
         Log.i("TAG", "onViewCreated: $last_name")
 
         profileBinding.profileNameTV.text = first_name+ " " + last_name
-
 
         profileBinding.profileSettingIcon.setOnClickListener {
             Navigation.findNavController(view)
@@ -51,6 +67,7 @@ class ProfileFragment : Fragment() {
             builder.setMessage(R.string.are_you_sure)
             builder.setPositiveButton(android.R.string.ok) { _, _ ->
                 auth.signOut()
+                MySharedPreferences.getInstance(requireContext()).saveISLogged(false)
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
                 startActivity(intent)
 

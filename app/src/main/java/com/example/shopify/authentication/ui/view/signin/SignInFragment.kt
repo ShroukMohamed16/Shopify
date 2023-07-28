@@ -1,17 +1,20 @@
 package com.example.shopify.authentication.ui.view.signin
 
+//import com.google.android.gms.auth.api.signin.GoogleSignIn
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.example.shopify.AllOrdersFragment.Model.LineItemsOrder
 import com.example.shopify.R
 import com.example.shopify.authentication.model.pojo.*
 import com.example.shopify.authentication.model.repository.AuthenticationRepository
@@ -31,19 +34,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-//import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.SignInButton
-
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
-import kotlin.properties.Delegates
 
-private const val TAG = "SignInFragment"
 
 class SignInFragment : Fragment() {
 
@@ -64,7 +62,11 @@ class SignInFragment : Fragment() {
     lateinit var customer: Customer
     var isHomeStarted : Boolean = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MySharedPreferences.getInstance(requireContext()).saveISGuest(false)
 
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -124,8 +126,13 @@ class SignInFragment : Fragment() {
         binding.googleLoginBtn.setOnClickListener {
             signIn()
         }
+        binding.forgetPasswordTxt.setOnClickListener {
+               resetPassword()
+        }
 
         binding.guestBtn.setOnClickListener {
+            MySharedPreferences.getInstance(requireContext()).saveISGuest(true)
+            MySharedPreferences.getInstance(requireContext()).saveISLogged(true)
             MySharedPreferences.getInstance(requireContext()).saveCurrencyCode("EGP")
             MySharedPreferences.getInstance(requireContext()).saveExchangeRate(1.0f)
             signInAnonymously()
@@ -160,17 +167,15 @@ class SignInFragment : Fragment() {
             Toast.makeText(requireContext(), "Enter Correct Password", Toast.LENGTH_LONG).show()
             return
         }
-        if (!isValidEmail(email)) {
-            Toast.makeText(requireContext(), "Enter Valid format in email ", Toast.LENGTH_LONG)
-                .show()
-            return
-        }
         lifecycleScope.launch {
             authenticationViewModel.getCustomerByEmail(email, requireContext())
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         if (auth.currentUser?.isEmailVerified!!) {
+                            MySharedPreferences.getInstance(requireContext()).saveISLogged(true)
+                            MySharedPreferences.getInstance(requireContext()).saveISGuest(false)
+
                             Log.i(TAG, "signInWithEmailAndPassword: ${auth.currentUser!!.uid}")
                             if (Constants.CustomerListResponseSize == 0) {
                                 authenticationViewModel.addCustomer(CustomerResponse(Customer(email,
@@ -253,14 +258,6 @@ class SignInFragment : Fragment() {
 
     }
 
-    private fun isValidEmail(email: String): Boolean {
-        val pattern = Pattern.compile(
-            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
-        val matcher = pattern.matcher(email)
-        return matcher.matches()
-
-    }
-
     private fun signIn() {
         Log.i(TAG, "signIn: ")
         val signInIntent: Intent = mGoogleSignInClient!!.getSignInIntent()
@@ -295,6 +292,7 @@ class SignInFragment : Fragment() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("TAGsigninsuccess", "signInWithCredential:success")
+                        MySharedPreferences.getInstance(requireContext()).saveISLogged(true)
                         val user: FirebaseUser? = auth.getCurrentUser()
                         val emailWithGoogle: String = user?.email!!
                         val names = user.displayName?.split("\\s".toRegex())
@@ -342,7 +340,7 @@ class SignInFragment : Fragment() {
                         val favID = result.data.draft_order?.id
                         MySharedPreferences.getInstance(requireContext()).saveFavID(favID!!)
                         customer.tags = favID.toString()
-                        creatCartDraftOrder(cartDraftOrder)
+                        createCartDraftOrder(cartDraftOrder)
                     }
                     else -> {
 
@@ -354,7 +352,7 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun creatCartDraftOrder(draftOrderResponse: DraftOrderResponse) {
+    private fun createCartDraftOrder(draftOrderResponse: DraftOrderResponse) {
         authenticationViewModel.createCartDraftOrder(draftOrderResponse)
         lifecycleScope.launch {
             authenticationViewModel.cartDraftOrder.collect { result ->
@@ -429,6 +427,36 @@ class SignInFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun resetPassword(){
+        val resetMail = EditText(requireContext())
+        val PasswordResetDialog = AlertDialog.Builder(requireContext())
+        PasswordResetDialog.setTitle("Reset Password ?")
+        PasswordResetDialog.setMessage("Enter Your Email To Reset Password")
+        PasswordResetDialog.setView(resetMail)
+        PasswordResetDialog.setPositiveButton(
+            "Yes"
+        ) { dialog, which ->
+            val mail = resetMail.text.toString()
+            auth.sendPasswordResetEmail(mail)
+                .addOnSuccessListener(OnSuccessListener<Void?> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Reset Link Send To Your Email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }).addOnFailureListener(
+                    OnFailureListener {
+                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT)
+                            .show()
+                    })
+        }
+        PasswordResetDialog.setNegativeButton(
+            "No"
+        ) { dialog, which -> }
+        PasswordResetDialog.create().show()
+
     }
 
 }
