@@ -109,8 +109,8 @@ class SignInFragment : Fragment() {
             authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
 
-        val firstname = Constants.FIRST_NAME
-        val lastname = Constants.LAST_NAME
+        val firstname = Constants.customer_FN
+        val lastname = Constants.customer_LN
 
         binding.loginBtn.setOnClickListener {
             Log.i(TAG, "onViewCreated: $customerLogin_id")
@@ -183,6 +183,7 @@ class SignInFragment : Fragment() {
                                                 Log.i(TAG,
                                                     "signInWithEmailAndPassword: ${result.data.customer}")
                                                 customer = result.data.customer
+
                                                 createFavDraftOrder(favDraftOrder)
 
                                             }
@@ -202,6 +203,9 @@ class SignInFragment : Fragment() {
                                     authenticationViewModel.customer.collect {
                                         when (it) {
                                             is State.Success -> {
+                                                MySharedPreferences.getInstance(requireContext()).saveCustomerFirstName(it.data.getCustomers()?.get(0)?.firstName!!)
+                                                MySharedPreferences.getInstance(requireContext()).saveCustomerLastName(it.data.getCustomers()?.get(0)?.lastName!!)
+
                                                 MySharedPreferences.getInstance(requireContext())
                                                     .saveCustomerID(
                                                         it.data.getCustomers()

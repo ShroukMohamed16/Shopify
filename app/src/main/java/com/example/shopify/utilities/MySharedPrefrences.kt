@@ -111,16 +111,22 @@ class MySharedPreferences private constructor(context: Context) {
     }
 
     fun saveCustomerFirstName(name:String){
-        sharedPreferences.edit().putString(Constants.FIRST_NAME, name).apply()
+        sharedPreferences.edit().putString(Constants.customer_FN, name).apply()
     }
     fun getCustomerFirstName(): String? {
-        return sharedPreferences.getString(Constants.FIRST_NAME,"")
+        return sharedPreferences.getString(Constants.customer_FN,"")
     }
 
     fun saveCustomerLastName(name:String){
-        sharedPreferences.edit().putString(Constants.LAST_NAME, name).apply()
+        sharedPreferences.edit().putString(Constants.customer_LN, name).apply()
     }
     fun getCustomerLastName(): String? {
-        return sharedPreferences.getString(Constants.LAST_NAME,"")
+        return sharedPreferences.getString(Constants.customer_LN,"")
+    }
+    fun saveTotalPrice(price:String){
+        sharedPreferences.edit().putString(Constants.customer_LN, price).apply()
+    }
+    fun getTotalPrice(): String? {
+        return sharedPreferences.getString(Constants.customer_LN,"0.0")
     }
 }

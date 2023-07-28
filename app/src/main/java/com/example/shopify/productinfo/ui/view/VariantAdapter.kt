@@ -31,7 +31,7 @@ class VariantAdapter(var list:List<Variant>, var listener: OnProductVariantClick
                 }
             binding.variantCard.setOnClickListener {
                 // Save the selected position and update the UI
-                listener.onProductVariantClick(currentItem.id!!)
+                listener.onProductVariantClick(currentItem.id!!,position)
                 val previousSelectedItemPosition = selectedItemPosition
                 selectedItemPosition = position
                 notifyItemChanged(previousSelectedItemPosition)

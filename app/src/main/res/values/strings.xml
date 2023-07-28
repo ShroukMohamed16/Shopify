@@ -108,4 +108,6 @@
     <string name="shop_with_joy_not_stress">Shop with joy , not stress</string>
     <string name="choose_size_color_title">Choose Size and Color</string>
     <string name="must_choose_size_color_message">You must choose the size and the color of the product</string>
+    <string name="deleteMessage">Are You Sure You Want To Delete This Item?</string>
+    <string name="no">No</string>
 </resources>

@@ -10,8 +10,8 @@ object Constants {
     const val CUSTOMER_EMAIL = "CustomerEmail"
     const val CART_DRAFT_ID="CartID"
     const val FAV_DRAFT_ID="FavouriteID"
-    var FIRST_NAME = "first_name"
-    var LAST_NAME = "last_name"
+    const val customer_FN = "first_name"
+    const val customer_LN = "last_name"
 
     const val CART_NOTE = "cart"
     const val FAV_NOTE = "favourite"
@@ -32,6 +32,8 @@ object Constants {
     const val LANGUAGE = "language"
     const val ENGLISH = "en"
     const val ARABIC = "ar"
+
+    const val TOTAL_PRICE = "total_price"
 
 
 }
