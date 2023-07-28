@@ -6,100 +6,104 @@
     android:layout_height="match_parent"
     tools:context="CartFragment.UI.View.CartFragment">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cartItemsConstraint"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ProgressBar
-        android:id="@+id/cartProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-
-        android:indeterminate="true"
-        android:indeterminateTint="@color/primary"
-        android:indeterminateTintMode="src_in"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cartItemsConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <TextView
-        android:id="@+id/totalPriceTV"
-        android:layout_width="0dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:text="Total Price:  50 EGP"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/cartRecycler"
-        app:layout_constraintStart_toStartOf="@+id/cartRecycler"
-        app:layout_constraintTop_toBottomOf="@+id/cartRecycler" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/checkoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/primary"
-        android:text="@string/proceed_to_checkout"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:cornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/totalPriceTV"
-        app:layout_constraintStart_toStartOf="@+id/totalPriceTV"
-        app:layout_constraintTop_toBottomOf="@+id/totalPriceTV"
-        app:rippleColor="@color/black" />
+        <ProgressBar
+            android:id="@+id/cartProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cartRecycler"
-        android:layout_width="346dp"
-        android:layout_height="450dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        android:orientation="vertical"
-        android:visibility="visible"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/cart_item"
-        tools:visibility="visible">
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary"
+            android:indeterminateTintMode="src_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/totalPriceTV"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="Total Price:  50 EGP"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/cartRecycler"
+            app:layout_constraintStart_toStartOf="@+id/cartRecycler"
+            app:layout_constraintTop_toBottomOf="@+id/cartRecycler" />
 
-    <TextView
-        android:id="@+id/noCartItemsTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nocartAnmi"
-        android:text="there is no products found"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/fontfile"
-        android:textColor="@color/primary"
-        android:textSize="20sp"
-        android:visibility="gone"
-        />
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/nocartAnmi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
-        android:visibility="gone"
-        app:lottie_rawRes="@raw/no_orders"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/checkoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/primary"
+            android:text="@string/proceed_to_checkout"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/totalPriceTV"
+            app:layout_constraintStart_toStartOf="@+id/totalPriceTV"
+            app:layout_constraintTop_toBottomOf="@+id/totalPriceTV"
+            app:rippleColor="@color/black" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartRecycler"
+            android:layout_width="346dp"
+            android:layout_height="450dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/cart_item"
+            tools:visibility="visible">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/noCartItemsTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/fontfile"
+            android:text="there is no products found"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nocartAnmi" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/nocartAnmi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_orders" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/noInternetConstraint"

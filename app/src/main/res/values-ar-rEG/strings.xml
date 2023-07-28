@@ -105,4 +105,9 @@
     <string name="no_orders_found">there is no orders found</string>
     <string name="deleteMessage">هل أنت متأكد من رغبتك في حذف هذا المنتج؟</string>
     <string name="no">لا</string>
+    <string name="go_home">الصفحة الرئيسية</string>
+    <string name="order_done">تم الطلب بنجاح</string>
+    <string name="network_lost">فقدان الاتصال بالشبكة</string>
+
+    <string name="network_lost_title">يرجى التحقق من اتصالك بالشبكة ثم المحاولة مرة أخرى</string>
 </resources>

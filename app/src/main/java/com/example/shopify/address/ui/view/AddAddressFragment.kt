@@ -88,11 +88,9 @@ class AddAddressFragment : Fragment() {
                     .show()
             } else {
 
-                //viewModel.addCustomerAddress("7169338474770", address)
                 Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT)
                 Log.i("TAG", "onViewCreated: saved")
-               // lifecycleScope.launch {  }
-                //viewModel.address.collect(){}
+
 
                 val address = AddressBody(
                     AddressModel(
@@ -100,10 +98,12 @@ class AddAddressFragment : Fragment() {
                         address2,
                         MyAddress.city!!,
                         MyAddress.country!!,
-                        phone,
+                        phone/*,
+                        MyAddress.zipCode,
+                        MyAddress.province*/
                     )
                 )
-                viewModel.addCustomerAddress(7157925183762, address)
+                viewModel.addCustomerAddress(MySharedPreferences.getInstance(requireContext()).getCustomerID()!!, address)
                 lifecycleScope.launch {
 
                     viewModel.address.collect { result ->

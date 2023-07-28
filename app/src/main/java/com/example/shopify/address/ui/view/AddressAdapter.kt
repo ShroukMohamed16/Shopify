@@ -67,6 +67,9 @@ class AddressAdapter (
       holder.binding.addressItemAddressTV.text=
           "${currentAddress?.address1} ${currentAddress?.address2} ${currentAddress?.city} ${currentAddress?.country}"
 
+        holder.binding.addressItemCardView.setOnClickListener {
+            listener.onAddressCardDeleteListener(currentAddress!!)
+        }
     }
 
     override fun getItemCount(): Int {
