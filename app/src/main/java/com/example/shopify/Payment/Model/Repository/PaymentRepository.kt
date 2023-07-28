@@ -3,6 +3,7 @@ package com.example.shopify.Payment.Model.Repository
 import com.example.shopify.AllOrdersFragment.Model.Order
 import com.example.shopify.AllOrdersFragment.Model.OrderReq
 import com.example.shopify.AllOrdersFragment.Model.OrderResponse
+import com.example.shopify.Payment.Model.DataClass.OrderData
 import com.example.shopify.Payment.Model.DataClass.PostOrder
 import com.example.shopify.Payment.Remote.PaymentRemoteSource
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,9 @@ class PaymentRepository (var paymentRemote : PaymentRemoteSource) : PaymentRepos
         }
     }
 
-    override suspend fun postOrder(id : Long):Flow<Boolean> {
-        return flowOf(paymentRemote.postOrder(id))
+    override suspend fun createOrder(orderData: OrderData): Flow<OrderResponse> {
+        return flowOf(paymentRemote.createOrder(orderData))
     }
+
+
 }

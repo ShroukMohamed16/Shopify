@@ -17,6 +17,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.shopify.AllOrdersFragment.Model.*
+import com.example.shopify.Payment.Model.DataClass.DiscountCode
+import com.example.shopify.Payment.Model.DataClass.LineItemm
+import com.example.shopify.Payment.Model.DataClass.OrderData
 import com.example.shopify.Payment.Model.Repository.PaymentRepository
 import com.example.shopify.Payment.Remote.PaymentClient
 import com.example.shopify.Payment.UI.ViewModel.PaymentViewModel
@@ -35,6 +38,8 @@ import com.paypal.checkout.order.Amount
 import com.paypal.checkout.order.AppContext
 import com.paypal.checkout.order.OrderRequest
 import com.paypal.checkout.order.PurchaseUnit
+import com.example.shopify.Payment.Model.DataClass.Order
+import com.example.shopify.utilities.MySharedPreferences
 
 
 class PaymentFragment : Fragment() {
@@ -176,6 +181,12 @@ class PaymentFragment : Fragment() {
                 approval.orderActions.capture { captureOrderResult ->
                     Log.i("MYTAG", "CaptureOrderResult: $captureOrderResult")
                     Toast.makeText(requireContext(), "Payment approved", Toast.LENGTH_SHORT).show()
+                    val email = MySharedPreferences.getInstance(requireContext()).getCustomerEmail()
+//                    val line_item = LineItemm()
+//                    val discond_code = DiscountCode()
+//                    val order = Order(email = email!!, line_items = listOf() ,discount_codes = listOf( discond_code ))
+//                    val orderData = OrderData(order)
+//                    viewModel.postOrder(orderData)
                 }
             }, onCancel = OnCancel {
                 Log.d("MYTAG", "Buyer canceled the PayPal experience.")

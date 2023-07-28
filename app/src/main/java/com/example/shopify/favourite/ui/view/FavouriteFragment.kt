@@ -62,7 +62,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
 
                     }
                     is State.Success ->{
-                        if(!result.data.draft_order!!.line_items.isEmpty() || result.data.draft_order!!.line_items.size != 1){
+                        if(!result.data.draft_order!!.line_items.isNullOrEmpty() || result.data.draft_order!!.line_items.size != 1){
                             val lineItemsList = result.data.draft_order!!.line_items
                             binding.noFavTxt.visibility = View.GONE
                             binding.favProgressBar.visibility = View.GONE
@@ -72,6 +72,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
                             binding.favRv.adapter = favouriteAdapter
                         }else{
                             binding.noFavTxt.visibility = View.VISIBLE
+                            binding.favRv.visibility = View.GONE
 
                         }
 
