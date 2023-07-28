@@ -39,9 +39,6 @@ class orderItemsAdapter(
         holder.binding.quantityValue.text = currentItemOrder.quantity.toString()
        holder.binding.pricevalue.text = formatDecimal(currentItemOrder.price!!.toDouble()* MySharedPreferences
            .getInstance(context).getExchangeRate() )+" "+"${MySharedPreferences.getInstance(context).getCurrencyCode()}"
-//        Glide.with(context)
-//            .load(currentItemOrder.properties[0].value)
-//            .into(holder.binding.itemImageView)
         holder.binding.itemOrderCardView.setOnClickListener {
             currentItemOrder.product_id?.let { it -> listener.onClickItemOrder(it.toLong()) }
         }

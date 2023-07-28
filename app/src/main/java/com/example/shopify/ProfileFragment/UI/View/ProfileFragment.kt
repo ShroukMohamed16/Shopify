@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import com.example.shopify.AllOrdersFragment.UI.View.AllOrdersFragment
 import com.example.shopify.R
 import com.example.shopify.authentication.ui.view.AuthenticationActivity
 import com.example.shopify.databinding.FragmentProfileBinding
@@ -62,6 +63,7 @@ class ProfileFragment : Fragment() {
         profileBinding.profileMoreOrdersTv2.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_profileFragment_to_allOrdersFragment)
+
         }
 
         profileBinding.profileMoreOrdersTv.setOnClickListener {

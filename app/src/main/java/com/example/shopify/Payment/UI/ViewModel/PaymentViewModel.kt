@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.shopify.AllOrdersFragment.Model.Order
 import com.example.shopify.AllOrdersFragment.Model.OrderReq
 import com.example.shopify.AllOrdersFragment.Model.OrderResponse
+import com.example.shopify.Payment.Model.DataClass.OrderData
 import com.example.shopify.Payment.Model.DataClass.PostOrder
 import com.example.shopify.Payment.Model.Repository.PaymentRepositoryInterface
 import com.example.shopify.base.State
@@ -15,19 +16,19 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class PaymentViewModel(private val repo: PaymentRepositoryInterface) : ViewModel() {
-    private var orderState: MutableStateFlow<State<Boolean>> = MutableStateFlow(State.Loading)
-    val order: StateFlow<State<Boolean>> = orderState
+    private var orderState: MutableStateFlow<State<OrderResponse>> = MutableStateFlow(State.Loading)
+    val order: StateFlow<State<OrderResponse>> = orderState
 
 
-    fun postOrder(id : Long) {
+    fun postOrder(orderData: OrderData) {
         viewModelScope.launch {
-            repo.postOrder(id)
+            repo.createOrder(orderData)
                 ?.catch { e->
                     Log.e("TAG", "getAllBrands: $e", )
                     orderState.value=State.Failure(e) }
                 ?.collect{ data->
                     Log.i("TAG", "getAllBrands: $data")
-                    orderState.value=State.Success(true)
+                    orderState.value=State.Success(data)
                 }
         }
     }

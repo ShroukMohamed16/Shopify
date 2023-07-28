@@ -42,7 +42,7 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
         holder.binding.favProductDeleteIcon.setOnClickListener{
             val builder = AlertDialog.Builder(context)
             builder.setMessage("Are You Sure Delete This Item?")
-            builder.setPositiveButton("Ok") { dialog, it ->
+            builder.setPositiveButton("Yes") { dialog, it ->
                 dialog.dismiss()
                 onClickListener.onClickDeleteIcon(currentItem)
             }
