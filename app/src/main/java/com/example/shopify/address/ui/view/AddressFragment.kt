@@ -21,6 +21,7 @@ import com.example.shopify.address.ui.viewmodel.AddressViewModel
 import com.example.shopify.address.ui.viewmodel.AddressViewModelFactory
 import com.example.shopify.base.State
 import com.example.shopify.databinding.*
+import com.example.shopify.utilities.MySharedPreferences
 import com.example.shopify.utilities.getLastLocation
 import kotlinx.coroutines.launch
 import java.util.*
@@ -62,7 +63,7 @@ class AddressFragment : Fragment(), OnAddressClickListener {
         addressRecyclerView.adapter = addressAdapter
         addressRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        viewModel.getCustomerAddress(7157925183762)
+        viewModel.getCustomerAddress(MySharedPreferences.getInstance(requireContext()).getCustomerID()!!)
         lifecycleScope.launch {
             viewModel.getAddress.collect { result ->
                 when (result) {

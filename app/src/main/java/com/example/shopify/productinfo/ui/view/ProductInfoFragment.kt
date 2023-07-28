@@ -257,11 +257,7 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                             var draft_order = DraftOrderResponse(
                                 DraftOrder(
                                     email = "",
-
-                                    line_items = listOf(newLineItem)
-
                                     line_items = updatedLineItem
-
                                 )
                             )
                             productsDetailsViewModel.modifyDraftOrder(
@@ -269,7 +265,6 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                                     requireContext()
                                 ).getFavID()!!, draft_order
                             )
-
                         }
                         is State.Failure -> {
                             Toast.makeText(
@@ -395,7 +390,7 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
         }
       
 
-    }
+
 
     fun formatDecimal(decimal: Double): String {
         val decimalFormat = DecimalFormat("0.00")
@@ -407,8 +402,6 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
         this.varientPosition=position
         Log.i("TAG", "onProductVariantClick: $variantID")
     }
-}
-    override fun onProductVariantClick(variantId: Long) {
-        this.variantID=variantId
-        }
+
+
 }

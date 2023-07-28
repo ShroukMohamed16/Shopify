@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context="CartFragment.UI.View.CartFragment">
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cartItemsConstraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <ProgressBar
         android:id="@+id/cartProgressBar"
         style="?android:attr/progressBarStyle"
@@ -66,32 +71,70 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <ImageView
-        android:id="@+id/NoCartIcon"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="250dp"
-        android:src="@drawable/ic_launcher_background"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
-
     <TextView
-        android:id="@+id/noCartTv"
+        android:id="@+id/noCartItemsTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Items Yet"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/NoCartIcon"
-        app:layout_constraintStart_toStartOf="@+id/NoCartIcon"
-        app:layout_constraintTop_toBottomOf="@+id/NoCartIcon"
-        tools:visibility="invisible" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nocartAnmi"
+        android:text="there is no products found"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/fontfile"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:visibility="gone"
+        />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/nocartAnmi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/no_orders"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/noInternetConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/cart_no_internet_connection_ani"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            android:visibility="gone"
+            app:lottie_rawRes="@raw/no_internet"
+            />
+        <TextView
+            android:id="@+id/cart_no_internet_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cart_no_internet_connection_ani"
+            android:text="@string/no_internet_connection"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/fontfile"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:visibility="gone"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
 

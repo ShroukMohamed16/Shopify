@@ -122,13 +122,11 @@ class MySharedPreferences private constructor(context: Context) {
     }
     fun getCustomerLastName(): String? {
         return sharedPreferences.getString(Constants.customer_LN,"")
-
     }
     fun saveTotalPrice(price:String){
-        sharedPreferences.edit().putString(Constants.customer_LN, price).apply()
+        sharedPreferences.edit().putString(Constants.TOTAL_PRICE, price).apply()
     }
     fun getTotalPrice(): String? {
-        return sharedPreferences.getString(Constants.customer_LN,"0.0")
-
+        return sharedPreferences.getString(Constants.TOTAL_PRICE,"0.0")
     }
 }
