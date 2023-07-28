@@ -308,6 +308,11 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                                     "inventoryQuantity",
                                     cartProduct?.variants?.get(varientPosition)?.inventoryQuantity.toString()
                                 )
+                                val cartVariantPosition = Property(
+                                    "cartVariantPosition",
+                                   varientPosition.toString()
+                                )
+
                                 val lineItem = line_items(
                                     title = cartProduct.title!!,
                                     quantity = 1,
@@ -316,7 +321,8 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                                     product_id = cartProduct.id!!,
                                     properties = arrayListOf(
                                         cartImageProperty,
-                                        cartInventoryQuantity
+                                        cartInventoryQuantity,
+                                        cartVariantPosition
                                     )
 
                                 )

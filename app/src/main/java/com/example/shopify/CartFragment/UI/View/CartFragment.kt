@@ -32,8 +32,13 @@ import com.example.shopify.base.line_items
 import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FragmentCartBinding
 import com.example.shopify.databinding.LanguageDialogBinding
+import com.example.shopify.productinfo.model.repository.ProductDetailsRepository
+import com.example.shopify.productinfo.remote.ProductDetailsClient
+import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
+import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModelFactory
 import com.example.shopify.utilities.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,12 +47,18 @@ class CartFragment : Fragment(), OnCartClickListener {
 
     lateinit var cartViewModel: CartViewModel
     lateinit var cartViewModelFactory: CartViewModelFactory
+    private lateinit var productsDetailsViewModel: ProductsDetailsViewModel
+    private lateinit var productsDetailsViewModelFactory: ProductsDetailsViewModelFactory
     lateinit var cartBinding: FragmentCartBinding
     lateinit var cartAdapter: CartAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var cartRecyclerView: RecyclerView
     lateinit var draftOrderResponse: DraftOrderResponse
     var totalPrice: Double = 0.0
+    val productIdsList = mutableListOf<Long>()
+    val productCountList = mutableListOf<Int>()
+
+    val variantPositionList = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +77,16 @@ class CartFragment : Fragment(), OnCartClickListener {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        productsDetailsViewModelFactory =
+            ProductsDetailsViewModelFactory(
+                ProductDetailsRepository.getInstance(
+                    ProductDetailsClient()
+                )
+            )
+        productsDetailsViewModel = ViewModelProvider(
+            this,
+            productsDetailsViewModelFactory
+        )[ProductsDetailsViewModel::class.java]
         cartViewModelFactory =
             CartViewModelFactory(CartRepository.getInstance(CartClient.getInstance()))
         cartViewModel = ViewModelProvider(this, cartViewModelFactory)[CartViewModel::class.java]
@@ -105,6 +126,24 @@ class CartFragment : Fragment(), OnCartClickListener {
                                 cartBinding.checkoutBtn.visibility = View.VISIBLE
                                 cartAdapter.setCartList(result.data.draft_order.line_items)
                                 calculateTotalPrice()
+                                for (i in 1 until result.data.draft_order!!.line_items.size){
+                                    productIdsList.add(result.data.draft_order!!.line_items[i].product_id!!)
+                                    variantPositionList.add(result.data.draft_order!!.line_items[i].properties[2].value!!.toInt())
+                                }
+                                for (i in 0 until productIdsList.size){
+                                    productsDetailsViewModel.getProductDetailsByID(productIdsList[i].toString())
+                                    productsDetailsViewModel.product.collect{ result->
+                                        when(result){
+                                            is State.Success->{
+                                                productCountList.add(result.data.product?.variants?.get(variantPositionList[i])?.inventoryQuantity!!)
+
+                                                Log.i("productCount", "onViewCreated:$i ${productCountList[i]}")
+                                            }
+                                            else->{}
+                                        }
+                                    }
+                                    delay(1000)
+                                }
                             }
                         }
                         is State.Loading -> {
@@ -131,7 +170,7 @@ class CartFragment : Fragment(), OnCartClickListener {
         }
         cartBinding.checkoutBtn.setOnClickListener {
             Navigation.findNavController(requireView())
-                .navigate(R.id.action_cartFragment_to_paymentFragment)
+                .navigate(R.id.action_cartFragment_to_addressFragment)
         }
     }
 
@@ -218,6 +257,8 @@ class CartFragment : Fragment(), OnCartClickListener {
         if (totalPrice == 0.0) {
             cartBinding.totalPriceTV.visibility = View.GONE
             cartBinding.checkoutBtn.visibility = View.GONE
+            cartBinding.nocartAnmi.visibility =View.VISIBLE
+            cartBinding.noCartItemsTxt.visibility=View.VISIBLE
         }
         MySharedPreferences.getInstance(requireContext()).saveTotalPrice(totalPrice.toString())
         val exchangedTotalPrice = formatDecimal(
