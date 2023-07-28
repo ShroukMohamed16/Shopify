@@ -49,25 +49,10 @@ class CartAdapter (
         }
         val quantity = currentItem.properties[1].value?.toInt()
         holder.binding.cartItemProductIncreaseCount.setOnClickListener {
-            if (currentQuantity!!<quantity!!){
-
-                currentQuantity=currentQuantity!!+1
-                holder.binding.cartItemProductCountTv.text=currentQuantity.toString()
-                var totalPrice =MySharedPreferences.getInstance(context).getTotalPrice()?.toDouble()
-            }else{
-                createAlert("","the available items finished out",context)
-            }
-           // listener.onCartIncreaseItemClickListener(quantity!!)
+            listener.onCartIncreaseItemClickListener(quantity!!,position+1,currentQuantity!!)
         }
         holder.binding.cartItemProductDecrease.setOnClickListener {
-            if (currentQuantity ==1){
-                createAlert("","can't have less than one item",context)
-
-            }else{
-                currentQuantity=currentQuantity!!-1
-                holder.binding.cartItemProductCountTv.text=currentQuantity.toString()
-            }
-            //listener.onCartDecreaseItemClickListener(quantity!!)
+            listener.onCartDecreaseItemClickListener(quantity!!,position+1,currentQuantity!!)
         }
 
     }

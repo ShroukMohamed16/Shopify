@@ -6,7 +6,7 @@ interface OnCartClickListener {
 
     fun onCartDeleteClickListener(lineItem: line_items)
 
-    fun onCartIncreaseItemClickListener(inventoryQuantity:Int)
+    fun onCartIncreaseItemClickListener(inventoryQuantity:Int,position:Int,currentQuantity:Int)
 
-    fun onCartDecreaseItemClickListener(inventoryQuantity:Int)
+    fun onCartDecreaseItemClickListener(inventoryQuantity:Int,position:Int,currentQuantity:Int)
 }
