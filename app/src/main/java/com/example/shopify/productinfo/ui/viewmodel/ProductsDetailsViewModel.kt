@@ -61,8 +61,8 @@ class ProductsDetailsViewModel(private val repositoryInterface: ProductDetailsRe
                 }
                 ?.collect{ data ->
                 }
+            }
         }
-    }
 
 
 

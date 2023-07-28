@@ -92,12 +92,12 @@ class SignInFragment : Fragment() {
 
         val cart_line_item = line_items(title = "cart item", quantity = 2, price = "1200")
         val cart_draftOrder =
-            DraftOrder(line_items = listOf(cart_line_item), note = Constants.CART_NOTE)
+            DraftOrder(line_items = arrayListOf(cart_line_item), note = Constants.CART_NOTE)
         cartDraftOrder = DraftOrderResponse(cart_draftOrder)
 
         val fav_line_item = line_items(title = "fav item", quantity = 1, price = "1500")
         val fav_draftOrder =
-            DraftOrder(line_items = listOf(fav_line_item), note = Constants.FAV_NOTE)
+            DraftOrder(line_items = arrayListOf(fav_line_item), note = Constants.FAV_NOTE)
         favDraftOrder = DraftOrderResponse(fav_draftOrder)
 
 
