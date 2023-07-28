@@ -22,33 +22,33 @@ class PaymentClient : PaymentRemoteSource {
     }
 
     override suspend fun postOrder(id: Long): Boolean {
-        var newDraftOrderId: Long? = 0L
+//        var newDraftOrderId: Long? = 0L
         var orderSuccess = false
-        try {
-            payment_Service.createOrder(id)
-            val newDraftOrderResponse = Auth_Service.createDraftOrder(DraftOrderResponse(
-                MySharedPreferences.getInstance(App.appContext).getCustomerEmail()?.let {
-                    DraftOrder(email = it,
-                        name = "cart_draft",
-                        line_items = listOf(
-                            line_items(
-                                title = "empty",
-                                quantity = 1,
-                                price = "0"
-                            )
-                        ))
-                }))
-
-            newDraftOrderId = newDraftOrderResponse.draft_order?.id
-
-            MySharedPreferences.getInstance(App.appContext).saveCartID(newDraftOrderId!!)
-            orderSuccess = true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d("TAG", e.message.toString())
-            orderSuccess = false
-
-        }
+//        try {
+//            payment_Service.createOrder(id)
+//            val newDraftOrderResponse = Auth_Service.createDraftOrder(DraftOrderResponse(
+//                MySharedPreferences.getInstance(App.appContext).getCustomerEmail()?.let {
+//                    DraftOrder(email = it,
+//                        name = "cart_draft",
+//                        line_items = listOf(
+//                            line_items(
+//                                title = "empty",
+//                                quantity = 1,
+//                                price = "0"
+//                            )
+//                        ))
+//                }))
+//
+//            newDraftOrderId = newDraftOrderResponse.draft_order?.id
+//
+//            MySharedPreferences.getInstance(App.appContext).saveCartID(newDraftOrderId!!)
+//            orderSuccess = true
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Log.d("TAG", e.message.toString())
+//            orderSuccess = false
+//
+//        }
         return orderSuccess
     }
 

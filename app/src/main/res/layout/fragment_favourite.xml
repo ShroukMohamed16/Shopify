@@ -13,6 +13,7 @@
         android:textSize="30dp"
         android:text="No Favourite Items"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
         app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
@@ -55,15 +56,16 @@
     <ProgressBar
         android:id="@+id/fav_progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:indeterminate="true"
+        android:visibility="gone"
         android:indeterminateTintMode="src_in"
         android:indeterminateTint="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/fav_rv"
-        app:layout_constraintStart_toStartOf="@+id/fav_rv"
-        app:layout_constraintTop_toTopOf="@+id/fav_rv" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

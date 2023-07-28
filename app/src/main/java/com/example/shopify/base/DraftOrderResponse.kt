@@ -21,7 +21,7 @@ data class DraftOrder(
     var source_name: String? = null,
     var tags: String? = null,
     var tax_exempt: Boolean? = null,
-    var tax_lines: ArrayList<TaxLine> = arrayListOf(),
+    var tax_lines: List<TaxLine> = listOf(),
     var applied_discount: AppliedDiscount? = AppliedDiscount(),
     var taxes_included: Boolean? = null,
     var total_tax: String? = null,

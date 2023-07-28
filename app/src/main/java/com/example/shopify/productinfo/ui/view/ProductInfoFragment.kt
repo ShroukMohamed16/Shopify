@@ -50,7 +50,10 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
     private var currentPage = 0
     private var variantList: List<Variant> = listOf()
     lateinit var product: Product
+
     var property = Property("", "")
+
+
     private val reviews = arrayOf(
         Reviews(
             "Bassant Mohamed",
@@ -220,6 +223,7 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
         }
 
         productBinding.productInfoAddToFavoriteIcon.setOnClickListener {
+
             productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
 
             productsDetailsViewModel.getDraftOrder(
@@ -245,14 +249,19 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                                 properties = arrayListOf(property)
                             )
 
-                            var oldlineItemsList = result.data.draft_order!!.line_items
+                            var oldLineItemsList = result.data.draft_order!!.line_items
                             var newLineItem = lineItem
-                            var updatedLineItem = oldlineItemsList + newLineItem
+
+                            var updatedLineItem = oldLineItemsList + newLineItem
 
                             var draft_order = DraftOrderResponse(
                                 DraftOrder(
                                     email = "",
+
                                     line_items = listOf(newLineItem)
+
+                                    line_items = updatedLineItem
+
                                 )
                             )
                             productsDetailsViewModel.modifyDraftOrder(
@@ -276,6 +285,7 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
 
                 }
             }
+
         }
 
 
@@ -381,6 +391,10 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                 }
             }
         }
+
+        }
+      
+
     }
 
     fun formatDecimal(decimal: Double): String {
@@ -393,4 +407,8 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
         this.varientPosition=position
         Log.i("TAG", "onProductVariantClick: $variantID")
     }
+}
+    override fun onProductVariantClick(variantId: Long) {
+        this.variantID=variantId
+        }
 }

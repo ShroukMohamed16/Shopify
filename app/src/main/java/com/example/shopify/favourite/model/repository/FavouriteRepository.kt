@@ -19,12 +19,12 @@ class FavouriteRepository(private val favouriteRemoteSource: FavouriteRemoteSour
         }
     }
 
-    override suspend fun getFavDraftOrder(id: String): Flow<DraftOrderResponse> {
+    override suspend fun getFavDraftOrder(id: Long): Flow<DraftOrderResponse> {
         return favouriteRemoteSource.getFavDraftOrderById(id)
     }
 
     override suspend fun modifyFavDraftOrder(
-        id: String,
+        id: Long,
         orderResponse: DraftOrderResponse
     ): Flow<DraftOrderResponse> {
         return favouriteRemoteSource.modifyFavDraftOrder(id,orderResponse)

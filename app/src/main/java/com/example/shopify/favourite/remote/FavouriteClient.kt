@@ -14,12 +14,12 @@ class FavouriteClient: FavouriteRemoteSource {
         RetrofitHelper.retrofitInstance.create(FavouriteService::class.java)
     }
 
-    override suspend fun getFavDraftOrderById(id: String): Flow<DraftOrderResponse> {
+    override suspend fun getFavDraftOrderById(id: Long): Flow<DraftOrderResponse> {
         return flowOf(favouriteService.getFavDraftOrderById(id))
     }
 
     override suspend fun modifyFavDraftOrder(
-        id: String,
+        id: Long,
         orderResponse: DraftOrderResponse
     ): Flow<DraftOrderResponse> {
         return flowOf(favouriteService.modifyFavDraftOrder(id,orderResponse))

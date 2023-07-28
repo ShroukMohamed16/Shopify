@@ -5,6 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Path
 
 interface FavouriteRemoteSource {
-    suspend fun getFavDraftOrderById(id:String) : Flow<DraftOrderResponse>
-    suspend fun modifyFavDraftOrder(id: String,orderResponse: DraftOrderResponse):Flow<DraftOrderResponse>
+    suspend fun getFavDraftOrderById(id:Long) : Flow<DraftOrderResponse>
+    suspend fun modifyFavDraftOrder(id: Long,orderResponse: DraftOrderResponse):Flow<DraftOrderResponse>
 }
