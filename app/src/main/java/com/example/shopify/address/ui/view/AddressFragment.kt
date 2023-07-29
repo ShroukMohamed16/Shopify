@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,11 +26,12 @@ import com.example.shopify.address.ui.viewmodel.AddressViewModelFactory
 import com.example.shopify.base.State
 import com.example.shopify.base.shipping_address
 import com.example.shopify.databinding.*
+import com.example.shopify.utilities.Constants
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.checkConnectivity
 import com.example.shopify.utilities.getLastLocation
-import kotlinx.coroutines.delay
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.util.*
 
 
 class AddressFragment : Fragment(), OnAddressClickListener {
@@ -41,7 +41,6 @@ class AddressFragment : Fragment(), OnAddressClickListener {
     lateinit var addressRecyclerView: RecyclerView
     lateinit var factory: AddressViewModelFactory
     lateinit var viewModel: AddressViewModel
-    lateinit var addressList: GetAddressResponse
 
 
     lateinit var cartViewModel: CartViewModel
@@ -77,47 +76,60 @@ class AddressFragment : Fragment(), OnAddressClickListener {
         addressRecyclerView.adapter = addressAdapter
         addressRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        viewModel.getCustomerAddress(MySharedPreferences.getInstance(requireContext()).getCustomerID()!!)
-        lifecycleScope.launch {
-            viewModel.getAddress.collect { result ->
-                when (result) {
-                    is State.Success -> {
-                        if (result.data==null){
-                            addressBinding.addressProgressBar.visibility = View.GONE
-                            addressBinding.addressRecycler.visibility=View.GONE
-                            addressBinding.noAddressImage.visibility=View.VISIBLE
-                            addressBinding.textView2.visibility=View.VISIBLE
-                        }else{
-                            if(result.data?.addresses?.size!! >0){
-                                addressBinding.addressProgressBar.visibility = View.GONE
-                                addressBinding.noAddressImage.visibility=View.GONE
-                                addressBinding.textView2.visibility=View.GONE
-                                addressAdapter.setAddressList(result.data?.addresses)
-                                addressBinding.addressRecycler.adapter = addressAdapter
-                            }else{
-                                addressBinding.addressProgressBar.visibility = View.GONE
-                                addressBinding.addressRecycler.visibility=View.GONE
-                                addressBinding.noAddressImage.visibility=View.VISIBLE
-                                addressBinding.textView2.visibility=View.VISIBLE
+        if (checkConnectivity(requireContext())){
+
+            addressBinding.addressRecycler.visibility=View.VISIBLE
+            viewModel.getCustomerAddress(MySharedPreferences.getInstance(requireContext()).getCustomerID()!!)
+            lifecycleScope.launch {
+                viewModel.getAddress.collect { result ->
+                    try {
+
+                        when (result) {
+                            is State.Success -> {
+                                if (result.data==null){
+                                    addressBinding.addressProgressBar.visibility = View.GONE
+                                    addressBinding.addressRecycler.visibility=View.GONE
+                                }else{
+                                    if(result.data?.addresses?.size!! >0){
+                                        addressBinding.addressProgressBar.visibility = View.GONE
+                                        addressAdapter.setAddressList(result.data?.addresses)
+                                        addressBinding.addressRecycler.adapter = addressAdapter
+                                    }else{
+                                        addressBinding.addressProgressBar.visibility = View.GONE
+                                        addressBinding.addressRecycler.visibility=View.GONE
+                                    }
+                                }
+
+
                             }
+                            is State.Loading -> {
+                                addressBinding.addressProgressBar.visibility = View.VISIBLE
+                                Log.i("TAG", "onViewCreated: loading")
+                            }
+                            is State.Failure ->
+                                Log.i("TAG", "onViewCreated: error")
+                            else -> {}
                         }
+                    }catch (e: Exception) {
+                        Log.e("address", "Error: ${e.message}")
+                    }
 
 
-                    }
-                    is State.Loading -> {
-                        addressBinding.addressProgressBar.visibility = View.VISIBLE
-                        Log.i("TAG", "onViewCreated: loading")
-                    }
-                    is State.Failure ->
-                        Log.i("TAG", "onViewCreated: error")
-                    else -> {}
                 }
-
-
             }
+        }else{
+
+            addressBinding.addressRecycler.visibility=View.GONE
+            addressBinding.addressProgressBar.visibility=View.GONE
+            addressBinding.addressNoInternetConstraint.visibility=View.GONE
         }
         addressBinding.addressFAB.setOnClickListener {
-            displayLocationDialog()
+            if (checkConnectivity(requireContext())){
+                displayLocationDialog()
+            }else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
@@ -141,48 +153,12 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                     .navigate(R.id.action_addressFragment_to_addAddressFragment)
             } else {
                 dialog.dismiss()
-                Navigation.findNavController(requireView())
-                    .navigate(R.id.action_addressFragment_to_mapsFragment)
-            }
-        }
-
-    }
-
-
-    override fun onAddressDeleteListener(id: Long, address_id: Long) {
-        viewModel.deleteCustomerAddress(id, address_id)
-    }
-
-    override fun onAddressCardDeleteListener(address: Address) {
-
-        lifecycleScope.launch {
-            cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString())
-            cartViewModel.getCart.collect { result ->
-                when (result) {
-                    is State.Success -> {
-                            var draftOrderResponse = result.data
-                        var shippingAddress = shipping_address(address1 = address.address1, address2 = address.address2, city = address.city, country = address.country, province = address.province, zip = address.zip, phone = address.phone)
-                        Log.i("shippingAddress", "onAddressCardDeleteListener: $shippingAddress")
-                        draftOrderResponse.draft_order!!.shipping_address=shippingAddress
-                        Log.i("shippingAddress", "draftOrderResponse: $draftOrderResponse")
-
-                        cartViewModel.editCartDraftOrderById(
-                            MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
-                            draftOrderResponse
-                        )
-
-                        addressBinding.addressProgressBar.visibility=View.GONE
-                        Navigation.findNavController(requireView())
-                            .navigate(R.id.action_addressFragment_to_paymentFragment)
-                        }
-
-                    is State.Loading -> {
-                       addressBinding.addressProgressBar.visibility=View.VISIBLE
-                    }
-                    is State.Failure -> {
-
-                        addressBinding.addressProgressBar.visibility=View.GONE
-                    }
+                if (checkConnectivity(requireContext())){
+                    Navigation.findNavController(requireView())
+                        .navigate(R.id.action_addressFragment_to_mapsFragment)
+                }else{
+                    Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -190,4 +166,53 @@ class AddressFragment : Fragment(), OnAddressClickListener {
     }
 
 
+    override fun onAddressDeleteListener(id: Long, address_id: Long) {
+        if (checkConnectivity(requireContext())){
+            viewModel.deleteCustomerAddress(id, address_id)
+        }else{
+            Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    override fun onAddressCardClickListener(address: Address) {
+        if (MySharedPreferences.getInstance(requireContext()).getAddressDestination()==Constants.PAYMENT_ADDRESS_DESTINATION){
+            if (checkConnectivity(requireContext())){
+                lifecycleScope.launch {
+                    cartViewModel.getCartDraftOrderById(MySharedPreferences.getInstance(requireContext()).getCartID().toString())
+                    cartViewModel.getCart.collect { result ->
+                        when (result) {
+                            is State.Success -> {
+                                var draftOrderResponse = result.data
+                                var shippingAddress = shipping_address(address1 = address.address1, address2 = address.address2, city = address.city, country = address.country, province = address.province, zip = address.zip, phone = address.phone)
+                                Log.i("shippingAddress", "onAddressCardClickListener: $shippingAddress")
+                                draftOrderResponse.draft_order!!.shipping_address=shippingAddress
+                                Log.i("shippingAddress", "draftOrderResponse: $draftOrderResponse")
+
+                                cartViewModel.editCartDraftOrderById(
+                                    MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                                    draftOrderResponse
+                                )
+
+                                addressBinding.addressProgressBar.visibility=View.GONE
+                                Navigation.findNavController(requireView())
+                                    .navigate(R.id.action_addressFragment_to_paymentFragment)
+                            }
+
+                            is State.Loading -> {
+                                addressBinding.addressProgressBar.visibility=View.VISIBLE
+                            }
+                            is State.Failure -> {
+
+                                addressBinding.addressProgressBar.visibility=View.GONE
+                            }
+                        }
+                    }
+                }
+            }else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        }
+    }
 }

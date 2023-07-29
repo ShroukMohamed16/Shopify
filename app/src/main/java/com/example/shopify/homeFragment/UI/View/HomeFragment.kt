@@ -38,6 +38,7 @@ import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeVi
 import com.example.shopify.network
 import com.example.shopify.utilities.MyPriceRules
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.checkConnectivity
 import com.example.shopify.utilities.copyToClipboard
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -94,44 +95,56 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
         Log.i("TAG", "onViewCreated: $fav_id")
 
 
-
-
-
-        viewModel.getAllBrands()
-        brandAdapter = BrandAdapter(brandList, requireContext(), this)
-        Log.i("TAG", "onViewCreated: get all brands")
-        lifecycleScope.launch {
-            try {
-                viewModel.brand.collect { result ->
-                    when (result) {
-                        is State.Loading -> {
-                            homeBinding.progressBar.visibility = View.VISIBLE
-                            homeBinding.brandsRV.visibility = View.GONE
-                            homeBinding.brandTextView.visibility = View.GONE
-                            Log.i("TAG", "onViewCreated: loaaaaaaaading")
-                        }
-                        is State.Success -> {
-                            Log.i("TAG", "onViewCreated: successsssssss")
-                            homeBinding.progressBar.visibility = View.GONE
-                            homeBinding.brandsRV.visibility = View.VISIBLE
-                            homeBinding.brandTextView.visibility = View.VISIBLE
-                            brandList = result.data.smart_collections
-                            gridLayoutmanager = GridLayoutManager(requireContext(), 2,
-                                GridLayoutManager.VERTICAL, false)
-                            brandAdapter.setBrandList(brandList)
-                            homeBinding.brandsRV.layoutManager = gridLayoutmanager
-                            homeBinding.brandsRV.adapter = brandAdapter
-                        }
-                        else -> {
-                            Log.i("TAG", "onViewCreated: failur")
-                        }
+if(checkConnectivity(requireContext())){
+    viewModel.getAllBrands()
+    brandAdapter = BrandAdapter(brandList, requireContext(), this)
+    Log.i("TAG", "onViewCreated: get all brands")
+    lifecycleScope.launch {
+        try {
+            viewModel.brand.collect { result ->
+                when (result) {
+                    is State.Loading -> {
+                        homeBinding.progressBar.visibility = View.VISIBLE
+                        homeBinding.brandsRV.visibility = View.GONE
+                        homeBinding.brandTextView.visibility = View.GONE
+                        Log.i("TAG", "onViewCreated: loaaaaaaaading")
+                    }
+                    is State.Success -> {
+                        Log.i("TAG", "onViewCreated: successsssssss")
+                        homeBinding.progressBar.visibility = View.GONE
+                        homeBinding.brandsRV.visibility = View.VISIBLE
+                        homeBinding.brandTextView.visibility = View.VISIBLE
+                        brandList = result.data.smart_collections
+                        gridLayoutmanager = GridLayoutManager(requireContext(), 2,
+                            GridLayoutManager.VERTICAL, false)
+                        brandAdapter.setBrandList(brandList)
+                        homeBinding.brandsRV.layoutManager = gridLayoutmanager
+                        homeBinding.brandsRV.adapter = brandAdapter
+                    }
+                    else -> {
+                        Log.i("TAG", "onViewCreated: failur")
                     }
                 }
-            } catch (e: Exception) {
-
-                Log.e("TAG", "Error: ${e.message}")
             }
+        } catch (e: Exception) {
+
+            Log.e("TAG", "Error: ${e.message}")
         }
+    }
+}else{
+    homeBinding.searchIcon.visibility=View.GONE
+    homeBinding.adsViewPager.visibility = View.GONE
+    homeBinding.searchEditText.visibility = View.GONE
+    homeBinding.txtSearch.visibility = View.GONE
+    homeBinding.brandTextView.visibility = View.GONE
+    homeBinding.brandsRV.visibility = View.GONE
+    homeBinding.noInternetText.visibility = View.VISIBLE
+    homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
+    homeBinding.searchByProduct.visibility=View.GONE
+}
+
+
+
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -253,6 +266,7 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
                     homeBinding.noInternetText.visibility = View.VISIBLE
                     homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
                     homeBinding.searchByProduct.visibility=View.GONE
+                    homeBinding.searchIcon.visibility=View.GONE
                     Snackbar.make(view!!,
                         R.string.no_network_connection,
                         Snackbar.LENGTH_LONG)

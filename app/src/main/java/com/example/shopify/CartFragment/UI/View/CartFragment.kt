@@ -37,6 +37,7 @@ import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModelFactory
 import com.example.shopify.utilities.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -54,9 +55,7 @@ class CartFragment : Fragment(), OnCartClickListener {
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var cartRecyclerView: RecyclerView
     lateinit var draftOrderResponse: DraftOrderResponse
-    var totalPrice: Double = 0.0
     val productIdsList = mutableListOf<Long>()
-    val productCountList = mutableListOf<Int>()
 
     val variantPositionList = mutableListOf<Int>()
 
@@ -176,8 +175,14 @@ class CartFragment : Fragment(), OnCartClickListener {
             cartBinding.cartItemsConstraint.visibility = View.GONE
         }
         cartBinding.checkoutBtn.setOnClickListener {
-            Navigation.findNavController(requireView())
-                .navigate(R.id.action_cartFragment_to_addressFragment)
+            if (checkConnectivity(requireContext())){
+                MySharedPreferences.getInstance(requireContext()).saveAddressDestination(Constants.PAYMENT_ADDRESS_DESTINATION)
+                Navigation.findNavController(requireView())
+                    .navigate(R.id.action_cartFragment_to_addressFragment)
+            }else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
@@ -190,18 +195,25 @@ class CartFragment : Fragment(), OnCartClickListener {
         dialog.show()
         deleteCartDialog.dialogYesBtn.setOnClickListener {
             cartAdapter.setCartList(listOf())
-            val list = draftOrderResponse.draft_order?.line_items
-            val mutableList = list?.toMutableList()
-            mutableList?.remove(lineItem)
-            draftOrderResponse.draft_order?.line_items = mutableList!!.toList()
-            cartViewModel.editCartDraftOrderById(
-                MySharedPreferences.getInstance(
-                    requireContext()
-                ).getCartID().toString(), draftOrderResponse
-            )
-            dialog.dismiss()
-            calculateTotalPrice()
-            cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
+            if (checkConnectivity(requireContext())){
+                val list = draftOrderResponse.draft_order?.line_items
+                val mutableList = list?.toMutableList()
+                mutableList?.remove(lineItem)
+                draftOrderResponse.draft_order?.line_items = mutableList!!.toList()
+                cartViewModel.editCartDraftOrderById(
+                    MySharedPreferences.getInstance(
+                        requireContext()
+                    ).getCartID().toString(), draftOrderResponse
+                )
+                dialog.dismiss()
+                calculateTotalPrice()
+                cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
+            }else{
+                dialog.dismiss()
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
+
         }
         deleteCartDialog.dialogNoBtn.setOnClickListener {
             dialog.dismiss()
@@ -215,18 +227,24 @@ class CartFragment : Fragment(), OnCartClickListener {
         currentQuantity: Int
     ) {
         var current = currentQuantity
-        if (currentQuantity < inventoryQuantity) {
-            current += 1
-            draftOrderResponse.draft_order!!.line_items[position].quantity = current
-            cartViewModel.editCartDraftOrderById(
-                MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
-                draftOrderResponse
-            )
-            cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
-            calculateTotalPrice()
-        } else {
-            createAlert("", "the available items finished out", requireContext())
+        if (checkConnectivity(requireContext())){
+            if (currentQuantity < inventoryQuantity) {
+                current += 1
+                draftOrderResponse.draft_order!!.line_items[position].quantity = current
+                cartViewModel.editCartDraftOrderById(
+                    MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                    draftOrderResponse
+                )
+                cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
+                calculateTotalPrice()
+            } else {
+                createAlert("", "the available items finished out", requireContext())
+            }
+        }else{
+            Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                .show()
         }
+
     }
 
     override fun onCartDecreaseItemClickListener(
@@ -235,19 +253,23 @@ class CartFragment : Fragment(), OnCartClickListener {
         currentQuantity: Int
     ) {
         var current = currentQuantity
-        if (currentQuantity == 1) {
-            createAlert("", "can't have less than one item", requireContext())
+            if (checkConnectivity(requireContext())){
+                if (currentQuantity == 1) {
+                    createAlert("", "can't have less than one item", requireContext())
 
-        } else {
-            current -= 1
-            draftOrderResponse.draft_order!!.line_items[position].quantity = current
-            cartViewModel.editCartDraftOrderById(
-                MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
-                draftOrderResponse
-            )
-            cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
-            calculateTotalPrice()
-        }
+                } else {
+                    current -= 1
+                    draftOrderResponse.draft_order!!.line_items[position].quantity = current
+                    cartViewModel.editCartDraftOrderById(
+                        MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                        draftOrderResponse
+                    )
+                    cartAdapter.setCartList(draftOrderResponse.draft_order!!.line_items)
+                    calculateTotalPrice()
+                } }else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
     }
 
 

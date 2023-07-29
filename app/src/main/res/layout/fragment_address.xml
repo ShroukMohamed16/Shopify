@@ -11,15 +11,15 @@
         android:id="@+id/addressFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="284dp"
+        android:layout_marginStart="300dp"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/primary"
         android:clickable="true"
         android:src="@drawable/add_address_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressRecycler"
-        app:layout_constraintVertical_bias="0.038"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.778"
         app:rippleColor="@color/white"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -55,31 +55,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/no_address_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@drawable/no_address"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/addressNoInternetConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.453" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="No Addresses yet! Add New Address"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/no_address_image" />
-
-
+        android:visibility="gone">
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/address_no_internet_connection_ani"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"
+            android:visibility="visible"
+            app:lottie_rawRes="@raw/no_internet"
+            />
+        <TextView
+            android:id="@+id/cart_no_internet_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/address_no_internet_connection_ani"
+            android:text="@string/no_internet_connection"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/fontfile"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:visibility="visible"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -144,4 +144,10 @@ class MySharedPreferences private constructor(context: Context) {
     fun getTotalPrice(): String? {
         return sharedPreferences.getString(Constants.TOTAL_PRICE,"0.0")
     }
+    fun saveAddressDestination(destination:String){
+        sharedPreferences.edit().putString(Constants.ADDRESS_DESTINATION, destination).apply()
+    }
+    fun getAddressDestination(): String? {
+        return sharedPreferences.getString(Constants.ADDRESS_DESTINATION, Constants.SETTING_ADDRESS_DESTINATION)
+    }
 }

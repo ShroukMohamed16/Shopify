@@ -17,9 +17,13 @@ object Constants {
 
     const val CART_NOTE = "cart"
     const val FAV_NOTE = "favourite"
+    const val ADDRESS_DESTINATION="address_destination"
     var first_name = "first_name"
     var last_name = "last_name"
     var CustomerListResponseSize = 0
+    const val SETTING_ADDRESS_DESTINATION="Setting"
+
+    const val PAYMENT_ADDRESS_DESTINATION="payment"
 
 
 

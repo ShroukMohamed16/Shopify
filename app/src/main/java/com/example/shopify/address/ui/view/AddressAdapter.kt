@@ -11,7 +11,6 @@ import com.example.shopify.R
 import com.example.shopify.address.model.Address
 import com.example.shopify.address.model.GetAddressResponse
 import com.example.shopify.databinding.AddressItemBinding
-import com.example.shopify.homeFragment.Model.DataCalss.SmartCollection
 
 class AddressAdapter (
     private var AddressList: GetAddressResponse?,
@@ -68,7 +67,7 @@ class AddressAdapter (
           "${currentAddress?.address1} ${currentAddress?.address2} ${currentAddress?.city} ${currentAddress?.country}"
 
         holder.binding.addressItemCardView.setOnClickListener {
-            listener.onAddressCardDeleteListener(currentAddress!!)
+            listener.onAddressCardClickListener(currentAddress!!)
         }
     }
 

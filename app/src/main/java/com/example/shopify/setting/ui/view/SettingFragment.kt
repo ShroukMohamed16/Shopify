@@ -84,7 +84,6 @@ class SettingFragment : Fragment(), OnClickCurrency {
                             }
                             Log.i("TAG", "onViewCreated is currency setting : $currencyList")
 
-
                         }
                         else -> {
                             Log.i("TAG", "onViewCreated: failur")
@@ -118,12 +117,11 @@ class SettingFragment : Fragment(), OnClickCurrency {
             }
         }
 
-
         settingBinding.AddressCard.setOnClickListener {
             if (checkConnectivity(requireContext())){
-
                 Navigation.findNavController(view)
                     .navigate(R.id.action_settingFragment_to_addressFragment)
+                MySharedPreferences.getInstance(requireContext()).saveAddressDestination(Constants.SETTING_ADDRESS_DESTINATION)
             }
             else{
                 Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)

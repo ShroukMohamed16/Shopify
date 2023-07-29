@@ -32,7 +32,6 @@ class App : Application() {
         appContext = applicationContext
         if (checkConnectivity(this)) {
             repository = BrandsRepository.getInstance(BrandsClient())
-
             CoroutineScope(Dispatchers.IO).launch {
                 repository.getPriceRules().collect {
                     for (i in 0 until it.price_rules.size) {
