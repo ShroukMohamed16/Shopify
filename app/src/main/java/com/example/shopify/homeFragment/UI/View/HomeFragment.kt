@@ -97,45 +97,41 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
 
 
 
-
         viewModel.getAllBrands()
         brandAdapter = BrandAdapter(brandList, requireContext(), this)
         Log.i("TAG", "onViewCreated: get all brands")
         lifecycleScope.launch {
-            viewModel.brand.collect { result ->
-                when (result) {
-                    is State.Loading -> {
-                        homeBinding.progressBar.visibility = View.VISIBLE
-                        homeBinding.brandsRV.visibility = View.GONE
-                        homeBinding.brandTextView.visibility = View.GONE
-                        Log.i("TAG", "onViewCreated: loaaaaaaaading")
-
-
-                    }
-                    is State.Success -> {
-                        Log.i("TAG", "onViewCreated: successsssssss")
-                        homeBinding.progressBar.visibility = View.GONE
-                        homeBinding.brandsRV.visibility = View.VISIBLE
-                        homeBinding.brandTextView.visibility = View.VISIBLE
-                        brandList = result.data.smart_collections
-                        gridLayoutmanager = GridLayoutManager(requireContext(), 2,
-                            GridLayoutManager.VERTICAL, false)
-                        brandAdapter.setBrandList(brandList)
-                        homeBinding.brandsRV.layoutManager = gridLayoutmanager
-                        homeBinding.brandsRV.adapter = brandAdapter
-
-
-                    }
-                    else -> {
-                        Log.i("TAG", "onViewCreated: failur")
-
-
+            try {
+                viewModel.brand.collect { result ->
+                    when (result) {
+                        is State.Loading -> {
+                            homeBinding.progressBar.visibility = View.VISIBLE
+                            homeBinding.brandsRV.visibility = View.GONE
+                            homeBinding.brandTextView.visibility = View.GONE
+                            Log.i("TAG", "onViewCreated: loaaaaaaaading")
+                        }
+                        is State.Success -> {
+                            Log.i("TAG", "onViewCreated: successsssssss")
+                            homeBinding.progressBar.visibility = View.GONE
+                            homeBinding.brandsRV.visibility = View.VISIBLE
+                            homeBinding.brandTextView.visibility = View.VISIBLE
+                            brandList = result.data.smart_collections
+                            gridLayoutmanager = GridLayoutManager(requireContext(), 2,
+                                GridLayoutManager.VERTICAL, false)
+                            brandAdapter.setBrandList(brandList)
+                            homeBinding.brandsRV.layoutManager = gridLayoutmanager
+                            homeBinding.brandsRV.adapter = brandAdapter
+                        }
+                        else -> {
+                            Log.i("TAG", "onViewCreated: failur")
+                        }
                     }
                 }
+            } catch (e: Exception) {
 
+                Log.e("TAG", "Error: ${e.message}")
             }
         }
-
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -259,11 +255,13 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
                     homeBinding.brandsRV.visibility = View.GONE
                     homeBinding.noInternetText.visibility = View.VISIBLE
                     homeBinding.noInternetConnectionAni.visibility = View.VISIBLE
+                    homeBinding.searchByProduct.visibility=View.GONE
                     Snackbar.make(view!!,
                         R.string.no_network_connection,
                         Snackbar.LENGTH_LONG)
                         .show()
                 } else {
+                    homeBinding.searchByProduct.visibility=View.VISIBLE
                     homeBinding.adsViewPager.visibility = View.VISIBLE
                     homeBinding.searchEditText.visibility = View.VISIBLE
                     homeBinding.txtSearch.visibility = View.VISIBLE
@@ -279,7 +277,7 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
     }
 
 
-    fun displayCouponDialog(code: String) {
+    private fun displayCouponDialog(code: String) {
         val builder = AlertDialog.Builder(requireContext())
         val couponDialog = CopounDialogBinding.inflate(layoutInflater)
         builder.setView(couponDialog.root)
@@ -308,5 +306,8 @@ class HomeFragment : Fragment(), OnBrandClick, OnAdsClickListener {
         }
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        activity?.unregisterReceiver(connectivityReceiver)
+    }
 }

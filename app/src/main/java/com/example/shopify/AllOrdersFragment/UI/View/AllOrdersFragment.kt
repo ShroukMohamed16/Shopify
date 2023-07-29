@@ -53,7 +53,6 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
                         allOrderBinding.ordersRecyclerView.visibility = View.GONE
                     }
 
-
                     is State.Success -> {
                         Log.i("TAG", "onViewCreated: success the order List")
                         val orderList = result.data.orders
@@ -82,12 +81,17 @@ class AllOrdersFragment : Fragment(), OnClickOrder {
             }
         }
 
-
     }
 
     override fun onClickOrder(order: Order) {
         val action = AllOrdersFragmentDirections.actionAllOrdersFragmentToOrderFragment(order)
         allOrderBinding.root.findNavController().navigate(action)
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        allOrderBinding.ordersRecyclerView.apply {
+            layoutManager = null
+            adapter = null
+        }
+    }
 }

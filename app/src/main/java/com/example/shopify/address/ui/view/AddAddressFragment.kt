@@ -56,13 +56,19 @@ class AddAddressFragment : Fragment() {
         return addAddressBinding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         factory =
             AddressViewModelFactory(AddressRepository.getInstance(AddressClient.getInstance()))
         viewModel = ViewModelProvider(this, factory).get(AddressViewModel::class.java)
 
-        getAddress(requireContext(), MyLocation.lat!!, MyLocation.lng!!)
+        if(MyLocation.lat==null|| MyLocation.lng==null){
+            getAddress(requireContext(), 30.0709201, 31.0213832)
+        }else{
+            getAddress(requireContext(), MyLocation.lat!!, MyLocation.lng!!)
+        }
+
         addAddressBinding.cityET.text =
             "City: ${MyAddress.city}"
 
@@ -72,9 +78,6 @@ class AddAddressFragment : Fragment() {
         addAddressBinding.ZIPCodeET.text =
             "ZipCode: ${MyAddress.zipCode}"
 
-
-
-
         addAddressBinding.addressSaveBtn.setOnClickListener {
             address1 = addAddressBinding.address1ET.text.toString().trim()
             address2 = addAddressBinding.address2ET.text.toString().trim()
@@ -82,7 +85,6 @@ class AddAddressFragment : Fragment() {
             if (addAddressBinding.PhoneET.text.length != 11) {
                 Toast.makeText(requireContext(), "Enter Available Number", Toast.LENGTH_SHORT)
                     .show()
-
             } else if (address1.isEmpty() || address2.isEmpty() || phone.isEmpty()) {
                 Toast.makeText(requireContext(), "You must fill all the fields", Toast.LENGTH_SHORT)
                     .show()
