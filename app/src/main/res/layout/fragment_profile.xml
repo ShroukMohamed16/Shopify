@@ -270,7 +270,6 @@
      android:id="@+id/profileLogoutBtn"
      android:layout_width="250dp"
      android:layout_height="wrap_content"
-     android:layout_marginTop="20dp"
      android:backgroundTint="@color/primary"
      android:text="@string/logout"
      android:textColor="@color/white"

@@ -27,6 +27,7 @@ import com.example.shopify.homeFragment.UI.View.FileName
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModel.HomeViewModel
 import com.example.shopify.homeFragment.UI.ViewModel.HomeViewModelFactory.HomeViewModelFactory
 import com.example.shopify.network
+import com.example.shopify.utilities.checkConnectivity
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -62,42 +63,50 @@ class CategoryFragment : Fragment(), OnClickCategory {
             AllCategoriesViewModelFactory(AllCategoriesRepository.getInstance(AllCategoriesClient()))
         viewModel = ViewModelProvider(this, factory).get(AllCategoriesViewModel::class.java)
 
-        viewModel.getAllCategories()
-        catAdapter = AllCategoriesAdapter(categoryList, requireContext(), this)
-        lifecycleScope.launch {
-            viewModel.category.collect { result ->
-                when (result) {
-                    is State.Loading -> {
-                        Log.i("TAG", "onViewCreated: categ loaaaading")
-                        catBinding.categoryProgressBar.visibility = View.VISIBLE
-                        catBinding.categoryRecyclerView.visibility = View.GONE
+        if(checkConnectivity(requireContext())){
+            viewModel.getAllCategories()
+            catAdapter = AllCategoriesAdapter(categoryList, requireContext(), this)
+            lifecycleScope.launch {
+                viewModel.category.collect { result ->
+                    when (result) {
+                        is State.Loading -> {
+                            Log.i("TAG", "onViewCreated: categ loaaaading")
+                            catBinding.categoryProgressBar.visibility = View.VISIBLE
+                            catBinding.categoryRecyclerView.visibility = View.GONE
 
 
+                        }
+                        is State.Success -> {
+                            Log.i("TAG", "onViewCreated: categ succcesssss")
+                            Log.i("TAG", "onViewCreated: categ ${result.data}")
+                            catBinding.categoryProgressBar.visibility = View.GONE
+                            catBinding.categoryRecyclerView.visibility = View.VISIBLE
+                            categoryList = result.data.custom_collections
+                            linearLayoutManager = LinearLayoutManager(requireContext())
+                            linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+                            catAdapter.setCategoryList(categoryList)
+                            catBinding.categoryRecyclerView.layoutManager = linearLayoutManager
+                            catBinding.categoryRecyclerView.adapter = catAdapter
+
+
+                        }
+                        else -> {
+                            Log.i("TAG", "onViewCreated: failur")
+
+
+                        }
                     }
-                    is State.Success -> {
-                        Log.i("TAG", "onViewCreated: categ succcesssss")
-                        Log.i("TAG", "onViewCreated: categ ${result.data}")
-                        catBinding.categoryProgressBar.visibility = View.GONE
-                        catBinding.categoryRecyclerView.visibility = View.VISIBLE
-                        categoryList = result.data.custom_collections
-                        linearLayoutManager = LinearLayoutManager(requireContext())
-                        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-                        catAdapter.setCategoryList(categoryList)
-                        catBinding.categoryRecyclerView.layoutManager = linearLayoutManager
-                        catBinding.categoryRecyclerView.adapter = catAdapter
 
-
-                    }
-                    else -> {
-                        Log.i("TAG", "onViewCreated: failur")
-
-
-                    }
                 }
 
             }
-
+        }else{
+            catBinding.categoryProgressBar.visibility = View.GONE
+            catBinding.categoryRecyclerView.visibility = View.GONE
+            catBinding.noInternetText.visibility = View.VISIBLE
+            catBinding.noInternetConnectionAni.visibility = View.VISIBLE
         }
+
     }
     override fun onStop() {
         super.onStop()

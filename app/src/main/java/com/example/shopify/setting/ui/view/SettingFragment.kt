@@ -31,7 +31,9 @@ import com.example.shopify.setting.ui.viewModel.SettingViewModel
 import com.example.shopify.setting.ui.viewModel.SettingViewModelFactory
 import com.example.shopify.utilities.Constants
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.checkConnectivity
 import com.example.shopify.utilities.setAppLanguage
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,62 +66,78 @@ class SettingFragment : Fragment(), OnClickCurrency {
         viewModel = ViewModelProvider(this, factory).get(SettingViewModel::class.java)
         settingBinding.currencyTV.text =
             MySharedPreferences.getInstance(requireContext()).getCurrencyCode()
-        viewModel.getAllCurrencies()
-        lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.currency.collect { result ->
-                when (result) {
-                    is State.Loading -> {
+        if(checkConnectivity(requireContext())){
 
-                    }
-                    is State.Success -> {
+            viewModel.getAllCurrencies()
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.currency.collect { result ->
+                    when (result) {
+                        is State.Loading -> {
 
-                        if (result.data.supported_codes.isEmpty()) {
-                            Toast.makeText(requireContext(), "loaaading", Toast.LENGTH_SHORT).show()
-                        } else {
-                            currencyList = result.data.supported_codes
                         }
-                        Log.i("TAG", "onViewCreated is currency setting : $currencyList")
+                        is State.Success -> {
+
+                            if (result.data.supported_codes.isEmpty()) {
+                                Toast.makeText(requireContext(), "loaaading", Toast.LENGTH_SHORT).show()
+                            } else {
+                                currencyList = result.data.supported_codes
+                            }
+                            Log.i("TAG", "onViewCreated is currency setting : $currencyList")
 
 
+                        }
+                        else -> {
+                            Log.i("TAG", "onViewCreated: failur")
+
+
+                        }
                     }
-                    else -> {
-                        Log.i("TAG", "onViewCreated: failur")
 
-
-                    }
                 }
-
             }
-        }
 
-        lifecycleScope.launch {
-            viewModel.changeCurrency.collect { result ->
-                when (result) {
-                    is State.Loading -> {
+            lifecycleScope.launch {
+                viewModel.changeCurrency.collect { result ->
+                    when (result) {
+                        is State.Loading -> {
 
+                        }
+                        is State.Success -> {
+                            val rate = result.data.conversion_rate
+                            MySharedPreferences.getInstance(requireContext())
+                                .saveExchangeRate(rate.toFloat())
+                            Log.i("TAG", "onViewCreated: ${rate.toFloat()}")
+
+                        }
+                        else -> {
+
+                        }
                     }
-                    is State.Success -> {
-                        val rate = result.data.conversion_rate
-                        MySharedPreferences.getInstance(requireContext())
-                            .saveExchangeRate(rate.toFloat())
-                        Log.i("TAG", "onViewCreated: ${rate.toFloat()}")
 
-                    }
-                    else -> {
-
-                    }
                 }
-
             }
         }
 
 
         settingBinding.AddressCard.setOnClickListener {
-            Navigation.findNavController(view)
-                .navigate(R.id.action_settingFragment_to_addressFragment)
+            if (checkConnectivity(requireContext())){
+
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_settingFragment_to_addressFragment)
+            }
+            else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
         settingBinding.CurrencyCard.setOnClickListener {
-            displayCurrencyDialog()
+            if (checkConnectivity(requireContext())){
+                displayCurrencyDialog()
+            }
+            else{
+                Snackbar.make(view!!, R.string.no_network_connection, Snackbar.LENGTH_LONG)
+                    .show()
+            }
         }
 
         settingBinding.LanguageCard.setOnClickListener {
