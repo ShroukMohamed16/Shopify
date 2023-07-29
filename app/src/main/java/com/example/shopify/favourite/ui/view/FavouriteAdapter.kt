@@ -55,6 +55,7 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
                 val dialog = builder.create()
                 dialog.show()
 
+
             }
             holder.binding.favProductCard.setOnClickListener {
                 onClickListener.onClickProductCard(currentItem.product_id!!)

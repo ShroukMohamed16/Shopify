@@ -20,7 +20,7 @@ data class Address(
     var default : Boolean? = null
 )
 data class AddressModel( val address1: String,
-                         val address2: String, val city: String,val country: String, val phone: String)
+                         val address2: String, val city: String,val country: String, val phone: String/*,val zip: String?,val province: String?*/)
 data class AddressBody(
     val address: AddressModel
 )

@@ -21,12 +21,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_marginStart="8dp"
+            android:textSize="18sp"
+            android:text="hi"
+            android:gravity="center"
+            android:textColor="@color/primary"
+            android:layout_marginStart="40dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_imageView"
-            app:layout_constraintTop_toTopOf="@+id/item_imageView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/quantityTxt"
@@ -57,11 +59,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/price"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/item_imageView"
             app:layout_constraintStart_toStartOf="@+id/quantityTxt"
             app:layout_constraintTop_toBottomOf="@+id/quantityTxt" />
 
@@ -77,18 +79,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/priceTxt"
             app:layout_constraintTop_toTopOf="@+id/priceTxt" />
-
-        <ImageView
-            android:id="@+id/item_imageView"
-            android:layout_width="110dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

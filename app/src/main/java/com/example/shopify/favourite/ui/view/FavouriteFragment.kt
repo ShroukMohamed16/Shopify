@@ -64,6 +64,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
                     }
                     is State.Success ->{
                         if(result.data.draft_order!!.line_items.size > 1){
+
                             val lineItemsList = result.data.draft_order!!.line_items
                             binding.noFavTxt.visibility = View.GONE
                             binding.favProgressBar.visibility = View.GONE

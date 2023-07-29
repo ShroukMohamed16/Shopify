@@ -35,5 +35,7 @@ object Constants {
     const val ENGLISH = "en"
     const val ARABIC = "ar"
 
+    const val TOTAL_PRICE = "total_price"
+
 
 }
