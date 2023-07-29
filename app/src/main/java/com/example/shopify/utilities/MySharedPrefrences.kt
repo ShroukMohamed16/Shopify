@@ -136,6 +136,7 @@ class MySharedPreferences private constructor(context: Context) {
 
     fun getISLogged(): Boolean {
         return sharedPreferences.getBoolean(Constants.IS_LOGGED, false)
+    }
 
     fun saveTotalPrice(price:String){
         sharedPreferences.edit().putString(Constants.TOTAL_PRICE, price).apply()
