@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -30,7 +31,9 @@ import com.example.shopify.productinfo.remote.ProductDetailsClient
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModel
 import com.example.shopify.productinfo.ui.viewmodel.ProductsDetailsViewModelFactory
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.checkConnectivity
 import com.example.shopify.utilities.createAlert
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,8 +53,9 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
     private var currentPage = 0
     private var variantList: List<Variant> = listOf()
     lateinit var product: Product
+    var property = Property("","")
+    var lineItemExists = false
 
-    var property = Property("", "")
 
 
     private val reviews = arrayOf(
@@ -104,6 +108,58 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (!checkConnectivity(requireContext())) {
+            productBinding.productInfoConstraint.visibility = View.GONE
+            Snackbar.make(view, "No Internet Connection", Snackbar.LENGTH_LONG)
+                .show()
+        } else {
+            cartViewModelFactory =
+                CartViewModelFactory(CartRepository.getInstance(CartClient.getInstance()))
+            cartViewModel = ViewModelProvider(this, cartViewModelFactory)[CartViewModel::class.java]
+            reviews.shuffle()
+            variantAdapter = VariantAdapter(variantList, this)
+
+
+            productsDetailsViewModelFactory =
+                ProductsDetailsViewModelFactory(
+                    ProductDetailsRepository.getInstance(
+                        ProductDetailsClient()
+                    )
+                )
+            productsDetailsViewModel = ViewModelProvider(
+                this,
+                productsDetailsViewModelFactory
+            )[ProductsDetailsViewModel::class.java]
+
+            val productID = args.productID
+
+            productsDetailsViewModel.isProductInDraftOrder(
+                MySharedPreferences.getInstance(requireContext())
+                    .getFavID()!!, productID!!.toLong()
+            )
+            lifecycleScope.launch {
+                productsDetailsViewModel.productFound.collect { result ->
+                    when (result) {
+                        is State.Success -> {
+                            if (result.data.draft_order!!.line_items.size != 0)
+                                lineItemExists = true
+                        }
+                        is State.Loading -> {
+                            Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT)
+                        }
+                        is State.Failure -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Fail To found Product",
+                                Toast.LENGTH_LONG
+                            )
+                        }
+                    }
+                    if (lineItemExists) {
+                        productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
+                    }else {
+                        productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.add_to_favorite)
+
         cartViewModelFactory =
             CartViewModelFactory(CartRepository.getInstance(CartClient.getInstance()))
         cartViewModel = ViewModelProvider(this, cartViewModelFactory)[CartViewModel::class.java]
@@ -196,13 +252,108 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                             }, 5000
                         )
                     }
-                    else -> {
-                        Log.i("TAG", "onViewCreated: fail")
+                        productsDetailsViewModel.getProductDetailsByID(productID!!)
+                        lifecycleScope.launch {
+                            productsDetailsViewModel.product.collect { result ->
+                                when (result) {
+                                    is State.Loading -> {
+                                        productBinding.productInfoProgressBar.visibility =
+                                            View.VISIBLE
+                                        productBinding.productInfoConstraint.visibility = View.GONE
+                                        Log.i("TAG", "onViewCreated: loading")
+                                    }
+                                    is State.Success -> {
+                                        Log.i("TAG", "onViewCreated: success")
+                                        if (MySharedPreferences.getInstance(requireContext())
+                                                .getISGuest()
+                                        ) {
+                                            productBinding.productInfoAddToFavoriteIcon.visibility =
+                                                View.GONE
+                                            productBinding.productInfoAddToShoppingCartIcon.visibility =
+                                                View.GONE
+                                        }
+                                        cartProduct = result.data.product!!
+                                        val price = result.data.product?.variants!![0]?.price
+                                        product = result.data.product!!
+
+                                        productBinding.productInfoProgressBar.visibility = View.GONE
+                                        productBinding.productInfoConstraint.visibility =
+                                            View.VISIBLE
+                                        productBinding.productInfoItemName.text =
+                                            result.data.product!!.title
+                                        productBinding.productInfoItemPrice.text =
+                                            formatDecimal(
+                                                price!!.toDouble() * MySharedPreferences
+                                                    .getInstance(requireContext()).getExchangeRate()
+                                            ) + " " + "${
+                                                MySharedPreferences.getInstance(requireContext())
+                                                    .getCurrencyCode()
+                                            }"
+                                        productBinding.productInfoDescriptionContent.text =
+                                            result.data.product!!.bodyHtml
+                                        productBinding.firstReviewerName.text = reviews[0].name
+                                        productBinding.firstReviewerComment.text =
+                                            reviews[0].comment
+                                        productBinding.secondReviewerName.text = reviews[1].name
+                                        productBinding.secondReviewerComment.text =
+                                            reviews[1].comment
+                                        productBinding.thirdReviewerName.text = reviews[2].name
+                                        productBinding.thirdReviewerComment.text =
+                                            reviews[2].comment
+
+                                        variantAdapter.setSizeList(result.data.product!!.variants)
+                                        productBinding.productInfoItemsRv.adapter = variantAdapter
+
+                                        val images = result.data.product?.images
+                                        val countOfImages = result.data.product?.images?.size
+                                        val adapter = ImagesAdapter(images!!)
+                                        productBinding.productInfoViewPager.adapter = adapter
+
+                                        productBinding.productInfoViewPager.orientation =
+                                            ViewPager2.ORIENTATION_HORIZONTAL
+
+
+                                        productBinding.productInfoViewPager.registerOnPageChangeCallback(
+                                            object :
+                                                ViewPager2.OnPageChangeCallback() {
+                                                override fun onPageSelected(position: Int) {
+                                                }
+                                            })
+                                        val handler = Handler(Looper.getMainLooper())
+                                        handler.postDelayed(
+                                            object : Runnable {
+                                                override fun run() {
+                                                    if (currentPage == countOfImages) {
+                                                        currentPage = 0
+                                                    } else {
+                                                        currentPage++
+                                                    }
+                                                    productBinding.productInfoViewPager.setCurrentItem(
+                                                        currentPage,
+                                                        true
+                                                    )
+                                                    handler.postDelayed(
+                                                        this,
+                                                        5000
+                                                    ) // Change the delay time as needed
+                                                }
+                                            }, 5000
+                                        )
+                                    }
+                                    else -> {
+                                        Log.i("TAG", "onViewCreated: fail")
+
+                                    }
+                            }
+                        }
 
                     }
                 }
             }
         }
+
+
+
         productBinding.showMoreTxt.setOnClickListener {
             productBinding.fourthReview.visibility = View.VISIBLE
             productBinding.fifthReview.visibility = View.VISIBLE
@@ -224,8 +375,6 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
 
         productBinding.productInfoAddToFavoriteIcon.setOnClickListener {
 
-            productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
-
             productsDetailsViewModel.getDraftOrder(
                 MySharedPreferences.getInstance(requireContext())
                     .getFavID()!!
@@ -237,10 +386,9 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                             Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
                         }
                         is State.Success -> {
-
                             property.name = product.image!!.src
                             Log.i(TAG, "onViewCreated product image: ${product.image!!.src}")
-                            val lineItem = line_items(
+                            var lineItem = line_items(
                                 title = product.title!!,
                                 quantity = 1,
                                 price = product.variants!!.get(0).price!!,
@@ -248,6 +396,43 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
                                 product_id = product.id!!,
                                 properties = arrayListOf(property)
                             )
+
+                            if(lineItemExists) {
+                                productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.add_to_favorite)
+                                var list = result.data.draft_order?.line_items
+                                val mutableList = list?.toMutableList()
+                                deleteItem(mutableList!!,lineItem)
+                                var draft_order = DraftOrderResponse(
+                                    DraftOrder(
+                                        email = "",
+                                        line_items = mutableList!!.toList()
+                                    )
+                                )
+                                productsDetailsViewModel.modifyDraftOrder(
+                                    MySharedPreferences.getInstance(
+                                        requireContext()
+                                    ).getFavID()!!, draft_order
+                                )
+                            }else{
+                                productBinding.productInfoAddToFavoriteIcon.setImageResource(R.drawable.fill_favorite)
+                                var oldLineItemsList = result.data.draft_order!!.line_items
+                                var newLineItem = lineItem
+                                var updatedLineItem = oldLineItemsList + newLineItem
+
+                                var draft_order = DraftOrderResponse(
+                                    DraftOrder(
+                                        email = "",
+                                        line_items = updatedLineItem
+                                    )
+                                )
+                                productsDetailsViewModel.modifyDraftOrder(
+                                    MySharedPreferences.getInstance(
+                                        requireContext()
+                                    ).getFavID()!!, draft_order
+                                )
+
+
+                            }
 
                             var oldLineItemsList = result.data.draft_order!!.line_items
                             var newLineItem = lineItem
@@ -403,6 +588,22 @@ class ProductInfoFragment : Fragment(), OnProductVariantClickListener {
         return decimalFormat.format(decimal)
     }
 
+    override fun onProductVariantClick(variantId: Long) {
+        this.variantID=variantId
+    }
+    private fun deleteItem(list:MutableList<line_items>,lineItem: line_items){
+        for (existingLineItem in list) {
+            if (existingLineItem.title == lineItem.title
+                && existingLineItem.quantity == lineItem.quantity
+                && existingLineItem.price == lineItem.price
+                && existingLineItem.variant_id == lineItem.variant_id
+                && existingLineItem.product_id == lineItem.product_id
+                && existingLineItem.properties == lineItem.properties
+            ) {
+                  list.remove(existingLineItem)
+            }
+        }
+    }
     override fun onProductVariantClick(variantId: Long,position:Int) {
         this.variantID = variantId
         this.varientPosition=position

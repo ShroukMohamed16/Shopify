@@ -123,6 +123,20 @@ class MySharedPreferences private constructor(context: Context) {
     fun getCustomerLastName(): String? {
         return sharedPreferences.getString(Constants.customer_LN,"")
     }
+    fun saveISGuest(state: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.IS_GUEST, state).apply()
+    }
+
+    fun getISGuest(): Boolean {
+        return sharedPreferences.getBoolean(Constants.IS_GUEST, false)
+    }
+    fun saveISLogged(state: Boolean) {
+        sharedPreferences.edit().putBoolean(Constants.IS_LOGGED, state).apply()
+    }
+
+    fun getISLogged(): Boolean {
+        return sharedPreferences.getBoolean(Constants.IS_LOGGED, false)
+
     fun saveTotalPrice(price:String){
         sharedPreferences.edit().putString(Constants.TOTAL_PRICE, price).apply()
     }

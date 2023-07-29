@@ -12,6 +12,8 @@ object Constants {
     const val FAV_DRAFT_ID="FavouriteID"
     const val customer_FN = "first_name"
     const val customer_LN = "last_name"
+    const val IS_GUEST="IsGuest"
+    const val IS_LOGGED="IsLogged"
 
     const val CART_NOTE = "cart"
     const val FAV_NOTE = "favourite"

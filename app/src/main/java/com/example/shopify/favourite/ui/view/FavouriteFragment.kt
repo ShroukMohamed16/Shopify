@@ -1,17 +1,18 @@
 package com.example.shopify.favourite.ui.view
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import com.example.shopify.R
-import com.example.shopify.base.DraftOrder
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
@@ -20,10 +21,9 @@ import com.example.shopify.favourite.model.repository.FavouriteRepository
 import com.example.shopify.favourite.remote.FavouriteClient
 import com.example.shopify.favourite.ui.viewmodel.FavouriteViewModel
 import com.example.shopify.favourite.ui.viewmodel.FavouriteViewModelFactory
-import com.example.shopify.search.ui.view.SearchFragmentDirections
 import com.example.shopify.utilities.MySharedPreferences
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import com.example.shopify.utilities.checkConnectivity
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 private const val TAG = "FavouriteFragment"
@@ -49,6 +49,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
         favouriteViewModelFactory = FavouriteViewModelFactory(FavouriteRepository.getInstance(FavouriteClient()))
         favouriteViewModel = ViewModelProvider(this,favouriteViewModelFactory)[FavouriteViewModel::class.java]
 
+        if(checkConnectivity(requireContext())){
         favouriteViewModel.getFavDraftOrder(MySharedPreferences.getInstance(requireContext()).getFavID()!!)
 
         lifecycleScope.launch{
@@ -62,7 +63,8 @@ class FavouriteFragment : Fragment(),OnClickListener{
 
                     }
                     is State.Success ->{
-                        if(!result.data.draft_order!!.line_items.isNullOrEmpty() || result.data.draft_order!!.line_items.size != 1){
+                        if(result.data.draft_order!!.line_items.size > 1){
+
                             val lineItemsList = result.data.draft_order!!.line_items
                             binding.noFavTxt.visibility = View.GONE
                             binding.favProgressBar.visibility = View.GONE
@@ -71,6 +73,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
                             favouriteAdapter.setFavList(lineItemsList)
                             binding.favRv.adapter = favouriteAdapter
                         }else{
+                            binding.favProgressBar.visibility = View.GONE
                             binding.noFavTxt.visibility = View.VISIBLE
                             binding.favRv.visibility = View.GONE
 
@@ -86,6 +89,14 @@ class FavouriteFragment : Fragment(),OnClickListener{
                 }
 
             }
+        }
+        }else{
+            binding.favRv.visibility = View.GONE
+            binding.noFavTxt.visibility = View.GONE
+            binding.favProgressBar.visibility = View.GONE
+            Snackbar.make(view,"No Internet Connection",Snackbar.LENGTH_LONG)
+                .show()
+
         }
 
     }
@@ -110,6 +121,7 @@ class FavouriteFragment : Fragment(),OnClickListener{
         val action =
             FavouriteFragmentDirections.actionFavouriteFragmentToProductInfoFragment2(id.toString())
         binding.root.findNavController().navigate(action)
-        }
+    }
+
 
 }

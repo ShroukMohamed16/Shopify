@@ -7,19 +7,20 @@
     android:background="@color/background_color"
     tools:context=".favourite.ui.view.FavouriteFragment">
     <TextView
+
         android:id="@+id/no_fav_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:text="No Favourite Items"
         android:gravity="center"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/fav_left_guideline"
         app:layout_constraintEnd_toStartOf="@id/fav_right_guideline"
         app:layout_constraintTop_toBottomOf="@id/fav_top_guideline"
         />
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:id="@+id/fav_rv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
-import com.example.shopify.utilities.Constants
 import com.example.shopify.R
 import com.example.shopify.databinding.FragmentSignUpBinding
 import com.example.shopify.utilities.MySharedPreferences
@@ -41,7 +40,7 @@ class SignUpFragment : Fragment() {
         binding.signUpBtn.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("please verify your email address")
-            builder.setPositiveButton("Ok") { dialog, it ->
+            builder.setPositiveButton("Ok") { dialog, _ ->
                 dialog.dismiss()
                 singUpWithEmailAndPassword(view)
             }
@@ -106,6 +105,7 @@ class SignUpFragment : Fragment() {
         auth.currentUser?.sendEmailVerification()!!
             .addOnCompleteListener {
                 if (it.isSuccessful) {
+                    MySharedPreferences.getInstance(requireContext()).saveISLogged(false)
                     Navigation.findNavController(binding.root)
                         .navigate(R.id.action_signUpFragment_to_signInFragment)
 

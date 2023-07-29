@@ -101,13 +101,14 @@
     <string name="logout">Logout</string>
     <string name="search">search</string>
     <string name="brands">Brands</string>
-    <string name="find_product">find product</string>
+    <string name="find_product">search for product</string>
     <string name="choose_language">Choose Language</string>
     <string name="no_orders_found">there is no orders found</string>
     <string name="proceed_to_checkout">Proceed To CheckOut</string>
     <string name="shop_with_joy_not_stress">Shop with joy , not stress</string>
     <string name="choose_size_color_title">Choose Size and Color</string>
     <string name="must_choose_size_color_message">You must choose the size and the color of the product</string>
+    <string name="forget_password">forget Password</string>
     <string name="deleteMessage">Are You Sure You Want To Delete This Item?</string>
     <string name="no">No</string>
     <string name="go_home">Go To Home</string>

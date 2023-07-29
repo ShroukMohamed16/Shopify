@@ -53,8 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/searchshape"
-        android:hint="@string/search"
         app:boxStrokeColor="@color/purple_700"
         app:hintTextColor="@color/purple_700"
         app:layout_constraintEnd_toStartOf="@id/rightGL"
@@ -65,7 +63,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search"
             android:background="@drawable/searchshape"
             android:textSize="14sp"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,TextContrastCheck" />
@@ -113,7 +112,6 @@
         android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/leftGL"
         app:layout_constraintTop_toBottomOf="@+id/brandTextView" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brands_RV"
         android:layout_width="0dp"
@@ -123,7 +121,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/rightGL"
         app:layout_constraintStart_toEndOf="@id/leftGL"
-        app:layout_constraintTop_toBottomOf="@+id/brandTextView"
+        app:layout_constraintTop_toBottomOf="@+id/search_constraint"
         app:layout_constraintVertical_bias="0.0" />
     <TextView
         android:id="@+id/no_internet_text"
@@ -140,27 +138,35 @@
         android:textSize="20sp"
         android:visibility="gone"
         />
-
-    <ImageView
-        android:id="@+id/search_icon"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_constraint"
+        app:layout_constraintStart_toStartOf="@id/brandTextView"
+        app:layout_constraintEnd_toEndOf="@id/brandTextView"
+        app:layout_constraintTop_toBottomOf="@id/brandTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintStart_toEndOf="@id/leftGL"
-        app:layout_constraintBottom_toBottomOf="@+id/brandTextView"
-        app:layout_constraintTop_toTopOf="@+id/brandTextView"
-        tools:layout_editor_absoluteX="30dp" />
+        >
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_search_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="30dp" />
 
-    <TextView
-        android:id="@+id/search_by_product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/find_product"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/search_icon"
-        app:layout_constraintStart_toEndOf="@+id/search_icon"
-        app:layout_constraintTop_toTopOf="@+id/search_icon" />
+        <TextView
+            android:id="@+id/search_by_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_product"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/search_icon"
+            app:layout_constraintStart_toEndOf="@+id/search_icon"
+            app:layout_constraintTop_toTopOf="@+id/search_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/no_internet_connection_ani"
         android:layout_width="wrap_content"
@@ -174,6 +180,9 @@
         android:visibility="gone"
         app:lottie_rawRes="@raw/no_internet"
         />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

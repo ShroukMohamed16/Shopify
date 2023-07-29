@@ -25,6 +25,7 @@ private const val TAG = "SplashScreen"
 class SplashScreen : AppCompatActivity() {
 
     val auth = FirebaseAuth.getInstance()
+    val isLogged = MySharedPreferences.getInstance(this).getISLogged()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class SplashScreen : AppCompatActivity() {
         } else {
             GlobalScope.launch(Dispatchers.Main) {
                 delay(4000)
-                if (auth.currentUser == null || !auth.currentUser!!.isEmailVerified) {
+                if (!isLogged) {
                     val intent = Intent(this@SplashScreen, AuthenticationActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

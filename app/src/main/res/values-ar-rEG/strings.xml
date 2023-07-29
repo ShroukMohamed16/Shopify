@@ -103,6 +103,7 @@
     <string name="choose_size_color_title">اختر الحجم واللون</string>
     <string name="must_choose_size_color_message">يجب عليك اختيار حجم ولون المنتج</string>
     <string name="no_orders_found">there is no orders found</string>
+    <string name="forget_password">نسيت كلمة المرور</string>
     <string name="deleteMessage">هل أنت متأكد من رغبتك في حذف هذا المنتج؟</string>
     <string name="no">لا</string>
     <string name="go_home">الصفحة الرئيسية</string>
