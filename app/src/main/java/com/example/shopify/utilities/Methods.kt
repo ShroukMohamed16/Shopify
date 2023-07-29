@@ -10,9 +10,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.example.shopify.R
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun checkConnectivity(context: Context): Boolean {
@@ -100,4 +103,12 @@ fun createAlert(title: String, message: String,context: Context) {
     }
     val alertDialog = builder.create()
     alertDialog.show()
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun convertDateTimeFormat(dateTimeString: String): String {
+    val inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+    val outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm")
+
+    val dateTime = LocalDateTime.parse(dateTimeString, inputFormat)
+    return dateTime.format(outputFormat)
 }

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.example.shopify.R
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
@@ -56,25 +57,31 @@ class FavouriteFragment : Fragment(),OnClickListener{
             favouriteViewModel.draftOrderDetailsList.collect { result->
                 when(result){
                     is State.Loading ->{
+
+                        binding.noInternetConstraint.visibility=View.GONE
                         binding.favProgressBar.visibility = View.VISIBLE
                         binding.favRv.visibility = View.GONE
                         binding.noFavTxt.visibility = View.GONE
+                        binding.nofavAnmi.visibility = View.GONE
                         Toast.makeText(context,"Loading",Toast.LENGTH_LONG).show()
 
                     }
                     is State.Success ->{
                         if(result.data.draft_order!!.line_items.size > 1){
 
+                            binding.noInternetConstraint.visibility=View.GONE
                             val lineItemsList = result.data.draft_order!!.line_items
                             binding.noFavTxt.visibility = View.GONE
                             binding.favProgressBar.visibility = View.GONE
                             draftOrderResponse = result.data
                             binding.favRv.visibility = View.VISIBLE
+                            binding.nofavAnmi.visibility = View.GONE
                             favouriteAdapter.setFavList(lineItemsList)
                             binding.favRv.adapter = favouriteAdapter
                         }else{
                             binding.favProgressBar.visibility = View.GONE
                             binding.noFavTxt.visibility = View.VISIBLE
+                            binding.nofavAnmi.visibility = View.VISIBLE
                             binding.favRv.visibility = View.GONE
 
                         }
@@ -94,9 +101,8 @@ class FavouriteFragment : Fragment(),OnClickListener{
             binding.favRv.visibility = View.GONE
             binding.noFavTxt.visibility = View.GONE
             binding.favProgressBar.visibility = View.GONE
-            Snackbar.make(view,"No Internet Connection",Snackbar.LENGTH_LONG)
-                .show()
-
+            binding.nofavAnmi.visibility = View.GONE
+            binding.noInternetConstraint.visibility=View.VISIBLE
         }
 
     }

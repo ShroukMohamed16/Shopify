@@ -8,7 +8,7 @@
     tools:context=".ProfileFragment.UI.View.ProfileFragment">
 
  <TextView
-     android:id="@+id/profileOrdersTv3"
+     android:id="@+id/wishListTv"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:layout_marginStart="16dp"
@@ -88,9 +88,9 @@
      android:textColor="@color/black"
      android:textSize="20sp"
      android:textStyle="bold"
-     app:layout_constraintBottom_toBottomOf="@+id/profileOrdersTv3"
+     app:layout_constraintBottom_toBottomOf="@+id/wishListTv"
      app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintTop_toTopOf="@+id/profileOrdersTv3" />
+     app:layout_constraintTop_toTopOf="@+id/wishListTv" />
 
  <TextView
      android:id="@+id/profileMoreOrdersTv2"
@@ -122,7 +122,7 @@
      android:id="@+id/firstOrderCardView"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:layout_marginStart="24dp"
+     android:layout_marginStart="20dp"
      app:cardCornerRadius="25dp"
      app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
      app:layout_constraintStart_toStartOf="@+id/profileOrdersTv"
@@ -149,7 +149,7 @@
 
    <TextView
        android:id="@+id/profileFirstOrderDateTv"
-       android:layout_width="wrap_content"
+       android:layout_width="90dp"
        android:layout_height="wrap_content"
        android:layout_marginTop="5dp"
        android:text="20/07/2023"
@@ -194,10 +194,11 @@
      android:id="@+id/secondOrderCardView"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:layout_marginStart="50dp"
+     android:layout_marginStart="30dp"
      android:layout_marginBottom="16dp"
      app:cardCornerRadius="25dp"
      app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
+     app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintStart_toEndOf="@+id/firstOrderCardView"
      app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv"
      app:layout_constraintVertical_bias="0.0">
@@ -222,8 +223,8 @@
        app:layout_constraintTop_toTopOf="parent" />
 
    <TextView
-       android:id="@+id/text_view_2"
-       android:layout_width="wrap_content"
+       android:id="@+id/profile_second_order_date_Tv"
+       android:layout_width="90dp"
        android:layout_height="wrap_content"
        android:layout_marginTop="5dp"
        android:text="20/07/2023"
@@ -243,13 +244,13 @@
        android:textColor="@android:color/black"
        android:textSize="20sp"
        android:textStyle="bold"
-       app:layout_constraintBottom_toTopOf="@id/text_view_4"
+       app:layout_constraintBottom_toTopOf="@id/profile_second_order_price_Tv"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toBottomOf="@id/text_view_2" />
+       app:layout_constraintTop_toBottomOf="@id/profile_second_order_date_Tv" />
 
    <TextView
-       android:id="@+id/text_view_4"
+       android:id="@+id/profile_second_order_price_Tv"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_marginTop="5dp"
@@ -264,6 +265,90 @@
   </androidx.constraintlayout.widget.ConstraintLayout>
  </androidx.cardview.widget.CardView>
 
+
+ <com.google.android.material.button.MaterialButton
+     android:id="@+id/profileLogoutBtn"
+     android:layout_width="250dp"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="20dp"
+     android:backgroundTint="@color/primary"
+     android:text="@string/logout"
+     android:textColor="@color/white"
+     android:textSize="24sp"
+     app:cornerRadius="25dp"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.496"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@id/profilethirdLine" />
+
+ <TextView
+     android:id="@+id/no_Orders_yet"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="100dp"
+     android:layout_marginBottom="100dp"
+     android:text="@string/no_orders_yet"
+     android:textColor="@color/primary"
+     android:textSize="24sp"
+     android:visibility="visible"
+     app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profilefirstLine" />
+
+ <TextView
+     android:id="@+id/no_favourites_Yet"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="100dp"
+     android:layout_marginBottom="100dp"
+     android:text="@string/no_items_in_wish_list_yet"
+     android:textColor="@color/primary"
+     android:textSize="24sp"
+     android:visibility="visible"
+     app:layout_constraintBottom_toTopOf="@+id/profileLogoutBtn"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profileSecondLine" />
+
+ <ProgressBar
+     android:id="@+id/orderProgreeBar"
+     style="?android:attr/progressBarStyle"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:indeterminate="true"
+     android:indeterminateTint="@color/primary"
+     android:indeterminateTintMode="src_in"
+     app:layout_constraintBottom_toTopOf="@+id/profileSecondLine"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profilefirstLine" />
+
+ <ProgressBar
+     android:id="@+id/favProgressBar"
+     style="?android:attr/progressBarStyle"
+     android:indeterminate="true"
+     android:indeterminateTint="@color/primary"
+     android:indeterminateTintMode="src_in"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     app:layout_constraintBottom_toTopOf="@+id/profileLogoutBtn"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toBottomOf="@+id/profileSecondLine" />
+
+
+ <View
+     android:id="@+id/profilethirdLine"
+     android:layout_width="300dp"
+     android:layout_height="2dp"
+     android:background="@color/black"
+     app:layout_constraintEnd_toEndOf="parent"
+     app:layout_constraintHorizontal_bias="0.504"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintBottom_toTopOf="@+id/profileLogoutBtn"
+     tools:layout_editor_absoluteY="600dp" />
+
  <androidx.cardview.widget.CardView
      android:id="@+id/profileFirstWishListCardView"
      android:layout_width="wrap_content"
@@ -272,8 +357,9 @@
      app:cardCornerRadius="25dp"
      app:cardElevation="4dp"
      app:cardUseCompatPadding="true"
-     app:layout_constraintStart_toStartOf="@+id/profileOrdersTv3"
-     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv3">
+     app:layout_constraintBottom_toTopOf="@+id/profilethirdLine"
+     app:layout_constraintStart_toStartOf="@+id/wishListTv"
+     app:layout_constraintTop_toBottomOf="@+id/wishListTv">
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
@@ -292,8 +378,8 @@
 
    <TextView
        android:id="@+id/profileFirstWishListItemName"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
+       android:layout_width="100dp"
+       android:layout_height="50dp"
        android:text="@string/item_name"
        android:textColor="@android:color/black"
        android:textSize="16sp"
@@ -323,10 +409,11 @@
      app:cardCornerRadius="25dp"
      app:cardElevation="4dp"
      app:cardUseCompatPadding="true"
+     app:layout_constraintBottom_toBottomOf="@+id/profileFirstWishListCardView"
      app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintHorizontal_bias="0.584"
      app:layout_constraintStart_toEndOf="@+id/profileFirstWishListCardView"
-     app:layout_constraintTop_toBottomOf="@+id/profileOrdersTv3">
+     app:layout_constraintTop_toTopOf="@+id/profileFirstWishListCardView">
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
@@ -345,8 +432,8 @@
 
    <TextView
        android:id="@+id/profileSecondWishListItemName"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
+       android:layout_width="100dp"
+       android:layout_height="50dp"
        android:text="@string/item_name"
        android:textColor="@android:color/black"
        android:textSize="16sp"
@@ -369,16 +456,7 @@
 
  </androidx.cardview.widget.CardView>
 
- <com.google.android.material.button.MaterialButton
-     android:id="@+id/profileLogoutBtn"
-     android:layout_width="250dp"
-     android:layout_height="wrap_content"
-     android:backgroundTint="@color/primary"
-     android:text="@string/logout"
-     android:textColor="@color/white"
-     android:textSize="24sp"
-     app:cornerRadius="25dp"
-     app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintStart_toStartOf="parent"
-     app:layout_constraintTop_toBottomOf="@+id/profileSecondWishListCardView" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

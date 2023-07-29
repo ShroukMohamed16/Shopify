@@ -33,16 +33,15 @@ import com.example.shopify.Payment.Remote.PaymentClient
 import com.example.shopify.Payment.UI.ViewModel.PaymentViewModel
 import com.example.shopify.Payment.UI.ViewModel.PaymentViewModelFactory
 import com.example.shopify.R
+import com.example.shopify.base.DraftOrder
+import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
 import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.DoneAlertBinding
 import com.example.shopify.databinding.FragmentPaymentBinding
 import com.example.shopify.homeFragment.Model.DataCalss.DiscountCodes
-import com.example.shopify.utilities.MyPriceRules
-import com.example.shopify.utilities.MySharedPreferences
-import com.example.shopify.utilities.checkConnectivity
-import com.example.shopify.utilities.createAlert
+import com.example.shopify.utilities.*
 import com.google.android.material.snackbar.Snackbar
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
@@ -58,6 +57,7 @@ import com.paypal.checkout.order.PurchaseUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class PaymentFragment : Fragment() {
@@ -74,6 +74,8 @@ class PaymentFragment : Fragment() {
     lateinit var deliveryFeesTv: TextView
     lateinit var discountFeesTv: TextView
     lateinit var totalPriceTv: TextView
+
+    lateinit var draftOrderResponse: DraftOrderResponse
 
     private var deliveryPrice: Float = 20f
 
@@ -106,6 +108,10 @@ class PaymentFragment : Fragment() {
         cartViewModel.getCartDraftOrderById(
             MySharedPreferences.getInstance(requireContext()).getCartID().toString()
         )
+        val cart_line_item = line_items(title = "cart item", quantity = 1, price = "1200")
+        val cart_draftOrder =
+            DraftOrder(line_items = arrayListOf(cart_line_item), note = Constants.CART_NOTE)
+        var cartDraftOrder = DraftOrderResponse(cart_draftOrder)
         if (checkConnectivity(requireContext())) {
 
             lifecycleScope.launch {
@@ -113,6 +119,7 @@ class PaymentFragment : Fragment() {
                 cartViewModel.getCart.collect { result ->
                     when (result) {
                         is State.Success -> {
+                         draftOrderResponse = result.data
                             var lineItemsList = result.data.draft_order!!.line_items
                             var mutableLineItems = mutableListOf<LineItemm>()
                             Log.i("TAG", "lineItemsList: $lineItemsList")
@@ -127,11 +134,14 @@ class PaymentFragment : Fragment() {
                             orderLineItemsList = mutableLineItems.toList()
                             Log.i("TAG", "orderLineItemsList: $orderLineItemsList")
                         }
-                        else -> {
+                        is State.Failure->{
                             Snackbar.make(view!!,
-                                R.string.no_network_connection,
-                                Snackbar.LENGTH_LONG)
-                                .show()
+                           R.string.no_network_connection,
+                           Snackbar.LENGTH_LONG)
+                           .show()
+                        }
+                        else -> {
+
                         }
                     }
                 }
@@ -208,22 +218,16 @@ class PaymentFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 var mustableDisount = mutableListOf<DiscountCode>()
-               // discountCodes=mustableDisount
                 discountPrice = if (discountCodeET.text.toString() == "Summer60") {
-                   // mustableDisount.add(DiscountCode("Summer60", "60", "percentage"))
-                    //discountCodes = mustableDisount.toList()
                     discountCodes= DiscountCode("Summer60", "60", "percentage")
                     60f
 
                 } else if (discountCodeET.text.toString() == "Summer25") {
 
-                  //  mustableDisount.add(DiscountCode("Summer60", "60", "fixed_amount"))
-                   // discountCodes = mustableDisount.toList()
                     discountCodes= DiscountCode("Summer25", "25", "fixed_amount")
                     (productPrice * (1 - .25f))
                 } else {
                     mustableDisount.add(DiscountCode("NoCode", "0", "percentage"))
-                    //discountCodes = mustableDisount.toList()
                     discountCodes=DiscountCode("NoCode", "0", "percentage")
                     0f
                 }
@@ -281,13 +285,17 @@ class PaymentFragment : Fragment() {
                         line_items = orderLineItemsList,
                         discount_codes = listOf(discountCodes)
                     )
-                    lifecycleScope.launch{
-
+                    lifecycleScope.launch {
                         val orderData = OrderData(order)
                         viewModel.postOrder(orderData)
-
+                        cartViewModel.editCartDraftOrderById(
+                            MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                            cartDraftOrder
+                        )
+                        withContext(Dispatchers.Main){
+                            createAlertGoToHome()
+                        }
                     }
-                    createAlertGoToHome()
                 }
             }
         } else {
@@ -330,9 +338,14 @@ class PaymentFragment : Fragment() {
 
                             val orderData = OrderData(order)
                             viewModel.postOrder(orderData)
-
+                            cartViewModel.editCartDraftOrderById(
+                                MySharedPreferences.getInstance(requireContext()).getCartID().toString(),
+                                cartDraftOrder
+                            )
+                            withContext(Dispatchers.Main){
+                                createAlertGoToHome()
+                            }
                         }
-                        createAlertGoToHome()
                     }
                 }, onCancel = OnCancel {
                     Log.d("MYTAG", "Buyer canceled the PayPal experience.")

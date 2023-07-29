@@ -110,13 +110,9 @@ class SignInFragment : Fragment() {
         authenticationViewModel = ViewModelProvider(this,
             authenticationViewModelFactory)[AuthenticationViewModel::class.java]
 
-
-        val firstname = Constants.customer_FN
-        val lastname = Constants.customer_LN
-
         binding.loginBtn.setOnClickListener {
             Log.i(TAG, "onViewCreated: $customerLogin_id")
-            signInWithEmailAndPassword(firstname, lastname)
+            signInWithEmailAndPassword(MySharedPreferences.getInstance(requireContext()).getCustomerFirstName()!!, MySharedPreferences.getInstance(requireContext()).getCustomerLastName()!!)
         }
         binding.signUpTxt.setOnClickListener {
             Navigation.findNavController(view)
