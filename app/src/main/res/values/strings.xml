@@ -65,7 +65,7 @@
     <string name="CancelMapAlert">Cancel</string>
     <string name="errorFavMapAlert"> Could not find location</string>
     <string name="available_items" translatable="false">Available Items</string>
-    <string name="couponSaved"> coupon saved</string>
+    <string name="couponSaved"> Coupon saved.Use it during checkout</string>
     <string name="deleteAddressTitle"> Delete Address</string>
     <string name="deleteAddressMessage"> Are you sure you want to delete this address?</string>
     <string name="homeDeleteAddressMessage">Default address Can\'t be deleted</string>

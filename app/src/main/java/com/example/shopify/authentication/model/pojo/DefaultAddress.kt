@@ -7,11 +7,11 @@ import com.google.gson.annotations.SerializedName
 class DefaultAddress {
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var id: Long? = null
 
     @SerializedName("customer_id")
     @Expose
-    var customerId: Int? = null
+    var customerId: Long? = null
 
     @SerializedName("first_name")
     @Expose

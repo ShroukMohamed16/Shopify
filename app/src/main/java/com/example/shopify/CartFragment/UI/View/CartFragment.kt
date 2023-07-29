@@ -108,58 +108,65 @@ class CartFragment : Fragment(), OnCartClickListener {
             )
             lifecycleScope.launch {
                 cartViewModel.getCart.collect { result ->
-                    when (result) {
-                        is State.Success -> {
-                            if (result.data.draft_order!!.line_items.size == 1) {
-                                cartBinding.noCartItemsTxt.visibility = View.VISIBLE
-                                cartBinding.nocartAnmi.visibility = View.VISIBLE
+                    try {
+                        when (result) {
+                            is State.Success -> {
+                                if (result.data.draft_order!!.line_items.size == 1) {
+                                    cartBinding.noCartItemsTxt.visibility = View.VISIBLE
+                                    cartBinding.nocartAnmi.visibility = View.VISIBLE
+                                    cartBinding.cartRecycler.visibility = View.GONE
+                                    cartBinding.totalPriceTV.visibility = View.GONE
+                                    cartBinding.checkoutBtn.visibility = View.GONE
+                                } else {
+                                    draftOrderResponse = result.data
+                                    cartBinding.cartRecycler.visibility = View.VISIBLE
+                                    cartBinding.noCartItemsTxt.visibility = View.GONE
+                                    cartBinding.nocartAnmi.visibility = View.GONE
+                                    cartBinding.cartProgressBar.visibility = View.GONE
+                                    cartBinding.totalPriceTV.visibility = View.VISIBLE
+                                    cartBinding.checkoutBtn.visibility = View.VISIBLE
+                                    cartAdapter.setCartList(result.data.draft_order.line_items)
+                                    calculateTotalPrice()
+                                    for (i in 1 until result.data.draft_order!!.line_items.size){
+                                        productIdsList.add(result.data.draft_order!!.line_items[i].product_id!!)
+                                        variantPositionList.add(result.data.draft_order!!.line_items[i].properties[2].value!!.toInt())
+                                    }
+                                    /*for (i in 0 until productIdsList.size){
+                                        productsDetailsViewModel.getProductDetailsByID(productIdsList[i].toString())
+                                        productsDetailsViewModel.product.collect{ result->
+                                            try {
+                                                when(result){
+                                                    is State.Success->{
+                                                        productCountList.add(result.data.product?.variants?.get(variantPositionList[i])?.inventoryQuantity!!)
+
+                                                        Log.i("productCount", "onViewCreated:$i ${productCountList[i]}")
+                                                    }
+                                                    else->{}
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.e("productCount", "Error: ${e.message}")
+                                            }
+                                        }
+                                    }*/
+                                }
+                            }
+                            is State.Loading -> {
                                 cartBinding.cartRecycler.visibility = View.GONE
                                 cartBinding.totalPriceTV.visibility = View.GONE
                                 cartBinding.checkoutBtn.visibility = View.GONE
-                            } else {
-                                draftOrderResponse = result.data
-                                cartBinding.cartRecycler.visibility = View.VISIBLE
-                                cartBinding.noCartItemsTxt.visibility = View.GONE
-                                cartBinding.nocartAnmi.visibility = View.GONE
+                                cartBinding.cartProgressBar.visibility = View.VISIBLE
+                            }
+                            is State.Failure -> {
                                 cartBinding.cartProgressBar.visibility = View.GONE
-                                cartBinding.totalPriceTV.visibility = View.VISIBLE
-                                cartBinding.checkoutBtn.visibility = View.VISIBLE
-                                cartAdapter.setCartList(result.data.draft_order.line_items)
-                                calculateTotalPrice()
-                                for (i in 1 until result.data.draft_order!!.line_items.size){
-                                    productIdsList.add(result.data.draft_order!!.line_items[i].product_id!!)
-                                    variantPositionList.add(result.data.draft_order!!.line_items[i].properties[2].value!!.toInt())
-                                }
-                                for (i in 0 until productIdsList.size){
-                                    productsDetailsViewModel.getProductDetailsByID(productIdsList[i].toString())
-                                    productsDetailsViewModel.product.collect{ result->
-                                        when(result){
-                                            is State.Success->{
-                                                productCountList.add(result.data.product?.variants?.get(variantPositionList[i])?.inventoryQuantity!!)
-
-                                                Log.i("productCount", "onViewCreated:$i ${productCountList[i]}")
-                                            }
-                                            else->{}
-                                        }
-                                    }
-                                    delay(1000)
-                                }
+                                Toast.makeText(
+                                    requireContext(),
+                                    "failed to load ",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                        is State.Loading -> {
-                            cartBinding.cartRecycler.visibility = View.GONE
-                            cartBinding.totalPriceTV.visibility = View.GONE
-                            cartBinding.checkoutBtn.visibility = View.GONE
-                            cartBinding.cartProgressBar.visibility = View.VISIBLE
-                        }
-                        is State.Failure -> {
-                            cartBinding.cartProgressBar.visibility = View.GONE
-                            Toast.makeText(
-                                requireContext(),
-                                "failed to load ",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    } catch (e: Exception) {
+                        Log.e("cartViewModel", "Error: ${e.message}")
                     }
                 }
             }

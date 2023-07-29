@@ -43,6 +43,7 @@ import com.example.shopify.utilities.MyPriceRules
 import com.example.shopify.utilities.MySharedPreferences
 import com.example.shopify.utilities.checkConnectivity
 import com.example.shopify.utilities.createAlert
+import com.google.android.material.snackbar.Snackbar
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
@@ -54,6 +55,7 @@ import com.paypal.checkout.order.Amount
 import com.paypal.checkout.order.AppContext
 import com.paypal.checkout.order.OrderRequest
 import com.paypal.checkout.order.PurchaseUnit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -81,7 +83,7 @@ class PaymentFragment : Fragment() {
 
     private lateinit var orderLineItemsList: List<LineItemm>
 
-    lateinit var discountCodes: List<DiscountCode>
+     var discountCodes: DiscountCode= DiscountCode("","","")
 
 
     override fun onCreateView(
@@ -123,9 +125,13 @@ class PaymentFragment : Fragment() {
                                 )
                             }
                             orderLineItemsList = mutableLineItems.toList()
+                            Log.i("TAG", "orderLineItemsList: $orderLineItemsList")
                         }
                         else -> {
-
+                            Snackbar.make(view!!,
+                                R.string.no_network_connection,
+                                Snackbar.LENGTH_LONG)
+                                .show()
                         }
                     }
                 }
@@ -202,22 +208,23 @@ class PaymentFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
                 var mustableDisount = mutableListOf<DiscountCode>()
+               // discountCodes=mustableDisount
                 discountPrice = if (discountCodeET.text.toString() == "Summer60") {
-                    mustableDisount.add(DiscountCode("Summer60", "60", "percentage"))
-                    discountCodes = mustableDisount.toList()
+                   // mustableDisount.add(DiscountCode("Summer60", "60", "percentage"))
+                    //discountCodes = mustableDisount.toList()
+                    discountCodes= DiscountCode("Summer60", "60", "percentage")
                     60f
-
 
                 } else if (discountCodeET.text.toString() == "Summer25") {
 
-                    mustableDisount.add(DiscountCode("Summer60", "60", "fixed_amount"))
-                    discountCodes = mustableDisount.toList()
-
+                  //  mustableDisount.add(DiscountCode("Summer60", "60", "fixed_amount"))
+                   // discountCodes = mustableDisount.toList()
+                    discountCodes= DiscountCode("Summer25", "25", "fixed_amount")
                     (productPrice * (1 - .25f))
                 } else {
-                    mustableDisount.add(DiscountCode("", "0", "percentage"))
-                    discountCodes = mustableDisount.toList()
-
+                    mustableDisount.add(DiscountCode("NoCode", "0", "percentage"))
+                    //discountCodes = mustableDisount.toList()
+                    discountCodes=DiscountCode("NoCode", "0", "percentage")
                     0f
                 }
                 totalPrice = productPrice + deliveryPrice
@@ -266,16 +273,20 @@ class PaymentFragment : Fragment() {
                     createAlert(
                         getString(R.string.cant_pay_in_cash),
                         getString(R.string.large_amount_of_money), requireContext())
-
                 } else {
                     val email =
                         MySharedPreferences.getInstance(requireContext()).getCustomerEmail()
 
                     val order = Order(email = email!!,
                         line_items = orderLineItemsList,
-                        discount_codes = discountCodes)
-                    val orderData = OrderData(order)
-                    viewModel.postOrder(orderData)
+                        discount_codes = listOf(discountCodes)
+                    )
+                    lifecycleScope.launch{
+
+                        val orderData = OrderData(order)
+                        viewModel.postOrder(orderData)
+
+                    }
                     createAlertGoToHome()
                 }
             }
@@ -314,9 +325,13 @@ class PaymentFragment : Fragment() {
 
                         val order = Order(email = email!!,
                             line_items = orderLineItemsList,
-                            discount_codes = discountCodes)
-                        val orderData = OrderData(order)
-                        viewModel.postOrder(orderData)
+                            discount_codes = listOf( discountCodes))
+                        lifecycleScope.launch {
+
+                            val orderData = OrderData(order)
+                            viewModel.postOrder(orderData)
+
+                        }
                         createAlertGoToHome()
                     }
                 }, onCancel = OnCancel {
