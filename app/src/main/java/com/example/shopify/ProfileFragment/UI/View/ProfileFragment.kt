@@ -100,9 +100,9 @@ class ProfileFragment : Fragment() {
                             profileBinding.orderProgreeBar.visibility = View.VISIBLE
                             profileBinding.firstOrderCardView.visibility = View.GONE
                             profileBinding.secondOrderCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
                             profileBinding.noOrdersYet.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv.isEnabled = false
+                            profileBinding.profileMoreOrdersTv2.isEnabled = false
                         }
 
                         is State.Success -> {
@@ -113,18 +113,18 @@ class ProfileFragment : Fragment() {
                                 profileBinding.orderProgreeBar.visibility = View.GONE
                                 profileBinding.firstOrderCardView.visibility = View.GONE
                                 profileBinding.secondOrderCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                                profileBinding.profileMoreOrdersTv2.visibility = View.GONE
                                 profileBinding.noOrdersYet.visibility = View.VISIBLE
-                                profileBinding.profileMoreOrdersTv.isEnabled = false
+                                profileBinding.profileMoreOrdersTv2.isEnabled = false
                                 Log.i("TAG", "onViewCreated: null listssssssssss")
                             } else {
                                 Log.i("TAG", "onViewCreated: not null listssssssssss")
                                 if (orderList.size == 1) {
-                                    profileBinding.profileMoreOrdersTv.isEnabled = true
+                                    profileBinding.profileMoreOrdersTv2.isEnabled = true
                                     profileBinding.orderProgreeBar.visibility = View.GONE
                                     profileBinding.firstOrderCardView.visibility = View.VISIBLE
                                     profileBinding.secondOrderCardView.visibility = View.GONE
-                                    profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
+                                    profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
                                     profileBinding.noOrdersYet.visibility = View.GONE
                                     profileBinding.profileFirstOrderDateTv.text =
                                         convertDateTimeFormat(orderList[0].processed_at!!)
@@ -138,11 +138,11 @@ class ProfileFragment : Fragment() {
 
                                 } else {
 
-                                    profileBinding.profileMoreOrdersTv.isEnabled = true
+                                    profileBinding.profileMoreOrdersTv2.isEnabled = true
                                     profileBinding.orderProgreeBar.visibility = View.GONE
                                     profileBinding.firstOrderCardView.visibility = View.VISIBLE
                                     profileBinding.secondOrderCardView.visibility = View.VISIBLE
-                                    profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
+                                    profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
                                     profileBinding.noOrdersYet.visibility = View.GONE
                                     profileBinding.profileFirstOrderDateTv.text =
                                         convertDateTimeFormat(orderList[0].processed_at!!)
@@ -171,11 +171,11 @@ class ProfileFragment : Fragment() {
                             profileBinding.orderProgreeBar.visibility = View.GONE
                             profileBinding.firstOrderCardView.visibility = View.GONE
                             profileBinding.secondOrderCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
                             profileBinding.noOrdersYet.text =
                                 getString(R.string.no_network_connection)
                             profileBinding.noOrdersYet.visibility = View.VISIBLE
-                            profileBinding.profileMoreOrdersTv.isEnabled = false
+                            profileBinding.profileMoreOrdersTv2.isEnabled = false
 
                         }
 
@@ -187,9 +187,9 @@ class ProfileFragment : Fragment() {
             profileBinding.orderProgreeBar.visibility = View.GONE
             profileBinding.firstOrderCardView.visibility = View.GONE
             profileBinding.secondOrderCardView.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
             profileBinding.noOrdersYet.text = getString(R.string.no_network_connection)
-            profileBinding.profileMoreOrdersTv.isEnabled = false
+            profileBinding.profileMoreOrdersTv2.isEnabled = false
             profileBinding.noOrdersYet.visibility = View.VISIBLE
 
         }
@@ -206,7 +206,7 @@ class ProfileFragment : Fragment() {
                             profileBinding.favProgressBar.visibility = View.VISIBLE
                             profileBinding.profileFirstWishListCardView.visibility = View.GONE
                             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
                             profileBinding.noFavouritesYet.visibility = View.GONE
                         }
                         is State.Success -> {
@@ -215,7 +215,7 @@ class ProfileFragment : Fragment() {
                                 profileBinding.favProgressBar.visibility = View.GONE
                                 profileBinding.profileFirstWishListCardView.visibility = View.GONE
                                 profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                                profileBinding.profileMoreOrdersTv.visibility = View.GONE
                                 profileBinding.noFavouritesYet.visibility = View.VISIBLE
 
                             } else if (result.data.draft_order!!.line_items.size == 2) {
@@ -224,7 +224,7 @@ class ProfileFragment : Fragment() {
                                 profileBinding.profileFirstWishListCardView.visibility =
                                     View.VISIBLE
                                 profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
+                                profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
                                 profileBinding.noFavouritesYet.visibility = View.GONE
 
                                 profileBinding.profileFirstWishListItemName.text =
@@ -244,13 +244,13 @@ class ProfileFragment : Fragment() {
 
 
                             } else if (result.data.draft_order!!.line_items.size > 2) {
-                                profileBinding.profileMoreOrdersTv2.isEnabled = true
+                                profileBinding.profileMoreOrdersTv.isEnabled = true
                                 profileBinding.favProgressBar.visibility = View.GONE
                                 profileBinding.profileFirstWishListCardView.visibility =
                                     View.VISIBLE
                                 profileBinding.profileSecondWishListCardView.visibility =
                                     View.VISIBLE
-                                profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
+                                profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
                                 profileBinding.noFavouritesYet.visibility = View.GONE
 
                                 profileBinding.profileFirstWishListItemName.text =
@@ -290,7 +290,7 @@ class ProfileFragment : Fragment() {
                             profileBinding.favProgressBar.visibility = View.GONE
                             profileBinding.profileFirstWishListCardView.visibility = View.GONE
                             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
                             profileBinding.noFavouritesYet.text =
                                 getString(R.string.no_network_connection)
                             profileBinding.noFavouritesYet.visibility = View.VISIBLE
@@ -304,7 +304,7 @@ class ProfileFragment : Fragment() {
             profileBinding.favProgressBar.visibility = View.GONE
             profileBinding.profileFirstWishListCardView.visibility = View.GONE
             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv.visibility = View.GONE
             profileBinding.noFavouritesYet.text = getString(R.string.no_network_connection)
             profileBinding.noFavouritesYet.visibility = View.VISIBLE
         }

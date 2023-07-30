@@ -77,8 +77,8 @@ class AddressFragment : Fragment(), OnAddressClickListener {
         addressRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         if (checkConnectivity(requireContext())){
-
-            addressBinding.addressRecycler.visibility=View.VISIBLE
+            addressBinding.addressNoInternetConnectionConstraint.visibility=View.GONE
+           // addressBinding.addressRecycler.visibility=View.VISIBLE
             viewModel.getCustomerAddress(MySharedPreferences.getInstance(requireContext()).getCustomerID()!!)
             lifecycleScope.launch {
                 viewModel.getAddress.collect { result ->
@@ -89,14 +89,22 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                                 if (result.data==null){
                                     addressBinding.addressProgressBar.visibility = View.GONE
                                     addressBinding.addressRecycler.visibility=View.GONE
+                                    addressBinding.noAddressImage.visibility=View.VISIBLE
+                                    addressBinding.noaddressTV.visibility=View.VISIBLE
                                 }else{
                                     if(result.data?.addresses?.size!! >0){
+                                        addressBinding.addressRecycler.visibility=View.VISIBLE
                                         addressBinding.addressProgressBar.visibility = View.GONE
                                         addressAdapter.setAddressList(result.data?.addresses)
                                         addressBinding.addressRecycler.adapter = addressAdapter
+
+                                        addressBinding.noAddressImage.visibility=View.GONE
+                                        addressBinding.noaddressTV.visibility=View.GONE
                                     }else{
                                         addressBinding.addressProgressBar.visibility = View.GONE
                                         addressBinding.addressRecycler.visibility=View.GONE
+                                        addressBinding.noAddressImage.visibility=View.VISIBLE
+                                        addressBinding.noaddressTV.visibility=View.VISIBLE
                                     }
                                 }
 
@@ -104,6 +112,8 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                             }
                             is State.Loading -> {
                                 addressBinding.addressProgressBar.visibility = View.VISIBLE
+                                addressBinding.noAddressImage.visibility=View.GONE
+                                addressBinding.noaddressTV.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: loading")
                             }
                             is State.Failure ->
@@ -119,9 +129,11 @@ class AddressFragment : Fragment(), OnAddressClickListener {
             }
         }else{
 
+            addressBinding.noAddressImage.visibility=View.GONE
+            addressBinding.noaddressTV.visibility=View.GONE
             addressBinding.addressRecycler.visibility=View.GONE
             addressBinding.addressProgressBar.visibility=View.GONE
-            addressBinding.addressNoInternetConstraint.visibility=View.GONE
+            addressBinding.addressNoInternetConnectionConstraint.visibility=View.VISIBLE
         }
         addressBinding.addressFAB.setOnClickListener {
             if (checkConnectivity(requireContext())){
