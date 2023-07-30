@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopify.R
 import com.example.shopify.base.line_items
+import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FavouriteItemBinding
 import com.example.shopify.utilities.MySharedPreferences
 import com.example.shopify.utilities.formatDouble
@@ -30,6 +31,7 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
         return FavouriteViewHolder(binding)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FavouriteViewHolder, position: Int) {
         var currentItem = list[position + 1]
         if(currentItem.title!! != "fav item") {
@@ -44,18 +46,19 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
             holder.binding.favProductPrice.text =
                 "Price: ${formatDouble(price)}" + MySharedPreferences.getInstance(context).getCurrencyCode()
             holder.binding.favProductDeleteIcon.setOnClickListener {
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Are You Sure Delete This Item?")
-                builder.setPositiveButton("Ok") { dialog, it ->
+                val builder = android.app.AlertDialog.Builder(context)
+                val inflater = LayoutInflater.from(context)
+                val deleteCartDialog = DeleteCartItemDialogBinding.inflate(inflater)
+                builder.setView(deleteCartDialog.root)
+                val dialog = builder.create()
+                dialog.show()
+                deleteCartDialog.dialogYesBtn.setOnClickListener {
                     dialog.dismiss()
                     onClickListener.onClickDeleteIcon(currentItem)
                 }
-                builder.setNegativeButton("No") { dialog, which ->
+                deleteCartDialog.dialogNoBtn.setOnClickListener {
                     dialog.dismiss()
                 }
-                val dialog = builder.create()
-                dialog.show()
-
 
             }
             holder.binding.favProductCard.setOnClickListener {

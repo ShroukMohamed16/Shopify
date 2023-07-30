@@ -247,6 +247,7 @@ class CartFragment : Fragment(), OnCartClickListener {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCartDecreaseItemClickListener(
         inventoryQuantity: Int,
         position: Int,
