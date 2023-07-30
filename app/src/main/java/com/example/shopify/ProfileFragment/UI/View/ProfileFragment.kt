@@ -25,6 +25,7 @@ import com.example.shopify.CartFragment.UI.View.formatDecimal
 import com.example.shopify.R
 import com.example.shopify.authentication.ui.view.AuthenticationActivity
 import com.example.shopify.base.State
+import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FragmentProfileBinding
 import com.example.shopify.favourite.model.repository.FavouriteRepository
 import com.example.shopify.favourite.remote.FavouriteClient
@@ -316,20 +317,24 @@ class ProfileFragment : Fragment() {
         }
         profileBinding.profileLogoutBtn.setOnClickListener {
 
-            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-            builder.setCancelable(true)
-            builder.setTitle("sign out")
-            builder.setMessage(R.string.are_you_sure)
-            builder.setPositiveButton(android.R.string.ok) { _, _ ->
+            val builder = android.app.AlertDialog.Builder(context)
+            val inflater = LayoutInflater.from(context)
+            val deleteCartDialog = DeleteCartItemDialogBinding.inflate(inflater)
+            builder.setView(deleteCartDialog.root)
+            val dialog = builder.create()
+            dialog.show()
+            deleteCartDialog.dialogYesBtn.text=getString(R.string.yesMapAlert)
+            deleteCartDialog.dialogMessage.text=  getString(R.string.are_you_sure)
+            deleteCartDialog.dialogYesBtn.setOnClickListener {
+                dialog.dismiss()
                 auth.signOut()
                 MySharedPreferences.getInstance(requireContext()).saveISLogged(false)
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
                 startActivity(intent)
-
             }
-            builder.setNegativeButton(android.R.string.cancel) { _, _ -> }
-            builder.show()
-
+            deleteCartDialog.dialogNoBtn.setOnClickListener {
+                dialog.dismiss()
+            }
         }
         profileBinding.profileMoreOrdersTv2.setOnClickListener {
             Navigation.findNavController(view)

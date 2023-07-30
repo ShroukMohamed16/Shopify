@@ -21,6 +21,7 @@ import com.example.shopify.CartFragment.UI.viewmodel.CartViewModelFactory
 import com.example.shopify.CartFragment.model.CartRepository
 import com.example.shopify.CartFragment.remote.CartClient
 import com.example.shopify.base.*
+import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FragmentProductInfoBinding
 import com.example.shopify.productinfo.model.pojo.Product
 import com.example.shopify.productinfo.model.pojo.Reviews
@@ -344,11 +345,18 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
 
         productBinding.productInfoAddToShoppingCartIcon.setOnClickListener {
             if (variantID == 0L) {
-                createAlert(
-                    getString(R.string.choose_size_color_title),
-                    getString(R.string.must_choose_size_color_message),
-                    requireContext()
-                )
+                val builder = android.app.AlertDialog.Builder(context)
+                val inflater = LayoutInflater.from(context)
+                val deleteCartDialog = DeleteCartItemDialogBinding.inflate(inflater)
+                builder.setView(deleteCartDialog.root)
+                val dialog = builder.create()
+                dialog.show()
+                deleteCartDialog.dialogYesBtn.text=getString(R.string.ok)
+                deleteCartDialog.dialogMessage.text=  getString(R.string.must_choose_size_color_message)
+                    deleteCartDialog.dialogYesBtn.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                deleteCartDialog.dialogNoBtn.visibility=View.GONE
             } else {
                 lifecycleScope.launch {
                     cartViewModel.getCartDraftOrderById(

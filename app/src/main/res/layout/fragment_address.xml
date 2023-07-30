@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="address.ui.view.AddressFragment">
 
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addressFAB"
         android:layout_width="wrap_content"
