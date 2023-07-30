@@ -1,5 +1,6 @@
 package com.example.shopify.productinfo.ui.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -90,6 +91,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
         return productBinding.root
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (!checkConnectivity(requireContext())) {
@@ -432,7 +434,7 @@ class ProductInfoFragment : Fragment(),OnProductVariantClickListener {
                                 } else {
                                     createAlert("already added", "this item is already added to cart", requireContext())
                                 }*/
-                                Toast.makeText(requireContext(), "saved", Toast.LENGTH_SHORT)
+                                Toast.makeText(requireContext(), "Item Saved to the Crat", Toast.LENGTH_SHORT)
                                     .show()
                             }
                             is State.Loading -> {

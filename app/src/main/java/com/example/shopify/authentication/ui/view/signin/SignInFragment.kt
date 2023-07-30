@@ -25,6 +25,7 @@ import com.example.shopify.base.DraftOrder
 import com.example.shopify.base.DraftOrderResponse
 import com.example.shopify.base.State
 import com.example.shopify.base.line_items
+import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FragmentSignInBinding
 import com.example.shopify.homeActivity.HomeActivity
 import com.example.shopify.utilities.Constants
@@ -220,12 +221,6 @@ class SignInFragment : Fragment() {
                                                 startActivity(Intent(requireActivity(),
                                                     HomeActivity::class.java))
                                                 requireActivity().finish()
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    "Sign in Successfully",
-                                                    Toast.LENGTH_LONG
-                                                )
-                                                    .show()
 
                                             }
                                             else -> {
@@ -238,12 +233,17 @@ class SignInFragment : Fragment() {
 
 
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Please Verify your email ",
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
+                            val builder = android.app.AlertDialog.Builder(requireContext())
+                            val deleteCartDialog = DeleteCartItemDialogBinding.inflate(layoutInflater)
+                            builder.setView(deleteCartDialog.root)
+                            val dialog = builder.create()
+                            dialog.show()
+                            deleteCartDialog.dialogMessage.text = (R.string.verifying_email.toString())
+                            deleteCartDialog.dialogNoBtn.visibility=View.GONE
+                            deleteCartDialog.dialogYesBtn.text=getString(R.string.ok)
+                            deleteCartDialog.dialogYesBtn.setOnClickListener {
+                                dialog.dismiss()
+                            }
                         }
                     } else {
                         val errorMessage = it.exception?.localizedMessage
@@ -313,12 +313,9 @@ class SignInFragment : Fragment() {
 
                         if (task.result.additionalUserInfo!!.isNewUser) {
                         }
-                        Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                         val intent = Intent(requireActivity(), HomeActivity::class.java)
                         startActivity(intent)
                         requireActivity().finish()
-                        Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT)
-                            .show()
                     } else {
                         Toast.makeText(requireContext(), "Fail", Toast.LENGTH_SHORT).show()
                         // If sign in fails, display a message to the user.

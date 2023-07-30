@@ -151,7 +151,7 @@ class PaymentFragment : Fragment() {
 
         productPrice = MySharedPreferences.getInstance(requireContext()).getTotalPrice()!!.toFloat()
 
-        totalPrice = productPrice + deliveryPrice
+        totalPrice = productPrice
         totalPrice -= discountPrice
         discountCodeET = paymentBinding.discountCodeET
         discountCodeVerficattion = paymentBinding.verfyIcon
@@ -231,7 +231,7 @@ class PaymentFragment : Fragment() {
                     discountCodes=DiscountCode("NoCode", "0", "percentage")
                     0f
                 }
-                totalPrice = productPrice + deliveryPrice
+                totalPrice = productPrice
                 totalPrice -= discountPrice
                 productFeesTV.text = "${getString(R.string.product_fees)} ${
                     formatDecimal(
@@ -354,7 +354,7 @@ class PaymentFragment : Fragment() {
                     Log.d("MYTAG", "Error: $errorInfo")
                     Toast.makeText(
                         requireContext(),
-                        "Payment failure $errorInfo",
+                        "Payment failed",
                         Toast.LENGTH_SHORT
                     )
                         .show()

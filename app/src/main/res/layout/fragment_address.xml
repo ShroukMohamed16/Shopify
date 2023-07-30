@@ -54,18 +54,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <ImageView
-        android:id="@+id/no_address_image"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@drawable/no_address"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/no_address_anim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.453" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:visibility="visible"
+        app:lottie_rawRes="@raw/no_address"
+        />
+
 
     <TextView
         android:id="@+id/noaddressTV"
@@ -73,12 +75,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="No Addresses yet! Add New Address"
-        android:textColor="@color/black"
+        android:textColor="@color/primary"
+        android:fontFamily="@font/fontfile"
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/no_address_image" />
+        app:layout_constraintTop_toBottomOf="@+id/no_address_anim" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -25,7 +25,6 @@ import com.example.shopify.CartFragment.UI.View.formatDecimal
 import com.example.shopify.R
 import com.example.shopify.authentication.ui.view.AuthenticationActivity
 import com.example.shopify.base.State
-import com.example.shopify.databinding.DeleteCartItemDialogBinding
 import com.example.shopify.databinding.FragmentProfileBinding
 import com.example.shopify.favourite.model.repository.FavouriteRepository
 import com.example.shopify.favourite.remote.FavouriteClient
@@ -70,18 +69,11 @@ class ProfileFragment : Fragment() {
             ViewModelProvider(this, favouriteViewModelFactory)[FavouriteViewModel::class.java]
 
         if (MySharedPreferences.getInstance(requireContext()).getISGuest()) {
-            profileBinding.profileNameTV.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
-            profileBinding.profileSettingIcon.visibility = View.GONE
+
+            profileBinding.guestTxt.visibility=View.VISIBLE
+            profileBinding.profileConstraint.visibility=View.GONE
             profileBinding.profileLogoutBtn.visibility = View.VISIBLE
-            profileBinding.profileNameTV.visibility = View.GONE
-            profileBinding.profileFirstWishListCardView.visibility = View.GONE
-            profileBinding.firstOrderCardView.visibility = View.GONE
-            profileBinding.profileSecondWishListCardView.visibility = View.GONE
-            profileBinding.secondOrderCardView.visibility = View.GONE
-            profileBinding.profilefirstLine.visibility = View.GONE
-            profileBinding.profileSecondLine.visibility = View.GONE
+            profileBinding.profileLogoutBtn.text = "Sign Up"
 
         }
         val first_name = MySharedPreferences.getInstance(requireContext()).getCustomerFirstName()
@@ -101,9 +93,9 @@ class ProfileFragment : Fragment() {
                             profileBinding.orderProgreeBar.visibility = View.VISIBLE
                             profileBinding.firstOrderCardView.visibility = View.GONE
                             profileBinding.secondOrderCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
                             profileBinding.noOrdersYet.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv2.isEnabled = false
+                            profileBinding.profileMoreOrdersTv.isEnabled = false
                         }
 
                         is State.Success -> {
@@ -114,18 +106,18 @@ class ProfileFragment : Fragment() {
                                 profileBinding.orderProgreeBar.visibility = View.GONE
                                 profileBinding.firstOrderCardView.visibility = View.GONE
                                 profileBinding.secondOrderCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                                profileBinding.profileMoreOrdersTv.visibility = View.GONE
                                 profileBinding.noOrdersYet.visibility = View.VISIBLE
-                                profileBinding.profileMoreOrdersTv2.isEnabled = false
+                                profileBinding.profileMoreOrdersTv.isEnabled = false
                                 Log.i("TAG", "onViewCreated: null listssssssssss")
                             } else {
                                 Log.i("TAG", "onViewCreated: not null listssssssssss")
                                 if (orderList.size == 1) {
-                                    profileBinding.profileMoreOrdersTv2.isEnabled = true
+                                    profileBinding.profileMoreOrdersTv.isEnabled = true
                                     profileBinding.orderProgreeBar.visibility = View.GONE
                                     profileBinding.firstOrderCardView.visibility = View.VISIBLE
                                     profileBinding.secondOrderCardView.visibility = View.GONE
-                                    profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
+                                    profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
                                     profileBinding.noOrdersYet.visibility = View.GONE
                                     profileBinding.profileFirstOrderDateTv.text =
                                         convertDateTimeFormat(orderList[0].processed_at!!)
@@ -139,11 +131,11 @@ class ProfileFragment : Fragment() {
 
                                 } else {
 
-                                    profileBinding.profileMoreOrdersTv2.isEnabled = true
+                                    profileBinding.profileMoreOrdersTv.isEnabled = true
                                     profileBinding.orderProgreeBar.visibility = View.GONE
                                     profileBinding.firstOrderCardView.visibility = View.VISIBLE
                                     profileBinding.secondOrderCardView.visibility = View.VISIBLE
-                                    profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
+                                    profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
                                     profileBinding.noOrdersYet.visibility = View.GONE
                                     profileBinding.profileFirstOrderDateTv.text =
                                         convertDateTimeFormat(orderList[0].processed_at!!)
@@ -172,11 +164,11 @@ class ProfileFragment : Fragment() {
                             profileBinding.orderProgreeBar.visibility = View.GONE
                             profileBinding.firstOrderCardView.visibility = View.GONE
                             profileBinding.secondOrderCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
                             profileBinding.noOrdersYet.text =
                                 getString(R.string.no_network_connection)
                             profileBinding.noOrdersYet.visibility = View.VISIBLE
-                            profileBinding.profileMoreOrdersTv2.isEnabled = false
+                            profileBinding.profileMoreOrdersTv.isEnabled = false
 
                         }
 
@@ -188,9 +180,9 @@ class ProfileFragment : Fragment() {
             profileBinding.orderProgreeBar.visibility = View.GONE
             profileBinding.firstOrderCardView.visibility = View.GONE
             profileBinding.secondOrderCardView.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv.visibility = View.GONE
             profileBinding.noOrdersYet.text = getString(R.string.no_network_connection)
-            profileBinding.profileMoreOrdersTv2.isEnabled = false
+            profileBinding.profileMoreOrdersTv.isEnabled = false
             profileBinding.noOrdersYet.visibility = View.VISIBLE
 
         }
@@ -207,7 +199,7 @@ class ProfileFragment : Fragment() {
                             profileBinding.favProgressBar.visibility = View.VISIBLE
                             profileBinding.profileFirstWishListCardView.visibility = View.GONE
                             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
                             profileBinding.noFavouritesYet.visibility = View.GONE
                         }
                         is State.Success -> {
@@ -216,7 +208,7 @@ class ProfileFragment : Fragment() {
                                 profileBinding.favProgressBar.visibility = View.GONE
                                 profileBinding.profileFirstWishListCardView.visibility = View.GONE
                                 profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                                profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
                                 profileBinding.noFavouritesYet.visibility = View.VISIBLE
 
                             } else if (result.data.draft_order!!.line_items.size == 2) {
@@ -225,7 +217,7 @@ class ProfileFragment : Fragment() {
                                 profileBinding.profileFirstWishListCardView.visibility =
                                     View.VISIBLE
                                 profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                                profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
+                                profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
                                 profileBinding.noFavouritesYet.visibility = View.GONE
 
                                 profileBinding.profileFirstWishListItemName.text =
@@ -245,13 +237,13 @@ class ProfileFragment : Fragment() {
 
 
                             } else if (result.data.draft_order!!.line_items.size > 2) {
-                                profileBinding.profileMoreOrdersTv.isEnabled = true
+                                profileBinding.profileMoreOrdersTv2.isEnabled = true
                                 profileBinding.favProgressBar.visibility = View.GONE
                                 profileBinding.profileFirstWishListCardView.visibility =
                                     View.VISIBLE
                                 profileBinding.profileSecondWishListCardView.visibility =
                                     View.VISIBLE
-                                profileBinding.profileMoreOrdersTv.visibility = View.VISIBLE
+                                profileBinding.profileMoreOrdersTv2.visibility = View.VISIBLE
                                 profileBinding.noFavouritesYet.visibility = View.GONE
 
                                 profileBinding.profileFirstWishListItemName.text =
@@ -291,7 +283,7 @@ class ProfileFragment : Fragment() {
                             profileBinding.favProgressBar.visibility = View.GONE
                             profileBinding.profileFirstWishListCardView.visibility = View.GONE
                             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-                            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+                            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
                             profileBinding.noFavouritesYet.text =
                                 getString(R.string.no_network_connection)
                             profileBinding.noFavouritesYet.visibility = View.VISIBLE
@@ -305,7 +297,7 @@ class ProfileFragment : Fragment() {
             profileBinding.favProgressBar.visibility = View.GONE
             profileBinding.profileFirstWishListCardView.visibility = View.GONE
             profileBinding.profileSecondWishListCardView.visibility = View.GONE
-            profileBinding.profileMoreOrdersTv.visibility = View.GONE
+            profileBinding.profileMoreOrdersTv2.visibility = View.GONE
             profileBinding.noFavouritesYet.text = getString(R.string.no_network_connection)
             profileBinding.noFavouritesYet.visibility = View.VISIBLE
         }
@@ -317,24 +309,25 @@ class ProfileFragment : Fragment() {
         }
         profileBinding.profileLogoutBtn.setOnClickListener {
 
-            val builder = android.app.AlertDialog.Builder(context)
-            val inflater = LayoutInflater.from(context)
-            val deleteCartDialog = DeleteCartItemDialogBinding.inflate(inflater)
-            builder.setView(deleteCartDialog.root)
-            val dialog = builder.create()
-            dialog.show()
-            deleteCartDialog.dialogYesBtn.text=getString(R.string.yesMapAlert)
-            deleteCartDialog.dialogMessage.text=  getString(R.string.are_you_sure)
-            deleteCartDialog.dialogYesBtn.setOnClickListener {
-                dialog.dismiss()
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder.setCancelable(true)
+            if(MySharedPreferences.getInstance(requireContext()).getISGuest()) {
+                builder.setTitle("sign Up?")
+            }
+            else {
+                builder.setTitle("sign out")
+                builder.setMessage(R.string.are_you_sure)
+            }
+            builder.setPositiveButton(android.R.string.ok) { _, _ ->
                 auth.signOut()
                 MySharedPreferences.getInstance(requireContext()).saveISLogged(false)
                 val intent = Intent(requireContext(), AuthenticationActivity::class.java)
                 startActivity(intent)
+
             }
-            deleteCartDialog.dialogNoBtn.setOnClickListener {
-                dialog.dismiss()
-            }
+            builder.setNegativeButton(android.R.string.cancel) { _, _ -> }
+            builder.show()
+
         }
         profileBinding.profileMoreOrdersTv2.setOnClickListener {
             Navigation.findNavController(view)
@@ -345,7 +338,7 @@ class ProfileFragment : Fragment() {
         profileBinding.profileMoreOrdersTv.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_profileFragment_to_favouriteFragment)
-        }
+            }
 
-    }
+        }
 }

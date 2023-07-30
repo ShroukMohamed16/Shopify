@@ -3,6 +3,7 @@ package com.example.shopify.homeActivity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -24,12 +25,17 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigationView = findViewById(R.id.NavBar)
         navController = Navigation.findNavController(this, R.id.nav_host)
+
         if (isGuest) {
             val menu = bottomNavigationView.menu
             val menuItem = menu.findItem(R.id.favouriteFragment)
             val menuItem2 = menu.findItem(R.id.cartFragment)
+
             menuItem.isVisible = false
             menuItem2.isVisible = false
+
+
+
 
         }
         NavigationUI.setupWithNavController(bottomNavigationView, navController)

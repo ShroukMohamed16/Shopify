@@ -89,7 +89,7 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                                 if (result.data==null){
                                     addressBinding.addressProgressBar.visibility = View.GONE
                                     addressBinding.addressRecycler.visibility=View.GONE
-                                    addressBinding.noAddressImage.visibility=View.VISIBLE
+                                    addressBinding.noAddressAnim.visibility=View.VISIBLE
                                     addressBinding.noaddressTV.visibility=View.VISIBLE
                                 }else{
                                     if(result.data?.addresses?.size!! >0){
@@ -98,12 +98,12 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                                         addressAdapter.setAddressList(result.data?.addresses)
                                         addressBinding.addressRecycler.adapter = addressAdapter
 
-                                        addressBinding.noAddressImage.visibility=View.GONE
+                                        addressBinding.noAddressAnim.visibility=View.GONE
                                         addressBinding.noaddressTV.visibility=View.GONE
                                     }else{
                                         addressBinding.addressProgressBar.visibility = View.GONE
                                         addressBinding.addressRecycler.visibility=View.GONE
-                                        addressBinding.noAddressImage.visibility=View.VISIBLE
+                                        addressBinding.noAddressAnim.visibility=View.VISIBLE
                                         addressBinding.noaddressTV.visibility=View.VISIBLE
                                     }
                                 }
@@ -112,7 +112,7 @@ class AddressFragment : Fragment(), OnAddressClickListener {
                             }
                             is State.Loading -> {
                                 addressBinding.addressProgressBar.visibility = View.VISIBLE
-                                addressBinding.noAddressImage.visibility=View.GONE
+                                addressBinding.noAddressAnim.visibility=View.GONE
                                 addressBinding.noaddressTV.visibility=View.GONE
                                 Log.i("TAG", "onViewCreated: loading")
                             }
@@ -129,7 +129,7 @@ class AddressFragment : Fragment(), OnAddressClickListener {
             }
         }else{
 
-            addressBinding.noAddressImage.visibility=View.GONE
+            addressBinding.noAddressAnim.visibility=View.GONE
             addressBinding.noaddressTV.visibility=View.GONE
             addressBinding.addressRecycler.visibility=View.GONE
             addressBinding.addressProgressBar.visibility=View.GONE

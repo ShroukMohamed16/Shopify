@@ -110,6 +110,7 @@ class SignUpFragment : Fragment() {
                         .navigate(R.id.action_signUpFragment_to_signInFragment)
 
                 } else {
+
                     Toast.makeText(requireContext(), "please verify your email ", Toast.LENGTH_LONG)
                         .show()
                 }
