@@ -112,3 +112,6 @@ fun convertDateTimeFormat(dateTimeString: String): String {
     val dateTime = LocalDateTime.parse(dateTimeString, inputFormat)
     return dateTime.format(outputFormat)
 }
+fun formatDouble(value: Double): String {
+    return String.format("%.2f", value)
+}

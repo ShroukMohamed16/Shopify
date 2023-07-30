@@ -333,6 +333,8 @@ class SignInFragment : Fragment() {
             authenticationViewModel.favDraftOrder.collect { result ->
                 when (result) {
                     is State.Success -> {
+                        binding.loginFrame.visibility = View.VISIBLE
+                        binding.signInProgressBar.visibility = View.VISIBLE
                         val favID = result.data.draft_order?.id
                         MySharedPreferences.getInstance(requireContext()).saveFavID(favID!!)
                         customer.tags = favID.toString()
@@ -354,6 +356,8 @@ class SignInFragment : Fragment() {
             authenticationViewModel.cartDraftOrder.collect { result ->
                 when (result) {
                     is State.Success -> {
+                        binding.loginFrame.visibility = View.VISIBLE
+                        binding.signInProgressBar.visibility = View.VISIBLE
                         val cartID = result.data.draft_order?.id
                         MySharedPreferences.getInstance(requireContext()).saveCartID(cartID!!)
                         customer.note = cartID.toString()

@@ -11,6 +11,7 @@ import com.example.shopify.R
 import com.example.shopify.base.line_items
 import com.example.shopify.databinding.FavouriteItemBinding
 import com.example.shopify.utilities.MySharedPreferences
+import com.example.shopify.utilities.formatDouble
 
 class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickListener):RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder>() {
 
@@ -41,7 +42,7 @@ class FavouriteAdapter(var list: List<line_items>,var onClickListener: OnClickLi
             val price = MySharedPreferences.getInstance(context)
                 .getExchangeRate() * currentItem.price!!.toDouble()
             holder.binding.favProductPrice.text =
-                "Price: $price" + MySharedPreferences.getInstance(context).getCurrencyCode()
+                "Price: ${formatDouble(price)}" + MySharedPreferences.getInstance(context).getCurrencyCode()
             holder.binding.favProductDeleteIcon.setOnClickListener {
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Are You Sure Delete This Item?")
